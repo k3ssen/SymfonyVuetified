@@ -1,0 +1,19 @@
+{% block menu %}
+    <v-list nav>
+        {% block menuItems %}
+            <menu-item href="/" icon="mdi-view-dashboard">
+                Dashboard
+            </menu-item>
+            <menu-item href="{{ path('admin_user_index') }}" icon="mdi-account-multiple">
+                 Users
+            </menu-item>
+            <menu-item href="#3" icon="mdi-view-dashboard">
+                Menu item 3
+            </menu-item>
+        {% endblock %}
+
+{#        <menu-item v-for="menuItem in $store.menuItems" :href="menuItem.href" :icon="menuItem.icon">#}
+{#            {{ '{{ menuItem.text }}' }}#}
+{#        </menu-item>#}
+    </v-list>
+{% endblock %}

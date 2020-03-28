@@ -1,0 +1,236 @@
+{% use "form_div_layout.html.twig" %}
+
+{%- block form_row -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+    <div {% with {attr: row_attr|default({})} %}{{ block('attributes') }}{% endwith %}>
+{#        {% if input_style == 'solo' %}#}
+{#            <div class="row">#}
+{#                <div class="col-sm-2 py-0 pt-3">#}
+{#                {{- form_label(form) -}}#}
+{#                </div>#}
+{#                <div class="col-sm-10 py-0">#}
+{#                    {{- form_widget(form, widget_attr) -}}#}
+{#                </div>#}
+{#            </div>#}
+{#        {% else %}#}
+            {%- set type = type|default('text') -%}
+            {{- form_widget(form, widget_attr) -}}
+            {# form_errors & form_help aren't needed here, since these are added to the vue-component in form_widget #}
+{#        {% endif %}#}
+    </div>
+{%- endblock form_row -%}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    {%- if type == 'range' or type == 'color' -%}
+        {# Attribute "required" is not supported #}
+        {%- set required = false -%}
+    {%- endif -%}
+    {% if type != 'hidden' %}
+        <v-text-field
+            {{ input_style }}
+            type="{{ type }}"
+            {% if value is not empty %}value="{{ value }}" {% endif %}
+            {{ block('widget_attributes') }}
+        ></v-text-field>
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{%- endblock form_widget_simple -%}
+
+{%- block textarea_widget -%}
+    <v-textarea
+        {{ input_style }}
+        {% if value is not empty %}value="{{ value }}" {% endif %}
+        {{ block('widget_attributes') }}
+    ></v-textarea>
+{%- endblock textarea_widget -%}
+
+{%- block widget_attributes -%}
+    id="{{ id }}" name="{{ full_name }}" error-count="10"
+    label="{{ label ? label|trans : 'null'}}"
+    {%- if disabled %} disabled="disabled"{% endif -%}
+    {%- if required %} required="required"{% endif -%}
+    {%- if help %} messages="{{ help|trans }}"{% endif -%}
+    {%- if errors|length > 0 %} :error="true" :error-messages="[{%- for error in errors -%}'{{ error.message ~ (loop.last ? "" : ", ") }}'{% endfor %}]"{% endif %}
+    {{ block('attributes') }}
+{%- endblock widget_attributes -%}
+
+{% block form_label %}
+    {% if errors|length > 0 %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' error--text')|trim}) %}
+    {% endif %}
+    {{ parent() }}
+{% endblock %}
+
+{%- block choice_widget_collapsed -%}
+    {%- if required and placeholder is none and not placeholder_in_choices and not multiple and (attr.size is not defined or attr.size <= 1) -%}
+        {% set required = false %}
+    {%- endif -%}
+    {% set useCombobox = 'tags' in attr %}
+    {% if multiple %}
+        <input v-for="value in {{ form.vars.attr['v-model'] }}" type="hidden" name="{{ full_name }}" :value="value">
+    {% else %}
+        <input type="hidden" name="{{ full_name }}" v-model="{{ form.vars.attr['v-model'] }}">
+    {% endif %}
+    {% set full_name = 'form_ignore_fields[]' %}
+    <{{ useCombobox ? 'v-combobox' : 'v-autocomplete' }}
+            {{ multiple ? ':chips="true"' : '' }}
+            :clearable="true"
+            :deletable-chips="true"
+            autocomplete="off" {# disables native browser autocomplete functionaly #}
+            {{ input_style }}
+            label="{{ label ? label|trans : '' }}"
+            {% if multiple %} :multiple="true"{% endif %}
+            :items="[
+                {%- if preferred_choices|length > 0 -%}
+                    {% set options = preferred_choices %}
+                    {{- block('choice_widget_options') -}}
+                    {%- if choices|length > 0 and separator is not none -%}
+                    {
+                        text: '{{ separator }}',
+                        divider: true,
+                    },
+                    {%- endif -%}
+                {%- endif -%}
+                {%- set options = choices -%}
+                {{- block('choice_widget_options') -}}
+            ]"
+            {{ block('widget_attributes') }}
+    >
+    {% if useCombobox %}
+        <template v-slot:no-data>
+            <v-list-item>
+                <v-list-item-content>
+                    <v-list-item-title class="pt-5 pl-5 pb-5">
+                        No results. Press <kbd>enter</kbd> to create a new one.
+                    </v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+        </template>
+    {% endif %}
+    </{{ useCombobox ? 'v-combobox' : 'v-autocomplete' }}>
+{%- endblock choice_widget_collapsed -%}
+
+{%- block choice_widget_selected_options -%}
+    {% for group_label, choice in options %}
+        {%- if choice is iterable -%}
+            {% set options = choice %}
+            {{- block('choice_widget_selected_options') -}}
+        {%- else -%}
+            {{ choice.value }},
+        {%- endif -%}
+    {% endfor %}
+{%- endblock choice_widget_selected_options -%}
+
+{#{%- block choice_widget_disabled_options -%}#}
+{#    {% for group_label, choice in options %}#}
+{#        {%- if choice is iterable -%}#}
+{#            {% set options = choice %}#}
+{#            {{- block('choice_widget_disabled_options') -}}#}
+{#        {%- else -%}#}
+{#            {%- if choice is selectedchoice(value) -%}#}
+{#                {{- choice.value }},#}
+{#            {%- endif %}#}
+{#        {%- endif -%}#}
+{#    {% endfor %}#}
+{#{%- endblock choice_widget_disabled_options -%}#}
+
+{%- block choice_widget_options -%}
+    {% for group_label, choice in options %}
+        {%- if choice is iterable -%}
+            {
+                text: '{{ choice_translation_domain is same as(false) ? group_label : group_label|trans({}, choice_translation_domain) }}',
+                header: true,
+            },
+            {% set options = choice %}
+            {{- block('choice_widget_options') -}}
+        {%- else -%}
+            {
+                text: '{{ choice_translation_domain is same as(false) ? choice.label : choice.label|trans({}, choice_translation_domain) }}',
+                value: '{{ choice.value }}'
+            },
+        {%- endif -%}
+    {% endfor %}
+{%- endblock choice_widget_options -%}
+
+{%- block collection_widget -%}
+    <collection-type
+            :allow_add="{{ form.vars.allow_add ? 'true': 'false' }}"
+            :allow_delete="{{ form.vars.allow_delete ? 'true': 'false' }}"
+            prototype_name="{{ prototype is defined and not prototype.rendered ? prototype.vars.name : '' }}"
+    >
+        <div slot="content" {{ block('widget_container_attributes') }}>
+            {% for field in form %}
+                <v-card class="subform my-5 pa-4">
+                    {{ form_widget(field, {label: false}) }}
+                    {% if form.vars.allow_delete %}
+                        <v-btn onClick="this.closest('.subform').remove()">Remove</v-btn>
+                    {% endif %}
+                </v-card>
+            {% endfor %}
+        </div>
+        {% if prototype is defined and not prototype.rendered %}
+            <template slot="prototype">
+                {{ form_widget(prototype, {label: false}) }}
+            </template>
+        {% endif %}
+    </collection-type>
+{%- endblock collection_widget -%}
+
+
+
+{%- block choice_widget_expanded -%}
+    <v-radio-group {{ block('widget_container_attributes') }}>
+        {%- for child in form %}
+            {{- form_widget(child) -}}
+        {% endfor -%}
+    </v-radio-group>
+{%- endblock choice_widget_expanded -%}
+
+{%- block radio_widget -%}
+    <v-radio
+        {{ block('widget_attributes') }}
+        label="{{ label|trans()  }}"
+        value="{{ value }}"
+    ></v-radio>
+{%- endblock radio_widget -%}
+
+
+{%- block checkbox_widget -%}
+    <v-checkbox label="{{ label }}" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %}></v-checkbox>
+{%- endblock checkbox_widget -%}
+
+
+{%- block date_widget -%}
+    {%- if widget == 'single_text' -%}
+
+        <v-menu
+        v-model="{{ attr['v-model'] ~ '_menu' }}"
+        :close-on-content-click="false"
+        :nudge-right="40"
+        transition="scale-transition"
+        offset-y
+        min-width="290px"
+        >
+            <template v-slot:activator="{ on }">
+            {{ block('form_widget_simple') }}
+{#            {{ add_vue_data(attr['v-model'], value) }}#}
+            {{ vue_store(attr['v-model'] ~ '_menu', false) }}
+            </template>
+            <v-date-picker v-model="{{ attr['v-model']  }}" @input="{{ attr['v-model'] ~ '_menu' }} = false"></v-date-picker>
+        </v-menu>
+    {%- else -%}
+        <div {{ block('widget_container_attributes') }}>
+            {{- date_pattern|replace({
+                '{{ year }}':  form_widget(form.year),
+                '{{ month }}': form_widget(form.month),
+                '{{ day }}':   form_widget(form.day),
+            })|raw -}}
+        </div>
+    {%- endif -%}
+
+{%- endblock date_widget -%}

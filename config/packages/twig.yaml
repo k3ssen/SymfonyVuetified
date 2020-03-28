@@ -1,2 +1,8 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+    globals:
+        # for options, see: https://vuetifyjs.com/en/components/text-fields#usage
+        # if solo is used, then labels will be rendered in twig
+        input_style: 'outlined'
+    form_themes:
+        - 'form/form-layout.vue.twig'

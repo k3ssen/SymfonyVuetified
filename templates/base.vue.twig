@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% use 'menu.vue.twig' %}
+{% block appContent %}
+    <App>
+        <div slot="menu">
+            {% block menu %}{{ parent() }}{% endblock %}
+        </div>
+        <div slot="before-page">
+            <v-breadcrumbs :items="$store.breadcrumbs" divider=">"></v-breadcrumbs>
+        </div>
+        {% block body %}{% endblock %}
+    </App>
+{% endblock %}
+
+{% block javascripts %}
+    {% block vueJs %}{% endblock %}
+    <script>
+        {% if block('template') is defined %}
+            const baseVue = {
+                delimiters: ['{', '}'],
+                template: `<div>{{ block('template') }}</div>`,
+            };
+        {% endif %}
+        if (typeof baseVue !== 'undefined') {
+            window.pageVue = Object.assign(
+                baseVue,
+                typeof vue !== 'undefined' ? vue : {}
+            );
+        }
+        let vueObservableData = {{ get_vue_store() | raw }};
+    </script>
+    {{ parent() }}
+{% endblock %}
