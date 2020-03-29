@@ -11,9 +11,10 @@ for (const i in VuetifyComponents) {
 import App from './App';
 import Login from './Login';
 import MenuItem from './components/MenuItem';
-import CollectionType from './components/CollectionType';
 import Datatable from './components/Datatable';
-import AppForm from './components/Form/AppForm';
+import FormType from './components/Form/FormType';
+import CollectionType from './components/Form/CollectionType';
+import DateType from './components/Form/DateType';
 
 // Adding all components to the object below may be somewhat cumbersome (compared to using something like
 // 'import * as globalComponents from './components'), but by using the object below, the components will be recognized
@@ -22,9 +23,10 @@ const globalComponents = {
     App,
     Login,
     MenuItem,
-    CollectionType,
     Datatable,
-    AppForm,
+    FormType,
+    CollectionType,
+    DateType,
 };
 
 for (const i in globalComponents) {

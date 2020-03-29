@@ -19,6 +19,7 @@ class DateTypeExtension extends AbstractTypeExtension
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            'input' => 'datetime_immutable',
             'type' => 'date',
             'widget' => 'single_text',
             'placeholder' => 'dd-mm-yyyy',
@@ -35,6 +36,10 @@ class DateTypeExtension extends AbstractTypeExtension
         // note that v-model is also required; this is already being set in TypeExtension
         $attr['v-on'] = "on";
         $attr['prepend-inner-icon'] = "mdi-calendar";
+        $data = $view->vars['data'];
+        if ($data instanceof \DateTimeInterface) {
+            $view->vars['data'] = $data->format('Y-m-d');
+        }
         $view->vars['attr'] = $attr;
     }
 }

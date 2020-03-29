@@ -1,0 +1,16 @@
+{% extends 'base.vue.twig' %}
+{% set title = 'Library' %}
+
+{% block template %}
+    <Datatable :datatable="datatable" />
+{% endblock %}
+
+{% block vueJs %}
+    <script>
+        const vue = {
+            data: () => ({
+                datatable: {{ datatable|json_encode|raw }}
+            })
+        }
+    </script>
+{% endblock %}

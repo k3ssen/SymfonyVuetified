@@ -47,7 +47,7 @@ following:
 ### Dynamic twig form using Symfony's FormView
 
 Symfony's `FormView` can't be directly used in Vuejs, so a `JsonForm` class is created to enable serializing the FormView into json.
-This can be passed to the `AppForm` vue-component where it will render the form, a bit similar to twig's `{{ form(form) }}`.
+This can be passed to the `FormType` vue-component where it will render the form, a bit similar to twig's `{{ form(form) }}`.
 
 Example:
 
@@ -63,7 +63,7 @@ Then in your twig file can look like below:
 {% extends 'base.vue.twig' %}
 
 {% block template %}
-    <AppForm :form="form" />
+    <FormType :form="form" />
 {% endblock %}
 
 {% block vueJs %}
@@ -79,9 +79,9 @@ Then in your twig file can look like below:
 
 You can still render parts of the form individually, like this:
 ```vue
-    <AppForm :form="form.children.name" />
-    <AppForm :form="form.children.email" />
-    <AppForm :form="form" /> <!-- renders remaining form-fields -->
+<FormType :form="form.children.name" />
+<FormType :form="form.children.email" />
+<FormType :form="form" /> <!-- renders remaining form-fields -->
 ```
 
 ### VueStore
@@ -97,7 +97,7 @@ This way the previous example could also be achieved like this:
 
 {% block template %}
     {{ vue_store('form', jsonForm) }}
-    <AppForm :form="$store.form" />
+    <FormType :form="$store.form" />
 {% endblock %}
 ```
 

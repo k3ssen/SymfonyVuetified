@@ -84,18 +84,9 @@ class UserController extends AbstractController
         $this->denyAccessUnlessGranted(UserVoter::EDIT, $user);
 
         $form = $this->createForm(UserType::class, $user);
-//        $form->handleRequest($request);
-//        dump($form->isSubmitted());
-//        if($form->isSubmitted()) {
-//            dump($form->get('roles'));
-//        }
         if ($this->handleForm($form, $request)) {
             return $this->redirectToRoute('admin_user_index');
         }
-
-//        exit(JsonForm::create($form));
-
-        dump($form->createView());
 
         return $this->render('admin/user/edit.vue.twig', [
             'user' => $user,

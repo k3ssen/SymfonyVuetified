@@ -26,7 +26,7 @@ class VueDataStorage
         foreach ($this->vueData as $key => $value) {
             $this->assignArrayByPath($dataArray, $key, $value);
         }
-        return json_encode($dataArray);
+        return json_encode($dataArray, JSON_THROW_ON_ERROR);
     }
 
     protected function assignArrayByPath(&$arr, $path, $value) {

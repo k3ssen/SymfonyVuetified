@@ -1,0 +1,10 @@
+{% extends 'base.vue.twig' %}
+{% set title = 'Library' %}
+
+{% block template %}
+    {{ vue_store('form', jsonForm) }}
+    <v-form action="{{ path('library_edit', library) }}" method="post">
+        <FormType :form="$store.form" />
+        <v-btn type="submit" color="primary" class="mt-5">Save</v-btn>
+    </v-form>
+{% endblock %}
