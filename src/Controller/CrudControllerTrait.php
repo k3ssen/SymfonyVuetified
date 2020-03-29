@@ -7,10 +7,30 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 trait CrudControllerTrait
 {
+    /**
+     * Returns a RedirectResponse to the given route with the given parameters.
+     * Overwrites Controller-trait to allow parameters as object as well.
+     */
+    protected function redirectToRoute(string $route, $parameters = [], int $status = 302): RedirectResponse
+    {
+        return $this->redirect($this->generateUrl($route, $parameters), $status);
+    }
+
+    /**
+     * Generates a URL from the given parameters.
+     * Overwrites Controller-trait to allow parameters as object as well.
+     */
+    protected function generateUrl(string $route, $parameters = [], int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
+    {
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
+    }
+
     /**
      * @return ObjectManager|EntityManager
      */

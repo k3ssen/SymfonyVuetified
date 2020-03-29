@@ -25,6 +25,7 @@ final class Roles
         return [
             self::ROLE_USER,
             self::ROLE_ADMIN,
+            self::ROLE_SUPER_ADMIN,
         ];
     }
 }

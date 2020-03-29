@@ -29,6 +29,8 @@ class JsonForm implements \JsonSerializable
 
     public function jsonSerialize()
     {
+        $this->vars['errors'] = (string) $this->vars['errors'];
+
         return [
             'vars' => $this->vars,
             'children' => $this->children,

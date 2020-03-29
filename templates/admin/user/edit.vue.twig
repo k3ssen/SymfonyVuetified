@@ -10,5 +10,8 @@
         { 'text': 'Edit' },
     ]) }}
     {{ vue_store('form', jsonForm) }}
+    <v-form action="{{ path('admin_user_edit', user) }}" method="post">
     <AppForm :form="$store.form" />
+        <v-btn type="submit" color="primary" class="mt-5">Save</v-btn>
+    </v-form>
 {% endblock %}

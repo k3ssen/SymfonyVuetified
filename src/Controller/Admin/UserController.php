@@ -6,7 +6,6 @@ namespace App\Controller\Admin;
 use App\Controller\CrudControllerTrait;
 use App\Entity\User;
 use App\Form\JsonForm;
-use App\Form\SerializableFormView;
 use App\Form\UserType;
 use App\Security\UserVoter;
 use App\Datatable\UserDatatable;
@@ -85,9 +84,18 @@ class UserController extends AbstractController
         $this->denyAccessUnlessGranted(UserVoter::EDIT, $user);
 
         $form = $this->createForm(UserType::class, $user);
+//        $form->handleRequest($request);
+//        dump($form->isSubmitted());
+//        if($form->isSubmitted()) {
+//            dump($form->get('roles'));
+//        }
         if ($this->handleForm($form, $request)) {
             return $this->redirectToRoute('admin_user_index');
         }
+
+//        exit(JsonForm::create($form));
+
+        dump($form->createView());
 
         return $this->render('admin/user/edit.vue.twig', [
             'user' => $user,
