@@ -1,3 +1,7 @@
+/.idea/
+/*.phar
+phpunit
+!.gitkeep
 
 ###> symfony/framework-bundle ###
 /.env.local

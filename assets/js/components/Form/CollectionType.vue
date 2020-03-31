@@ -15,10 +15,9 @@
                     </template>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
-                    <FormType :form="child" :parentForm="form" :rootForm="rootForm ? rootForm : form" />
+                    <FormType :form="child" :parentForm="form" />
                 </v-expansion-panel-content>
             </v-expansion-panel>
-
         </v-expansion-panels>
 
         <v-btn v-if="form.vars.allow_add" @click="addItem" class="mt-5" >

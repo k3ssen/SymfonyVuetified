@@ -4,7 +4,7 @@
 {% block template %}
     {{ vue_store('form', jsonForm) }}
     <v-form action="{{ path('library_edit', library) }}" method="post">
-        <FormType :form="$store.form" />
+        <form-type :form="$store.form"></form-type>
         <v-btn type="submit" color="primary" class="mt-5">Save</v-btn>
     </v-form>
 {% endblock %}
