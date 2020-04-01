@@ -10,9 +10,13 @@ Assuming you run a server with php7.4+, mysql, composer, yarn and required modul
 
 1) Checkout project
 2) Create a `.env.local` file to define `DATABASE_URL` for your environment.
-3) run `yarn setup-all`  
-(checkout packages.json for details and more shortcut commands)
-
+3) run `yarn setup-all` or run the following commands step by step:
+    1) `composer install`  
+    2) `yarn install`  
+    3) `yarn build` (for production) or `yarn dev` (for development)  
+    4) `php bin/console doctrine:database:create`  
+    5) `php bin/console doctrine:schema:create`  
+    6) `php bin/console doctrine:fixtures:load -n`
 
 For development you can use `yarn watch` to watch javascript/css files.
 
