@@ -21,6 +21,10 @@ class LibraryType extends AbstractType
             ->add('date', null, [
                 'label' => 'Date',
             ])
+            ->add('locations', null, [
+                'label' => 'Locations',
+                'by_reference' => false,
+            ])
             ->add('books', CollectionType::class, [
                 'label' => 'Books',
                 'entry_type' => BookType::class,
@@ -29,6 +33,7 @@ class LibraryType extends AbstractType
                 'allow_delete' => true,
                 'btn_add_txt' => 'add new book',
                 'by_reference' => false,
+//                'block_prefix' => 'CollectionTableType'
             ])
         ;
     }

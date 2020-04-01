@@ -8,12 +8,13 @@ for (const i in VuetifyComponents) {
 }
 
 // // Import all custom components that you need globally available.
-import App from './App';
-import Login from './Login';
+import App from './components/App';
+import Login from './components/Login';
 import MenuItem from './components/MenuItem';
 import Datatable from './components/Datatable';
 import FormType from './components/Form/FormType';
 import CollectionType from './components/Form/CollectionType';
+import CollectionTableType from './components/Form/CollectionTableType';
 import DateType from './components/Form/DateType';
 
 // Adding all components to the object below may be somewhat cumbersome (compared to using something like
@@ -26,6 +27,7 @@ const globalComponents = {
     Datatable,
     FormType,
     CollectionType,
+    CollectionTableType,
     DateType,
 };
 

@@ -21,7 +21,13 @@ class Location
     private ?int $id = null;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Library", inversedBy="Locations")
+     * @ORM\Column(type="string", unique=true)
+     * @Assert\NotNull
+     */
+    private ?string $name = null;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Library", inversedBy="locations")
      * @Assert\Valid
      */
     private Collection $libraries;
@@ -34,7 +40,7 @@ class Location
 
     public function __toString(): string
     {
-        return (string) $this->getLibraries();
+        return (string) $this->getName();
     }
 
     public function getId(): ?int
@@ -66,5 +72,15 @@ class Location
             $library->removeLocation($this);
         }
         return $this;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 }

@@ -43,6 +43,9 @@ class JsonForm implements \JsonSerializable
             $this->vars['data'] = null;
             $this->vars['value'] = null;
         }
+        if (!$this->vars['data'] && $this->vars['value']) {
+            $this->vars['data'] = $this->vars['value'];
+        }
         $this->vars['errors'] = (string) $this->vars['errors'];
         return [
             'vars' => $this->vars,
@@ -54,9 +57,9 @@ class JsonForm implements \JsonSerializable
     private function addMappedBlockPrefixes()
     {
         $initialPrefixes = $this->vars['block_prefixes'];
-        foreach ($initialPrefixes as $block_prefix) {
+        foreach ($initialPrefixes as $index => $block_prefix) {
             if (key_exists($block_prefix, static::MAPPED_TYPES)) {
-                $this->vars['block_prefixes'][] = static::MAPPED_TYPES[$block_prefix];
+                array_splice( $this->vars['block_prefixes'], $index, 0,  static::MAPPED_TYPES[$block_prefix]);
             }
         }
     }

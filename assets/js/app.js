@@ -8,7 +8,6 @@ Vue.use(Vuetify);
 const vuetify = new Vuetify();
 
 require('./globalComponents');
-// require('./globalStoreAndMixin');
 
 if (typeof vueObservableData !== 'undefined') {
     Vue.prototype.$store = Vue.observable(vueObservableData);

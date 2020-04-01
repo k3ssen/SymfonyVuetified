@@ -89,6 +89,12 @@ class LibraryController extends AbstractController
             return $this->redirectToRoute('library_index');
         }
 
+//        dump(JsonForm::create($form));
+
+//        exit((string) JsonForm::create($form));
+//
+//        exit();
+
         return $this->render('library/edit.vue.twig', [
             'library' => $library,
             'jsonForm' => JsonForm::create($form),

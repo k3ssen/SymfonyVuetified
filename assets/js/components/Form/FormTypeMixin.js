@@ -32,11 +32,18 @@ const formTypeMixin = {
             attr['error-messages'] = this.form.vars.errors;
 
             if (this.isChoiceType) {
+                if (this.form.vars.multiple) {
+                    const dataObjects = Object.values(JSON.parse(JSON.stringify(this.form.vars.data)));
+                    const valueObjects = Object.values(JSON.parse(JSON.stringify(this.form.vars.value)));
+                    this.form.vars.data = dataObjects.length ? dataObjects : valueObjects;
+                }
                 attr['item-text'] = 'label';
                 attr['item-value'] = 'value';
                 attr['chips'] = this.form.vars.multiple;
                 attr['multiple'] = this.form.vars.multiple;
-                attr['items'] = this.form.vars.choices;
+                attr['return-object'] = false;
+                attr['deletable-chips'] = this.form.vars.multiple;
+                attr['items'] = Object.values(JSON.parse(JSON.stringify(this.form.vars.choices)));
             }
             if (this.isPasswordType) {
                 attr['type'] = 'password';
@@ -56,12 +63,6 @@ const formTypeMixin = {
             if (this.isChoiceType) {
                 return 'v-select';
             }
-            // if (this.isCollectionType) {
-            //     return 'CollectionType';
-            // }
-            // if (this.isDateType) {
-            //     return 'DateType';
-            // }
             return 'v-text-field';
         },
         isHiddenType() {

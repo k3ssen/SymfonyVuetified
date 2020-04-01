@@ -15,6 +15,9 @@ class BookType extends AbstractType
         $builder
             ->add('title', null, [
                 'label' => 'Title',
+                'row_attr' => [
+                    'width' => '70%',
+                ]
             ])
             ->add('pages', null, [
                 'label' => 'Number of pages',
