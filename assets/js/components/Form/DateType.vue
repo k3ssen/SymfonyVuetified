@@ -9,7 +9,7 @@
                 <v-text-field
                     :value="form.vars.data"
                     append-outer-icon="mdi-calendar"
-                    v-bind="bindAttributes"
+                    v-bind="attributes"
                     v-on="on"
                     autocomplete="off"
                 />
@@ -26,13 +26,10 @@
     import {formTypeMixin} from "./FormTypeMixin";
 
     export default {
-        name: 'DateType',
         mixins: [formTypeMixin],
         data: () => ({
             locale: 'nl', // get locale from config-value
             fromDateMenu: false,
         }),
-        computed: {
-        }
     };
 </script>

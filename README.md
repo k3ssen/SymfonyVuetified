@@ -1,6 +1,6 @@
 ## SymfonyVuetified
 
-Example Symfony 5 project where Vuetified is used as frontend and twig can be used for
+A Symfony 5 demonstration project where Vuetify is used as frontend and twig can be used for
 serverside rendering where its rendered content can be easiliy passed down to Vue
 
 
@@ -50,7 +50,7 @@ following:
 
 ### Dynamic twig form using Symfony's FormView
 
-Symfony's `FormView` can't be directly used in Vuejs, so a `JsonForm` class is created to enable serializing the FormView into json.
+Symfony's `FormView` can't be directly used in Vuejs, so a `VueForm` class is created to enable serializing the FormView into json.
 This can be passed to the `FormType` vue-component where it will render the form, a bit similar to twig's `{{ form(form) }}`.
 
 Example:
@@ -74,7 +74,7 @@ Then in your twig file can look like below:
     <script>
         const vue = {
             data: () => ({
-                form: {{ jsonForm|raw }}
+                form: {{ vueForm|raw }}
             })
         }
     </script>

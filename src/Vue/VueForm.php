@@ -1,21 +1,27 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Form;
+namespace App\Vue;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 
-class JsonForm implements \JsonSerializable
+class VueForm implements \JsonSerializable
 {
     const MAPPED_TYPES = [
         'date' => 'DateType',
         'collection' => 'CollectionType',
+        'hidden' => 'HiddenType',
+        'radio' => 'RadioType',
+        'checkbox' => 'CheckboxType',
+        'choice' => 'ChoiceType',
+        'text' => 'TextType',
+        'textarea' => 'TextareaType',
     ];
 
     private array $vars;
 
-    /** @var JsonForm[] */
+    /** @var VueForm[] */
     private array $children = [];
 
     public static function create(FormInterface $form): self
@@ -59,7 +65,14 @@ class JsonForm implements \JsonSerializable
         $initialPrefixes = $this->vars['block_prefixes'];
         foreach ($initialPrefixes as $index => $block_prefix) {
             if (key_exists($block_prefix, static::MAPPED_TYPES)) {
-                array_splice( $this->vars['block_prefixes'], $index, 0,  static::MAPPED_TYPES[$block_prefix]);
+                array_splice( $this->vars['block_prefixes'], $index, 0, static::MAPPED_TYPES[$block_prefix]);
+            }
+        }
+        if ($this->vars['expanded'] ?? false) {
+            if ($this->vars['multiple'] === false) {
+                array_splice( $this->vars['block_prefixes'], -1, 0, 'RadioGroupType');
+            } else {
+                $this->vars['block_prefixes'][] = 'CheckboxGroupType';
             }
         }
     }

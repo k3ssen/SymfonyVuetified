@@ -2,8 +2,18 @@
 {% set title = 'Library' %}
 
 {% block template %}
-    {{ vue_store('form', jsonForm) }}
+    {{ vue_store('form', vue_form(form)) }}
     <v-form action="{{ path('library_edit', library) }}" method="post">
+
+        <v-row>
+            <v-col>
+                <form-type :form="$store.form.children.date"></form-type>
+            </v-col>
+            <v-col>
+                <form-type :form="$store.form.children.locations"></form-type>
+            </v-col>
+        </v-row>
+
         <form-type :form="$store.form"></form-type>
         <v-btn type="submit" color="primary" class="mt-5">Save</v-btn>
     </v-form>

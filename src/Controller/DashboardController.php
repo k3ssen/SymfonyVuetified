@@ -17,4 +17,14 @@ class DashboardController extends AbstractController
             'controller_name' => 'DashboardController',
         ]);
     }
+
+    /**
+     * @Route("/example2", name="example2")
+     */
+    public function example2()
+    {
+        return $this->render('dashboard/example2.vue.twig', [
+            'controller_name' => 'DashboardController',
+        ]);
+    }
 }

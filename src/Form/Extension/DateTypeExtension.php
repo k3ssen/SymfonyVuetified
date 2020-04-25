@@ -30,12 +30,6 @@ class DateTypeExtension extends AbstractTypeExtension
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $attr = $view->vars['attr'] ?? [];
-        if ($options['widget'] === 'single_text') {
-            $attr['placeholder'] = is_array($options['placeholder']) ? array_pop($options['placeholder']) : $options['placeholder'];
-        }
-        // note that v-model is also required; this is already being set in TypeExtension
-        $attr['v-on'] = "on";
-        $attr['prepend-inner-icon'] = "mdi-calendar";
         $data = $view->vars['data'];
         if ($data instanceof \DateTimeInterface) {
             $view->vars['data'] = $data->format('Y-m-d');

@@ -5,7 +5,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\CrudControllerTrait;
 use App\Entity\User;
-use App\Form\JsonForm;
+use App\Form\VueForm;
 use App\Form\UserType;
 use App\Security\UserVoter;
 use App\Datatable\UserDatatable;
@@ -72,7 +72,7 @@ class UserController extends AbstractController
         }
         return $this->render('admin/user/new.vue.twig', [
             'user' => $user,
-            'jsonForm' => JsonForm::create($form),
+            'jsonForm' => VueForm::create($form),
         ]);
     }
 
@@ -90,7 +90,7 @@ class UserController extends AbstractController
 
         return $this->render('admin/user/edit.vue.twig', [
             'user' => $user,
-            'jsonForm' => JsonForm::create($form),
+            'jsonForm' => VueForm::create($form),
         ]);
     }
 

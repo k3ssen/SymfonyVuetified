@@ -5,7 +5,6 @@ namespace App\Controller;
 
 use App\Datatable\LibraryDatatable;
 use App\Entity\Library;
-use App\Form\JsonForm;
 use App\Form\LibraryType;
 use App\Security\UserVoter;
 use App\Datatable\UserDatatable;
@@ -69,11 +68,11 @@ class LibraryController extends AbstractController
             return $this->redirectToRoute('library_index');
         }
 
-        dump(JsonForm::create($form));
+//        dump(VueForm::create($form));
 
         return $this->render('library/new.vue.twig', [
             'library' => $library,
-            'jsonForm' => JsonForm::create($form),
+            'form' => $form->createView(),
         ]);
     }
 
@@ -95,9 +94,11 @@ class LibraryController extends AbstractController
 //
 //        exit();
 
+//        dump($form->createView()); exit();
+
         return $this->render('library/edit.vue.twig', [
             'library' => $library,
-            'jsonForm' => JsonForm::create($form),
+            'form' => $form->createView(),
         ]);
     }
 
