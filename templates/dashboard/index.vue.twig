@@ -18,7 +18,7 @@
     </p>
     <p>
     <code v-pre>   {
-        template: \`&lt;div&gt;{ seconds } seconds have past since this page was loaded.&lt;/div&gt;\`,
+        template: `&lt;div&gt;{ seconds } seconds have past since this page was loaded.&lt;/div&gt;`,
         delimiters: ['{', '}'],
         data: () => ({
             seconds: 0,
@@ -35,7 +35,7 @@
     <p>
     <code v-pre>   {{ '{% block javascripts %}' }}
         var vueObject = Object.assign({
-            template: \`&lt;div&gt;{{ '{{ block(\'body\') }}' }}&lt;/div&gt;\`,
+            template: `&lt;div&gt;{{ '{{ block(\'body\') }}' }}&lt;/div&gt;`,
             delimiters: ['{', '}']
         }, typeof vue !== 'undefined' ? vue : {});
     {{ '{% endblock %}' }}</code>
@@ -52,7 +52,7 @@
         &lt;/p&gt;
     {{ '{% endblock %}' }}
     {{ '{% block javascripts %}' }}
-        var vue = {
+        window.vue = {
             data: () => ({
                 seconds: 0,
             }),

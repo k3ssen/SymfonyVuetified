@@ -28,8 +28,6 @@ class LibraryController extends AbstractController
     {
         $this->denyAccessUnlessGranted(UserVoter::INDEX);
 
-//        dump(json_encode($datatable)); exit();
-
         return $this->render('library/index.vue.twig', [
             'datatable' => $datatable,
         ]);
@@ -61,14 +59,9 @@ class LibraryController extends AbstractController
         $library = new Library();
         $form = $this->createForm(LibraryType::class, $library);
 
-//        $form->handleRequest($request);
-//        dump($form->getData());
-
         if ($this->handleForm($form, $request)) {
             return $this->redirectToRoute('library_index');
         }
-
-//        dump(VueForm::create($form));
 
         return $this->render('library/new.vue.twig', [
             'library' => $library,
@@ -85,16 +78,9 @@ class LibraryController extends AbstractController
 
         $form = $this->createForm(LibraryType::class, $library);
         if ($this->handleForm($form, $request)) {
-            return $this->redirectToRoute('library_index');
+            return $this->redirectToRoute('library_show', $library);
+//            return $this->redirectToRoute('library_index');
         }
-
-//        dump(JsonForm::create($form));
-
-//        exit((string) JsonForm::create($form));
-//
-//        exit();
-
-//        dump($form->createView()); exit();
 
         return $this->render('library/edit.vue.twig', [
             'library' => $library,
@@ -111,7 +97,7 @@ class LibraryController extends AbstractController
 
         $form = $this->createDeleteForm($library);
         if ($this->handleDeleteForm($form, $request)) {
-            return $this->redirectToRoute('admin_user_index');
+            return $this->redirectToRoute('library_index');
         }
         return $this->render('library/delete.vue.twig', [
             'library' => $library,

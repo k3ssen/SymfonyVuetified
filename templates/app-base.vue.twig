@@ -1,0 +1,34 @@
+{% extends 'app-base.html.twig' %}
+{% use 'menu.vue.twig' %}
+{% block appContent %}
+    <app>
+        <div slot="menu">
+            {% block menu %}{{ parent() }}{% endblock %}
+        </div>
+        <div slot="before-page">
+            <v-breadcrumbs :items="$store.breadcrumbs" divider=">"></v-breadcrumbs>
+        </div>
+        {% include 'flash_messages.html.twig' %}
+        {% block body %}{% endblock %}
+    </app>
+{% endblock %}
+
+{% block javascripts %}
+    {% block vueJs %}{% endblock %}
+    <script>
+        {% if block('template') is defined %}
+            var baseVue = {
+                delimiters: ['{', '}'],
+                template: `<div>{{ block('template')|replace({'`' : '\\\`'})|raw }}</div>`,
+            };
+        {% endif %}
+        if (typeof baseVue !== 'undefined') {
+            window.pageVue = Object.assign(
+                baseVue,
+                typeof window.vue !== 'undefined' ? window.vue : {}
+            );
+        }
+        window.store = {{ get_vue_store() | raw }};
+    </script>
+    {{ parent() }}
+{% endblock %}

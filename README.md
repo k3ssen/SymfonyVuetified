@@ -1,7 +1,11 @@
 ## SymfonyVuetified
 
-A Symfony 5 demonstration project where Vuetify is used as frontend and twig can be used for
-serverside rendering where its rendered content can be easiliy passed down to Vue
+A Symfony 5 project to demonstrate how twig and vue can be mixed:
+
+* Load twig rendered content as Vue-component.
+* Pass serverside data into a vue store.
+* Render Symfony's FormView as Twig components.
+* Load dynamic component over ajax.
 
 
 ### Getting started
@@ -24,9 +28,7 @@ For development you can use `yarn watch` to watch javascript/css files.
 ### Twig-vue-components
 
 By using dynamic Vue components, rendered twig-content can be used to provide
-the template for such dynamic-vue-component. And by using a global javascript
-variable you can define your complete vue-object inside twig, like the
-following:
+the template for such dynamic-vue-component. 
 
 ```
 {% extends 'base.vue.twig' %}
@@ -36,7 +38,7 @@ following:
     </p>
 {% endblock %}
 {% block vueJs %}
-    var vue = {
+    window.vue = {
         data: () => ({
             seconds: 0,
         }),
@@ -46,6 +48,9 @@ following:
     };
 {% endblock %}
 ```
+
+> Note that `window.vue` is purposely used instead of `var vue`. While for this example both have the same effect, using
+> the window object makes it easier to redefine its value at different stages.
 
 
 ### Dynamic twig form using Symfony's FormView
@@ -116,33 +121,33 @@ public function buildForm(FormBuilderInterface $builder, array $options): void
 {
     $builder->add('email', null, [
         'label' => 'Email',
-        'block_prefix' => 'MyEmailFormType',
+        'block_prefix' => 'EmailType',
     ]);
 }
 ```
 
-After this you just need to make sure a component with the name `MyEmailFormType` has been defined where you at least
-have a form property defined:
+After this you just need to make sure a component with the name `EmailType` has been defined where you at least
+have a form property defined. To make it easier, just use the FormTypeMixin:
 ```vue
 <template>
     <div>
         <label :for="form.vars.full_name">{{ form.vars.label }}</label>
-        <input :name="form.vars.full_name" :id="form.vars.full_name" type="email" v-model="form.vars.data" />
+        <input type="email" v-model="form.vars.data" v-bind="attributes" />
     </div>
 </template>
 
 <script>
-    module.exports = {
-        name: 'MyEmailFormType',
-        props: {
-            form: { type: Object},
-        },
-    }
+    import {formTypeMixin} from "./FormTypeMixin";
+
+    export default {
+        mixins: [formTypeMixin],
+    };
 </script>
 ```
 
-This is of course just a lousy example. For something like an email-field you're probably better of with the
-v-text-field that is used by default.
+Just have a look at the components in /assets/js/components/Form and you'll notice that most of these aren't more
+complex than the example above.
+
 
 ### Caveats
 * Javascript in twig files is not compiled by webpack, so be extra aware of browser-compatibility.

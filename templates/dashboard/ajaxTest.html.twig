@@ -1,0 +1,19 @@
+<template>
+    <div>
+        <p v-if="test">
+            Test
+        </p>
+        <input type="text">
+        <v-text-field></v-text-field>
+
+        <v-btn @click="test = !test">Test</v-btn>
+    </div>
+</template>
+
+<script>
+    window.vue = {
+        data: () => ({
+            test: true,
+        })
+    };
+</script>

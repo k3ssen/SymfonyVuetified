@@ -72,7 +72,7 @@ class UserController extends AbstractController
         }
         return $this->render('admin/user/new.vue.twig', [
             'user' => $user,
-            'jsonForm' => VueForm::create($form),
+            'form' => $form->createView(),
         ]);
     }
 
@@ -90,7 +90,7 @@ class UserController extends AbstractController
 
         return $this->render('admin/user/edit.vue.twig', [
             'user' => $user,
-            'jsonForm' => VueForm::create($form),
+            'form' => $form->createView(),
         ]);
     }
 

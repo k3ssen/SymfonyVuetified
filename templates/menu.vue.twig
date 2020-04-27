@@ -10,6 +10,11 @@
             <menu-item href="{{ path('library_index') }}" icon="mdi-book">
                 Library
             </menu-item>
+
+            {{ vue_store('pageUrl', null) }}
+{#            <v-btn @click="$store.pageUrl = '{{ path('library_index') }}'">#}
+{#                Library over ajax#}
+{#            </v-btn>#}
         {% endblock %}
 
 {#        <menu-item v-for="menuItem in $store.menuItems" :href="menuItem.href" :icon="menuItem.icon">#}

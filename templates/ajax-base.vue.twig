@@ -1,0 +1,21 @@
+<template>
+    <div>
+        {% block appContent %}
+            {% include 'flash_messages.html.twig' %}
+            {% block body %}
+                {% block template %}{% endblock %}
+            {% endblock %}
+        {% endblock %}
+    </div>
+</template>
+
+{% block javascripts %}
+    {% block vueJs %}{% endblock %}
+    <script>
+        window.vue = Object.assign(
+            { delimiters: ['{', '}'] },
+            typeof window.vue !== 'undefined' ? window.vue : {}
+        );
+        window.store = {{ get_vue_store() | raw }};
+    </script>
+{% endblock %}

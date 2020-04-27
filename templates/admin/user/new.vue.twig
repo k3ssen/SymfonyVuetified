@@ -3,14 +3,9 @@
 {% set title = 'User' %}
 
 {% block template %}
-    {{ vue_store('breadcrumbs', [
-        { 'text': 'Dashboard', 'href': path('dashboard') },
-        { 'text': 'User', 'href': path('admin_user_index') },
-        { 'text': 'New' },
-    ]) }}
-    {{ vue_store('form', jsonForm) }}
+    {{ vue_store('form', vue_form(form)) }}
     <v-form action="{{ path('admin_user_new', user) }}" method="post">
-        <FormType :form="$store.form" />
+        <form-type :form="$store.form"></form-type>
         <v-btn type="submit" color="primary" class="mt-5">Save</v-btn>
     </v-form>
 {% endblock %}

@@ -1,24 +1,33 @@
+import Vue from 'vue';
+
 // Unfortunately, the VuetifyLoaderPlugin doesn't work with twig-vue-components (because these aren't preprocessed)
-// So instead, here we import all VuetifyComponents. You might want to only import the Components you actually need.
-export * from 'vuetify/lib/components';
+// So instead, here we import all VuetifyComponents. You may want to only import the Components you actually need.
+import * as VuetifyComponents from 'vuetify/lib/components';
+for (const i in VuetifyComponents) {
+    Vue.component(i, VuetifyComponents[i]);
+}
 
-// Any component added to the export below will be added as globalComponent in app.js
-export {default as App} from './components/App';
-export {default as Login} from './components/Login';
-export {default as MenuItem} from './components/MenuItem';
-export {default as Datatable} from './components/Datatable';
+// Note that the custom components below aren't imported using "import * as components from '.components'"
+// This is because importing the components like below will help IDE to provide autocompletion.
 
-// All Form components
-export {default as CheckboxGroupType} from './components/Form/CheckboxGroupType';
-export {default as CheckboxType} from './components/Form/CheckboxType';
-export {default as ChoiceType} from './components/Form/ChoiceType';
-export {default as CollectionType} from './components/Form/CollectionType';
-export {default as DateType} from './components/Form/DateType';
-export {default as FormType} from './components/Form/FormType';
-export {default as HiddenType} from './components/Form/HiddenType';
-export {default as PasswordType} from './components/Form/PasswordType';
-export {default as RadioGroupType} from './components/Form/RadioGroupType';
-export {default as RadioType} from './components/Form/RadioType';
-export {default as TextareaType} from './components/Form/TextareaType';
-export {default as TextType} from './components/Form/TextType';
-export {default as SwitchType} from './components/Form/SwitchType';
+// FormTypes
+Vue.component('CheckBoxGroupType', () => import('./components/Form/CheckBoxGroupType'));
+Vue.component('CheckBoxType', () => import('./components/Form/CheckBoxType'));
+Vue.component('ChoiceType', () => import('./components/Form/ChoiceType'));
+Vue.component('CollectionType', () => import('./components/Form/CollectionType'));
+Vue.component('FormType', () => import('./components/Form/FormType'));
+Vue.component('DateType', () => import('./components/Form/DateType'));
+Vue.component('HiddenType', () => import('./components/Form/HiddenType'));
+Vue.component('PasswordType', () => import('./components/Form/PasswordType'));
+Vue.component('RadioGroupType', () => import('./components/Form/RadioGroupType'));
+Vue.component('RadioType', () => import('./components/Form/RadioType'));
+Vue.component('SwitchType', () => import('./components/Form/SwitchType'));
+Vue.component('TextareaType', () => import('./components/Form/TextareaType'));
+Vue.component('TextType', () => import('./components/Form/TextType'));
+
+// Other components
+Vue.component('App', () => import('./components/App'));
+Vue.component('Login', () => import('./components/Login'));
+Vue.component('Datatable', () => import('./components/Datatable'));
+Vue.component('ExternalComponent', () => import('./components/ExternalComponent'));
+Vue.component('MenuItem', () => import('./components/MenuItem'));

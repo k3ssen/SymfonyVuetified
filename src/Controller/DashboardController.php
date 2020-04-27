@@ -27,4 +27,16 @@ class DashboardController extends AbstractController
             'controller_name' => 'DashboardController',
         ]);
     }
+
+    /**
+     * @Route("/ajaxTest.js", name="ajaxTest")
+     */
+    public function ajaxTest()
+    {
+        return $this->render('dashboard/ajaxTest.html.twig', [
+            'controller_name' => 'DashboardController',
+        ]);
+//        $response->headers->set('Content-Type','text/javascript');
+//        return $response;
+    }
 }

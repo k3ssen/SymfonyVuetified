@@ -17,7 +17,7 @@
         props: {
             href: {
                 type: String,
-                default: ""
+                default: null
             },
             icon: {
                 type: String,

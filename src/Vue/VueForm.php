@@ -17,6 +17,7 @@ class VueForm implements \JsonSerializable
         'choice' => 'ChoiceType',
         'text' => 'TextType',
         'textarea' => 'TextareaType',
+        'password' => 'PasswordType',
     ];
 
     private array $vars;
