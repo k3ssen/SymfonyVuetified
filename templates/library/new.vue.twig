@@ -1,7 +1,7 @@
 {% extends 'base.vue.twig'  %}
 {% set title = 'Library' %}
 
-{% block template %}
+{% block body %}
     {{ vue_store('form', vue_form(form)) }}
     <v-form action="{{ path('library_new') }}" method="post">
         <form-type :form="$store.form"></form-type>
@@ -9,7 +9,7 @@
     </v-form>
 {% endblock %}
 
-{% block vueJs %}
+{% block script %}
     <script>
         window.vue = {
             created() {

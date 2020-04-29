@@ -2,7 +2,7 @@
 
 {% block title %}TwigVue component{% endblock %}
 
-{% block template %}
+{% block body %}
     {{ vue_store('menuItems', [{text: 'SomeMenuText', href: '#testen', icon: 'mdi-view-dashboard'}]) }}
 <div class="example-wrapper">
     <h1>Twig and Vue</h1>
@@ -95,7 +95,7 @@
 
 </div>
 {% endblock %}
-{% block vueJs %}
+{% block script %}
     <script>
         let vue = {
             data: () => ({

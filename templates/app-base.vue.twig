@@ -9,25 +9,19 @@
             <v-breadcrumbs :items="$store.breadcrumbs" divider=">"></v-breadcrumbs>
         </div>
         {% include 'flash_messages.html.twig' %}
-        {% block body %}{% endblock %}
     </app>
 {% endblock %}
 
 {% block javascripts %}
-    {% block vueJs %}{% endblock %}
+    {% block script %}{% endblock %}
     <script>
-        {% if block('template') is defined %}
-            var baseVue = {
+        window.pageVue = Object.assign(
+            {
+                template: `<div>{{ block('body')|replace({'`' : '\\\`'})|raw }}</div>`,
                 delimiters: ['{', '}'],
-                template: `<div>{{ block('template')|replace({'`' : '\\\`'})|raw }}</div>`,
-            };
-        {% endif %}
-        if (typeof baseVue !== 'undefined') {
-            window.pageVue = Object.assign(
-                baseVue,
-                typeof window.vue !== 'undefined' ? window.vue : {}
-            );
-        }
+            },
+            typeof window.vue !== 'undefined' ? window.vue : {}
+        );
         window.store = {{ get_vue_store() | raw }};
     </script>
     {{ parent() }}

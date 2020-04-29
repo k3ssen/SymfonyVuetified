@@ -2,12 +2,12 @@
 {% extends 'base.vue.twig' %}
 {% set title = 'User' %}
 
-{% block template %}
+{% block body %}
     <datatable :datatable="datatable"></datatable>
     <v-btn href="{{ path('admin_user_new') }}" color="success">Add user</v-btn>
 {% endblock %}
 
-{% block vueJs %}
+{% block script %}
     <script>
         window.vue = {
             data: () => ({
