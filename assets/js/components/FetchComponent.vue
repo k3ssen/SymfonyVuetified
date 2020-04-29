@@ -1,5 +1,8 @@
 <template>
-    <div  ref="component">
+    <div ref="component">
+        <v-alert v-if="error" type="error">
+            An error occurred.
+        </v-alert>
         <component v-if="component" :is="component"></component>
         <div ref="content" style="display: none"></div>
     </div>
@@ -9,12 +12,13 @@
     export default {
         data: () => ({
             component: null,
+            error: false,
         }),
         props: {
             url: {
                 type: String,
             },
-            useFetch: {
+            fetchPost: {
                 type: Boolean,
                 default: true
             },
@@ -29,7 +33,7 @@
         },
         async created() {
             await this.load();
-            if (this.useFetch) {
+            if (this.fetchPost) {
                 this.$refs.component.addEventListener('submit', (event) => {
                     const el = event.target;
                     if (el.tagName.toLowerCase() === 'form') {
@@ -46,40 +50,37 @@
         },
         methods: {
             async submitForm(formElement) {
-                this.$emit('loading');
-                // reset the object and store to prevent these from having merged with new data.
-                window[this.objectName] = {};
-                window[this.storeName] = {};
-
-                const response = await fetch(formElement.action, {
-                    // Do NOT add headers, since this will affect the body, causing formData to be sent differently.
+                await this.fetch(formElement.action, {
                     headers: {'fetch': 'post'},
                     method: "POST",
                     body: new FormData(formElement),
                 });
-                if (response.redirected) {
-                    const url = response.url;
-                    window.history.pushState(url, url, url);
-                }
-
-                this.processResponseContent(await response.text());
-                this.$emit('loaded');
             },
             async load() {
+                await this.fetch(this.url, { headers: {'fetch': 'get'} });
+            },
+            async fetch(fetchUrl, fetchOptions) {
+                this.error = false;
                 this.$emit('loading');
-                // reset the object and store to prevent these from having merged with new data.
+                // reset the object and store to prevent these from conflicting with new data.
                 window[this.objectName] = {};
                 window[this.storeName] = {};
 
-                const response = await fetch(this.url, { headers: {'fetch': 'get'} });
+                const response = await fetch(fetchUrl, fetchOptions);
                 if (response.redirected) {
                     const url = response.url;
                     window.history.pushState(url, url, url);
                 }
-                this.processResponseContent(await response.text());
+                if (!response.ok) {
+                    this.error = true;
+                    this.$emit('error', response);
+                } else {
+                    this.processResponseContent(await response.text());
+                }
+                this.$emit('loaded');
             },
             processResponseContent(responseText) {
-                // Load the fetched content into the DOM, so it can be analyzed.
+                // Load the responseText into the content's innerHtml, so it can be analyzed.
                 this.$refs.content.innerHTML = responseText;
                 // Scripts in innerHTML won't be executed, so replace them with new script-elements.
                 for (const script of this.$refs.content.getElementsByTagName('script')) {
@@ -91,7 +92,6 @@
                 this.loadComponent();
                 // Cleanup innerHTML as we no longer need it.
                 this.$refs.content.innerHTML = '';
-                this.$emit('loaded');
             },
             loadStoreData() {
                 // Update the $store if a store variable has been used.
@@ -100,14 +100,14 @@
                     // Add properties to the store using Vue.set to make sure these properties are reactive.
                     for (const property in store) {
                         if (store.hasOwnProperty(property)) {
-                            Vue.set(this.$store, property, store[property]);
+                            this.$set(this.$store, property, store[property]);
                         }
                     }
                 }
             },
             loadComponent() {
                 const vueObject = window[this.objectName];
-                // If no vue object is available, throw an exception to point out this component is not used correctly.
+                // If no vueObject available, throw an exception to point out this component is not used correctly.
                 if (typeof vueObject === 'undefined') {
                     throw new Error('Expected variable "'+this.objectName+'" was not found in ' + this.url);
                 } else {

@@ -7,16 +7,16 @@
 
             <v-app-bar app color="primary" dark clipped-left>
                 <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-                <v-toolbar-title>Application</v-toolbar-title>
+                <v-toolbar-title>{{ title }}</v-toolbar-title>
             </v-app-bar>
 
             <v-content>
                 <v-container>
-                        <slot name="before-page" />
-                        <external-component v-if="$store.pageUrl" :url="$store.pageUrl" :use-fetch="useFetch"></external-component>
-                        <component v-else-if="$window.pageVue" :is="$window.pageVue"></component>
-                        <slot v-else></slot>
-                        <slot name="after-page" />
+                    <slot name="before-page" />
+                    <fetch-component v-if="$store.fetchUrl" :url="$store.fetchUrl" :fetch-post="useFetch"></fetch-component>
+                    <component v-else-if="$window.pageVue" :is="$window.pageVue"></component>
+                    <slot v-else></slot>
+                    <slot name="after-page" />
                 </v-container>
             </v-content>
         </div>
@@ -24,18 +24,27 @@
 </template>
 
 <script>
-    import ExternalComponent from "./ExternalComponent";
+    import FetchComponent from "./FetchComponent";
     export default {
-        components: {ExternalComponent},
+        components: {FetchComponent},
         props: {
             useFetch: {
                 type: Boolean,
                 default: true
             },
+            title: {
+                type: String,
+                default: "Application"
+            },
         },
         data: () => ({
             drawer: null,
         }),
+        beforeCreate() {
+            if (typeof this.$store.fetchUrl === 'undefined') {
+                this.$set(this.$store, 'fetchUrl', null);
+            }
+        },
         mounted() {
             if (this.useFetch) {
                 const vm = this;
@@ -45,20 +54,20 @@
                         el = el.parentNode;
                     }
                     if (el) {
-                        vm.$store.pageUrl = el.href;
+                        vm.$store.fetchUrl = el.href;
                         event.preventDefault();
                     }
                 });
 
                 window.addEventListener('popstate', (event) => {
-                    vm.$store.pageUrl = event.state;
+                    vm.$store.fetchUrl = event.state;
                 });
             }
         },
         watch: {
-            '$store.pageUrl': function() {
+            '$store.fetchUrl': function() {
                 if (this.useFetch) {
-                    const href = this.$store.pageUrl;
+                    const href = this.$store.fetchUrl;
                     window.history.pushState(href, href, href);
                 }
             }

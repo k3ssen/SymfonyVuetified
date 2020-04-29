@@ -11,6 +11,7 @@
 <script>
     import {formTypeMixin} from "./FormTypeMixin";
     import FormType from "./FormType";
+
     export default {
         components: {FormType},
         mixins: [formTypeMixin],
