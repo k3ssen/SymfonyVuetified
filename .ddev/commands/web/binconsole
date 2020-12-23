@@ -1,0 +1,7 @@
+#!/bin/bash
+
+## Description: Execute php bin/console in the web container
+## Usage: c
+## Example: "ddev c list"
+
+php bin/console $@
