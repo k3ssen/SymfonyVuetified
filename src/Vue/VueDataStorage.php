@@ -16,7 +16,7 @@ class VueDataStorage
         self::TYPE_STORE => [],
     ];
 
-    public function addData(String $key, $value, string $type = self::TYPE_DATA): void
+    public function addData(string $key, $value, string $type = self::TYPE_DATA): void
     {
         if ($value instanceof FormView) {
             $value = new VueForm($value);

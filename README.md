@@ -1,7 +1,7 @@
 # Symfony Vuetified
 
 A base project for creating a [Symfony](https://symfony.com/) application that uses
-[Vuetify](https://vuetifyjs.com/en/) as frontend, while making it easy to pass data from Twig.
+[Vuetify](https://vuetifyjs.com/en/) as frontend, while making it easy to pass serverside data.
 
 This project is based on the [symfony/website-skeleton](https://github.com/symfony/website-skeleton)
 with Symfony 5.x and the addition of `"symfony/webpack-encore-bundle": "*"`.
@@ -18,22 +18,26 @@ composer and yarn (or npm) installed.
 
 1. Clone the project
 2. `cd` into the project
-3. run`./init-project.sh --php=7.4`   
-   Use a different php version if you want (only 7.4 and 8.0 have been tested; at the very least you need php 7.2.5).
+3. run`./init-project.sh --php=7.4` (you can use --php=8.0 instead if you want).  
+   **Note:** you may see Errors when the script is trying to run Webpack. 
+   The script will try to install missing packages automatically.
+   If this isn't working, then check step 12 in the manual setup.
 
-If you run into trouble, you could follow the manual setup below.
+After these steps, you can see running examples in the website.
+
+Check the manual setup below if you're running into trouble.
    
-### Manual setup (only needed if step 3 failed)
+### Manual setup (only needed if automatic setup failed)
 
 3. run `composer install --ignore-platform-reqs`  
-   --ignore-platform-reqs is need for php8.0 at the moment of writing.
-   You should omit it for php7.4.
+   --ignore-platform-reqs is needed for php8.0 at the moment of writing.
+   You can omit it for php7.4 (and probably 8.0 as well in the near future).
 7. Add the following line at the top of your webpack.config.js file:
 ```js
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 ```
 And enable vue with jsx by adding the following in webpack.config.js:  
- ```
+ ```js
     //...
     .enableVueLoader(() => {}, {
         useJsx: true
@@ -43,7 +47,6 @@ And enable vue with jsx by adding the following in webpack.config.js:
 (source: https://symfony.com/doc/current/frontend/encore/vuejs.html#jsx-support)
 
 While not required for this setup, you may want to uncomment enableSassLoader and enableTypeScriptLoader.
-You also might want make a comment of enableStimulusBridge to have that disabled.
 
 8. Add the following line to your `assets/app.js` file:
 ```js
@@ -67,7 +70,7 @@ cumbersome 'data-' attributes in html.
 The basic concept is that you can use a global vue object. This
 object will be used for creating the vue-instance.
 
-```twig
+```vue
 {% extends 'base.vue.twig' %}
 {% block body %}
     <p>
@@ -95,7 +98,7 @@ object will be used for creating the vue-instance.
 
 When passing data,  you’ll often need to do things like this:
 
-```twig
+```vue
 {% block body %}
     <div v-if="someObject && anotherObject">
         This tekst is only shown if both objects have a value.
@@ -115,7 +118,7 @@ When passing data,  you’ll often need to do things like this:
 
 If you just need to pass data to vue like this, you can use `vue_data` instead:
 
-```twig
+```vue
 {% block body %}
     {{ vue_data('someObject', someObject) }}
     {{ vue_data('anotherObject', anotherObject) }}
@@ -132,7 +135,7 @@ Data added this way will be json encoded and merged with the global vue object.
 
 In addition to adding data to the vue-instance, data can also be added to the vue $store observable, making
 data available to all vue components.
-```twig
+```vue
 {% block body %}
     {{ vue_store('someObject', someObject) }}
     {{ vue_store('anotherObject', anotherObject) }}
@@ -145,13 +148,16 @@ data available to all vue components.
 
 ## Using Fetch
 
-Because dynamic vue components can be rendered at runtime, the same principles can be used with `fetch` and load the response in a component.
+Because dynamic vue components can be rendered at runtime, the same principles can be used with `fetch` and load the
+response in a component.
 
 This project includes a FetchComponent that makes it really easy:
-```
+```vue
 <fetch-component url="/url-to-controller-action"></fetch-component>
 ```
 
+The `base.vue.twig` file in this project checks if a fetch was used to choose the suitable file to extend:
+if you're using fetch, only a template and the script will be loaded. Otherwise the entire page is loaded.
 
 ## Symfony's FormView as Vue component
 
@@ -161,7 +167,7 @@ This can be passed to the `FormType` vue-component where it will render the form
 similar to twig's `{{ form(form) }}`.
 
 Example:
-```twig
+```vue
 {% block body %}
     {{ vue_add('form', form) }}
     <form-type :form="form"></form-type>
@@ -170,7 +176,7 @@ Example:
 
 To take full control of your form-rendering you can also render parts individually:
 
-```twig
+```vue
 {% block body %}
     {{ vue_add('form', form) }}
     <v-row>
@@ -191,7 +197,7 @@ To take full control of your form-rendering you can also render parts individual
 The `block_prefixes` are used to determine what component should be used for each individual field.
 By setting a `block_prefix` in your FormType, you can specify a different component that you want to use for your
 field. So within your form type class, you can use something like this:
-```
+```php
 public function buildForm(FormBuilderInterface $builder, array $options): void
 {
     $builder->add('email', null, [

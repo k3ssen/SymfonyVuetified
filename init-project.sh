@@ -19,9 +19,10 @@ command_exists () {
 
 if command_exists ddev ; then
     ddev config --project-type=laravel --php-version="${php}" --docroot=public --create-docroot &&
+    ddev start &&
 
   # create bash file to open database with heidisql
-    cat > ./.ddev/commands/host/heidisql << ENDOFFILE
+    cat > ./.ddev/commands/host/heidisql << 'ENDOFFILE'
 #!/bin/bash
 
 ## Description: Run Heidisql (in Windows) against current db
@@ -33,7 +34,7 @@ if command_exists ddev ; then
 ENDOFFILE
 
   # create bash file to add command 'ddev c' as shortcut for 'ddev ssh' -> 'php bin/console'
-    cat > ./.ddev/commands/web/binconsole << ENDOFFILE
+    cat > ./.ddev/commands/web/binconsole << 'ENDOFFILE'
 #!/bin/bash
 
 ## Description: Execute php bin/console in the web container
@@ -44,7 +45,7 @@ php bin/console $@
 ENDOFFILE
 
   # create bash file to add command 'ddev c' as shortcut for 'ddev ssh' -> 'yarn'
-    cat > ./.ddev/commands/web/yarn << ENDOFFILE
+    cat > ./.ddev/commands/web/yarn << 'ENDOFFILE'
 #!/bin/bash
 
 ## Description: Execute yarn in the web container
@@ -55,11 +56,11 @@ yarn $@
 ENDOFFILE
 
   # create .enc.local file'
-    cat > ./.env.local << ENDOFFILE
+    cat > ./.env.local << 'ENDOFFILE'
 DATABASE_URL=mysql://db:db@db:3306/db?serverVersion=5.7
 ENDOFFILE
 
-    ddev start
+    ddev restart
 fi
 
 
@@ -95,23 +96,53 @@ line_old='.enableStimulusBridge()'
 line_new='//.enableStimulusBridge()'
 sed -i "s%$line_old%$line_new%g" ./webpack.config.js &&
 
+
+# capture the output of a command so it can be retrieved with ret
+cap () {
+  tee /tmp/capture.out;
+}
+
+count=0;
+runYarnDev() {
+  ((count++)); # use count to prevent infinite loop in case something goes wrong
+  if [[ $count < 8 ]]; then
+    if command_exists ddev ; then
+      ddev yarn dev | cap;
+    else
+      yarn dev | cap;
+    fi
+    string=$(cat /tmp/capture.out);
+    if [[ "$string" == *"yarn add "* ]]; then
+      yarnAddCommand=$(echo ${string} | sed 's/.*\(yarn add [^ ]*\( \-\-dev\)*\).*/\1/');
+      echo "Trying to automatically add package.";
+      if command_exists ddev ; then
+        ddev exec ${yarnAddCommand};
+      else
+        eval ${yarnAddCommand};
+      fi
+      runYarnDev;
+    fi
+  fi
+}
+
 if command_exists ddev ; then
       # it's risky to add vuetify without specifying any version, but otherwise the process can't continue.
     # check https://vuetifyjs.com/en/getting-started/installation/#webpack-install for requirements
     ddev yarn add vuetify &&
     ddev yarn add sass sass-loader deepmerge vuetify-loader -D &&
     ddev yarn install &&
-    ddev yarn dev
+    runYarnDev &&
+    ddev launch;
 else
     if command_exists yarn ; then
         yarn add vuetify &&
         yarn add sass sass-loader deepmerge vuetify-loader -D &&
         yarn install &&
-        yarn dev
+        runYarnDev;
     else
         npm install vuetify -P &&
         npm install  sass sass-loader deepmerge vuetify-loader -D &&
         npm install &&
-        npm run dev
+        npm run dev;
     fi
 fi
