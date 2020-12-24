@@ -1,7 +1,0 @@
-#!/bin/bash
-
-## Description: Execute yarn in the web container
-## Usage: yarn
-## Example: "yarn install"
-
-yarn $@

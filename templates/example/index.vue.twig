@@ -1,0 +1,43 @@
+{% extends 'base.vue.twig' %}
+
+{% block body %}
+<div class="example-wrapper">
+    <h1>Twig and Vue</h1>
+
+    <p>
+        This is an example project in which you can use Vue inside Twig and overcome the limitations of using slots.
+    </p>
+
+    {{ vue_data('test', 'test') }}
+    <p>
+        test = { test }
+    </p>
+    <p>
+        { seconds } seconds = { currentTimeString }
+    </p>
+
+</div>
+{% endblock %}
+{% block script %}
+    <script>
+        vue = {
+            data: () => ({
+                seconds: 0,
+            }),
+            mounted() {
+                setInterval(() => { this.seconds++; }, 1000);
+            },
+            computed: {
+                test() {
+                    return this.$store.testdata.aga;
+                },
+                mounted() {
+                    setInterval(() => { this.timer++; }, 1000);
+                },
+                currentTimeString() {
+                    return new Date().toLocaleTimeString();
+                }
+            }
+        };
+    </script>
+{% endblock %}

@@ -1,0 +1,8 @@
+{# pass an array argument to get the messages of those types  #}
+{% for label, messages in app.session.flashbag.all  %}
+    {% for message in messages %}
+        <v-alert type="{{ label }}">
+            {{ message }}
+        </v-alert>
+    {% endfor %}
+{% endfor %}

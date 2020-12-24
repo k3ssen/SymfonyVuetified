@@ -1,2 +1,2 @@
 {% set isFetchRequest = app.request.headers.get('fetch') %}
-{% extends isFetchRequest ? 'ajax-base.vue.twig' : 'app-base.vue.twig' %}
+{% extends isFetchRequest ? 'fetch-base.vue.twig' : 'app-base.vue.twig' %}

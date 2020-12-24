@@ -1,0 +1,30 @@
+{% extends 'base.vue.twig' %}
+
+{% block body %}
+<div>
+    <h1>FetchComponent example</h1>
+
+    <p>
+        With the FetchComponent you load a page as a dynamic vue component.
+    </p>
+    <v-btn @click="$store.dialog = true">Open dialog</v-btn>
+
+    {{ vue_store('dialog', false) }}
+    <v-dialog v-model="$store.dialog" width="500">
+        <v-card>
+            <v-card-title class="headline grey lighten-2">
+                Dialog
+            </v-card-title>
+            <v-card-text>
+                <fetch-component url="{{ path('example_fetch_content') }}"></fetch-component>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" text @click="$store.dialog = false">
+                    Close dialog
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+</div>
+{% endblock %}
