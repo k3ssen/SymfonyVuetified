@@ -9,9 +9,3 @@ example_fetch:
     controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
     defaults:
         template: example/fetch.vue.twig
-
-example_fetch_content:
-    path: /fetch-content
-    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
-    defaults:
-        template: example/fetch_content.vue.twig

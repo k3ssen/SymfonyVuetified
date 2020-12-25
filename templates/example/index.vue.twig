@@ -1,23 +1,83 @@
 {% extends 'base.vue.twig' %}
 
-{% block body %}
-<div class="example-wrapper">
-    <h1>Twig and Vue</h1>
-
-    <p>
-        This is an example project in which you can use Vue inside Twig and overcome the limitations of using slots.
-    </p>
-
-    {{ vue_data('test', 'test') }}
-    <p>
-        test = { test }
-    </p>
-    <p>
-        { seconds } seconds = { currentTimeString }
-    </p>
-
-</div>
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 10px;
+        }
+    </style>
 {% endblock %}
+
+{% block body %}
+    <h1>
+        Basic usage
+    </h1>
+    <p>
+        By extending <code>base.vue.twig</code> the basic handling for the vue instance is taken care of.
+        Using certain components doesn't require any special code:
+    </p>
+<pre v-pre>
+{{ '{% extends \'base.vue.twig\' %}' }}
+{{ '{% block body %}' }}
+    &lt;v-row>
+        &lt;v-col>
+            Column A
+        &lt;/v-col>
+        &lt;v-col>
+            Column B
+        &lt;/v-col>
+    &lt;/v-row>
+{{ '{% endblock %}' }}
+</pre>
+
+<p>
+    If you need to make serverside data available to vue, you can use <code>vue_data</code>:
+</p>
+<pre v-pre>
+{{ '{% extends \'base.vue.twig\' %}' }}
+{{ '{% block body %}' }}
+    {{ '{{ vue_data(\'product\', product) }}' }}
+    &lt;div v-if="product">
+        This text is only shown if product has a value.
+    &lt;/div>
+{{ '{% endblock %}' }}
+</pre>
+
+    <p>
+        The above example would achieve the same as the code below:
+    </p>
+    <pre v-pre>
+{{ '{% extends \'base.vue.twig\' %}' }}
+{{ '{% block body %}' }}
+    &lt;div v-if="product">
+        This text is only shown if product has a value.
+    &lt;/div>
+{{ '{% endblock %}' }}
+{{ '{% block script %}' }}
+    &lt;script>
+        vue = {
+            data: () => ({
+                product: {{ '{{ product | json_encode | raw }}' }}
+            })
+        }
+    &lt;/script>
+{{ '{% endblock %}' }}
+</pre>
+
+    <p>
+        The second approach is more useful when you need to add other vue-attributes, such as computed properties
+        and methods.
+
+        If you want, you can use a combination of both approaches: data you add with <code>vue_data</code> will be
+        merged with the data in this vue object.
+    </p>
+
+{% endblock %}
+
 {% block script %}
     <script>
         vue = {
@@ -28,14 +88,10 @@
                 setInterval(() => { this.seconds++; }, 1000);
             },
             computed: {
-                test() {
-                    return this.$store.testdata.aga;
-                },
-                mounted() {
-                    setInterval(() => { this.timer++; }, 1000);
-                },
                 currentTimeString() {
-                    return new Date().toLocaleTimeString();
+                    const date = new Date();
+                    date.setSeconds(date.getSeconds() + 10);
+                    return date.toLocaleTimeString();
                 }
             }
         };

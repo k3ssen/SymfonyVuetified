@@ -13,10 +13,7 @@
 {% block javascripts %}
     {% block script %}{% endblock %}
     <script>
-        window.vue = Object.assign(
-            { delimiters: ['{', '}'] },
-            window.vue ?? {}
-        );
+        window.vue = window.vue ?? {};
         window.vueData = {{ get_vue_data() | raw }};
         window.vueStoreData = {{ get_vue_store() | raw }};
     </script>
