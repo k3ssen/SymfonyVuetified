@@ -1,8 +1,8 @@
 {
-  "name": "symfony/website-skeleton",
+  "name": "k3ssen/symfony-vuetified",
   "type": "project",
   "license": "MIT",
-  "description": "A skeleton to start a new Symfony website",
+  "description": "A skeleton to start a new Symfony website with Vuetify",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {

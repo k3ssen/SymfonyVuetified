@@ -1,8 +1,0 @@
-{% extends 'base.vue.twig' %}
-{% set title = 'Library' %}
-
-{% block body %}
-    {{ vue_store('datatable', datatable) }}
-    <datatable :datatable="$store.datatable"></datatable>
-    <v-btn href="{{ path('library_new') }}" color="success">Add library</v-btn>
-{% endblock %}
