@@ -39,9 +39,9 @@ const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 And enable vue with jsx by adding the following in webpack.config.js:
  ```js
     //...
-.enableVueLoader(() => {}, {
-    useJsx: true
-})
+    .enableVueLoader(() => {}, {
+        useJsx: true
+    })
     .addPlugin(new VuetifyLoaderPlugin())
  ```
 (source: https://symfony.com/doc/current/frontend/encore/vuejs.html#jsx-support)
@@ -74,7 +74,7 @@ object will be used for creating the vue-instance.
 {% extends 'base.vue.twig' %}
 {% block body %}
     <p>
-    { seconds } seconds have passed.
+        @{ seconds } seconds have passed.
     </p>
 {% endblock %}
 {% block script %}
@@ -93,8 +93,11 @@ object will be used for creating the vue-instance.
 {% endblock %}
 ```
 
-> Note that Vue and Twig both use {{ and }} delimiters by default, so for Vue a single { is being used here.
-> (you can easily use other delimiters if you want)
+> **Note:** Vue and Twig both use `{{` and `}}` delimiters by default, so for Vue a `@{` and `}` are used instead.
+> You can specify different delimiters if you want, but avoid using `${` 
+> like [in Symfony's example](https://symfony.com/doc/5.2/frontend/encore/vuejs.html#using-vue-inside-twig-templates):
+> if you pass twig content as template to vue you'll need to render the content between ticks (\`).
+> When using ticks `${` will be parsed as javascript variable, causing unwanted behaviour.
 
 ## Passing data (`vue_data`)
 
@@ -102,36 +105,35 @@ When passing data,  you’ll often need to do things like this:
 
 ```vue
 {% block body %}
-<div v-if="someObject && anotherObject">
-This tekst is only shown if both objects have a value.
-</div>
+    <div v-if="someObject && anotherObject">
+        This tekst is only shown if both objects have a value.
+    </div>
 {% endblock %}
 {% block script %}
-<script>
-vue = {
-    data: () => ({
-        someObject: {{ someObject | json_encode | raw }},
-anotherObject: {{ anotherObject | json_encode | raw }},
-}),
-}
-</script>
+    <script>
+        vue = {
+            data: () => ({
+                someObject: {{ someObject | json_encode | raw }},
+                anotherObject: {{ anotherObject | json_encode | raw }},
+            })
+        }
+    </script>
 {% endblock %}
 ```
 
-If you just need to pass data to vue like this, you can use `vue_data` instead:
+If you need to pass server data to vue, you can use `vue_data` instead:
 
 ```vue
 {% block body %}
-{{ vue_data('someObject', someObject) }}
-{{ vue_data('anotherObject', anotherObject) }}
-<div v-if="someObject && anotherObject">
-This tekst is only shown if both objects have a value.
-</div>
+    {{ vue_data('someObject', someObject) }}
+    {{ vue_data('anotherObject', anotherObject) }}
+    <div v-if="someObject && anotherObject">
+        This tekst is only shown if both objects have a value.
+    </div>
 {% endblock %}
 ```
 
 Data added this way will be json encoded and merged with the global vue object.
-
 
 ## Global observable (`$store` and `vue_store`)
 
@@ -139,11 +141,11 @@ In addition to adding data to the vue-instance, data can also be added to the vu
 data available to all vue components.
 ```vue
 {% block body %}
-{{ vue_store('someObject', someObject) }}
-{{ vue_store('anotherObject', anotherObject) }}
-<div v-if="$store.someObject && $store.anotherObject">
-This tekst is only shown if both objects have a value.
-</div>
+    {{ vue_store('someObject', someObject) }}
+    {{ vue_store('anotherObject', anotherObject) }}
+    <div v-if="$store.someObject && $store.anotherObject">
+        This tekst is only shown if both objects have a value.
+    </div>
 {% endblock %}
 ```
 
@@ -171,8 +173,8 @@ similar to twig's `{{ form(form) }}`.
 Example:
 ```vue
 {% block body %}
-{{ vue_add('form', form) }}
-<form-type :form="form"></form-type>
+    {{ vue_add('form', form) }}
+    <form-type :form="form"></form-type>
 {% endblock %}
 ```
 
@@ -180,16 +182,16 @@ To take full control of your form-rendering you can also render parts individual
 
 ```vue
 {% block body %}
-{{ vue_add('form', form) }}
-<v-row>
-<v-col>
-    <form-type :form="form.children.name"></form-type>
-</v-col>
-<v-col>
-    <form-type :form="form.children.email"></form-type>
-</v-col>
-</v-row>
-<form-type :form="form"></form-type> <!-- renders remaining form-fields -->
+    {{ vue_add('form', form) }}
+    <v-row>
+        <v-col>
+            <form-type :form="form.children.name"></form-type>
+        </v-col>
+        <v-col>
+            <form-type :form="form.children.email"></form-type>
+        </v-col>
+    </v-row>
+    <form-type :form="form"></form-type> <!-- renders remaining form-fields -->
 {% endblock %}
 ```
 
@@ -220,12 +222,16 @@ have a form property defined. To make it easier, just use the FormTypeMixin:
 </template>
 
 <script>
-import {formTypeMixin} from "./FormTypeMixin";
-export default {
-    mixins: [formTypeMixin],
-};
+    import {formTypeMixin} from "./FormTypeMixin";
+    export default {
+        mixins: [formTypeMixin],
+    };
 </script>
 ```
 
-Have a look at the components in /assets/components/Form and you'll notice that most of these aren't more
-complex than the example above.
+Have a look at the components in /assets/components/Form and you'll notice that most of these
+aren't more complex than the example above.
+
+> **Note:** The form components are just an example implementation to help get started.
+> They haven't been perfectly refined for all kinds of different forms, so you may need to do
+> some tweaking to make it suitable for your own project.
