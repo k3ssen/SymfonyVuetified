@@ -5,24 +5,17 @@
         <div slot="menu">
             {% block menu %}{{ parent() }}{% endblock %}
         </div>
-        <div slot="before-page">
-            <v-breadcrumbs :items="$store.breadcrumbs" divider=">"></v-breadcrumbs>
-        </div>
-        {% include 'flash_messages.html.twig' %}
+        {% include 'flash_messages.vue.twig' %}
+        {% block body %}{% endblock %}
     </app>
 {% endblock %}
 
 {% block javascripts %}
     {% block script %}{% endblock %}
     <script>
-        window.pageVue = Object.assign(
-            {
-                template: `<div>{{ block('body')|replace({'`' : '\\\`'})|raw }}</div>`,
-                delimiters: ['{', '}'],
-            },
-            typeof window.vue !== 'undefined' ? window.vue : {}
-        );
-        window.store = {{ get_vue_store() | raw }};
+        window.vue = window.vue ?? {};
+        window.vueData = {{ get_vue_data() | raw }};
+        window.vueStoreData = {{ get_vue_store() | raw }};
     </script>
     {{ parent() }}
 {% endblock %}

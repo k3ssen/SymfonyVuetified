@@ -1,14 +1,11 @@
 {% block menu %}
     <v-list nav>
         {% block menuItems %}
-            <menu-item href="/" icon="mdi-view-dashboard">
+            <menu-item href="{{ path('example_index') }}" icon="mdi-view-dashboard">
                 Dashboard
             </menu-item>
-            <menu-item href="{{ path('admin_user_index') }}" icon="mdi-account-multiple">
-                Users
-            </menu-item>
-            <menu-item href="{{ path('library_index') }}" icon="mdi-book">
-                Library
+            <menu-item href="{{ path('example_fetch') }}" icon="mdi-view-dashboard">
+                Fetch example
             </menu-item>
         {% endblock %}
     </v-list>
