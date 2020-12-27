@@ -156,7 +156,7 @@ similar to twig's `{{ form(form) }}`.
 Example:
 ```vue
 {% block body %}
-    {{ vue_add('form', form) }}
+    {{ vue_data('form', form) }}
     <form-type :form="form"></form-type>
 {% endblock %}
 ```
@@ -165,7 +165,7 @@ To take full control of your form-rendering you can also render parts individual
 
 ```vue
 {% block body %}
-    {{ vue_add('form', form) }}
+    {{ vue_data('form', form) }}
     <v-row>
         <v-col>
             <form-type :form="form.children.name"></form-type>
