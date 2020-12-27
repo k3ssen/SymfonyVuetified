@@ -24,8 +24,6 @@ if (typeof vue === 'object') {
     }
 
     new Vue(Object.assign({
-        el: '#app',
-        delimiters: ['@{', '}'],
         vuetify,
     }, vue));
 }

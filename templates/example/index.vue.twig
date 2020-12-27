@@ -1,4 +1,4 @@
-{% extends 'base.vue.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -76,24 +76,4 @@
         merged with the data in this vue object.
     </p>
 
-{% endblock %}
-
-{% block script %}
-    <script>
-        vue = {
-            data: () => ({
-                seconds: 0,
-            }),
-            mounted() {
-                setInterval(() => { this.seconds++; }, 1000);
-            },
-            computed: {
-                currentTimeString() {
-                    const date = new Date();
-                    date.setSeconds(date.getSeconds() + 10);
-                    return date.toLocaleTimeString();
-                }
-            }
-        };
-    </script>
 {% endblock %}

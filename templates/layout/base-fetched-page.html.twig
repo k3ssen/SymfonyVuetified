@@ -1,9 +1,8 @@
 <template>
+    {# wrap everything inside a div-tag, to ensure the dynamic vue-component will always have one root element. #}
     <div>
-        {% block appContent %}
-            {% include 'flash_messages.vue.twig' %}
-            {% block body %}{% endblock %}
-        {% endblock %}
+        {% include 'layout/flash_messages.vue.twig' %}
+        {% block body %}{% endblock %}
     </div>
 </template>
 
@@ -11,7 +10,7 @@
     {% block script %}{% endblock %}
     <script>
         window.vue =(Object.assign({
-            delimiters: ['@{', '}'],
+            delimiters: ['@{', '}'], {# Make sure to set the same delimiters in 'base-full-page.html.twig #}
         }, window.vue ?? {}));
         window.vueData = {{ get_vue_data() | raw }};
         window.vueStoreData = {{ get_vue_store() | raw }};

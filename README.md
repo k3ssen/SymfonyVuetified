@@ -8,7 +8,7 @@ with Symfony 5.x and the addition of `"symfony/webpack-encore-bundle": "*"`.
 
 ## Getting started
 
-Assuming you run a server with php7.2.5+, mysql, composer, yarn (or npm) and required modules:
+Assuming you run a server with php7.2.5+ (or 8.0+), mysql, composer, yarn (or npm) and required modules:
 
 1. Checkout project
 2. run`./init-project.sh`  
@@ -60,7 +60,7 @@ The basic concept is that you can use a global vue object.
 This object will be used for creating the vue-instance.
 
 ```vue
-{% extends 'base.vue.twig' %}
+{% extends 'base.html.twig' %}
 {% block body %}
     <p>
         @{ seconds } seconds have passed.
@@ -143,7 +143,7 @@ This project includes a FetchComponent that makes it really easy:
 <fetch-component url="/url-to-controller-action"></fetch-component>
 ```
 
-The `base.vue.twig` file in this project checks if a fetch was used to choose the suitable file to extend:
+The `base.html.twig` file in this project checks if a fetch was used to choose the suitable file to extend:
 if you're using fetch, only a template and the script will be loaded. Otherwise the entire page is loaded.
 
 ## Symfony's FormView as Vue component
