@@ -1,10 +1,10 @@
 <template>
-    <v-text-field v-model="form.vars.data" v-bind="attributes"/>
+    <v-text-field v-model="form.data" v-bind="attributes"/>
 </template>
 <script>
-    import {formTypeMixin} from "./FormTypeMixin";
+    import {formWidgetMixin} from "./FormWidgetMixin";
 
     export default {
-        mixins: [formTypeMixin],
+        mixins: [formWidgetMixin],
     };
 </script>

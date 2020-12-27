@@ -10,12 +10,12 @@ for (const i in VuetifyComponents) {
 // Note that the custom components below aren't imported using "import * as components from '.components'"
 // This is because importing the components like below will help IDE to provide autocompletion.
 
-// FormTypes
+// FormWidgets
 Vue.component('CheckboxGroupType', () => import('./components/Form/CheckboxGroupType'));
 Vue.component('CheckboxType', () => import('./components/Form/CheckboxType'));
 Vue.component('ChoiceType', () => import('./components/Form/ChoiceType'));
 Vue.component('CollectionType', () => import('./components/Form/CollectionType'));
-Vue.component('FormType', () => import('./components/Form/FormType'));
+Vue.component('FormWidget', () => import('./components/Form/FormWidget'));
 Vue.component('DateType', () => import('./components/Form/DateType'));
 Vue.component('HiddenType', () => import('./components/Form/HiddenType'));
 Vue.component('PasswordType', () => import('./components/Form/PasswordType'));

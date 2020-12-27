@@ -1,4 +1,4 @@
-const formTypeMixin = {
+const formWidgetMixin = {
     data: () => ({
         alreadyRendered: false,
         attributes: {},
@@ -12,4 +12,4 @@ const formTypeMixin = {
         this.form.rendered = true;
     },
 };
-export { formTypeMixin };
+export { formWidgetMixin };

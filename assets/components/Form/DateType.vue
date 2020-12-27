@@ -23,10 +23,10 @@
         </v-menu>
 </template>
 <script>
-    import {formTypeMixin} from "./FormTypeMixin";
+    import {formWidgetMixin} from "./FormWidgetMixin";
 
     export default {
-        mixins: [formTypeMixin],
+        mixins: [formWidgetMixin],
         data: () => ({
             locale: 'nl', // get locale from config-value
             fromDateMenu: false,

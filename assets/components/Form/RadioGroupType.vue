@@ -4,14 +4,14 @@
             v-model="form.vars.data"
         >
             <div v-for="(child, key) in form.children" :key="key">
-                <FormType :form="child" />
+                <form-widget :form="child"></form-widget>
             </div>
         </v-radio-group>
 </template>
 <script>
-    import {formTypeMixin} from "./FormTypeMixin";
+    import {formWidgetMixin} from "./FormWidgetMixin";
     export default {
-        mixins: [formTypeMixin],
+        mixins: [formWidgetMixin],
         created() {
             for (const child of this.form.children) {
                 if (child.vars.data === true) {

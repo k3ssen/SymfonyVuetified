@@ -6,7 +6,7 @@
         <table>
             <tr v-for="(child, key) in form.children" :key="key">
                 <td v-for="subChild in child.children" v-bind="subChild.vars.row_attr">
-                    <FormType :form="subChild" :parentForm="subChild" />
+                    <form-widget :form="subChild" :parentForm="subChild"></form-widget>
                 </td>
                 <td>
                     <v-btn v-if="form.vars.allow_delete" @click.stop="removeItem(key)">
@@ -25,10 +25,10 @@
 </template>
 
 <script>
-    import {formTypeMixin} from "./FormTypeMixin";
+    import {formWidgetMixin} from "./FormWidgetMixin";
 
     export default {
-        mixins: [formTypeMixin],
+        mixins: [formWidgetMixin],
         computed: {
             prototypeName() {
                 return this.form.vars.prototype.vars.name;

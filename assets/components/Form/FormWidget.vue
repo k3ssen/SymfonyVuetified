@@ -5,7 +5,7 @@
                 {{ form.vars.label }}
             </label>
             <div v-for="(child, key) in form.children" :key="key" v-bind="child.vars.row_attr">
-                <form-type :form="child" />
+                <form-widget :form="child" />
             </div>
         </template>
 
@@ -19,11 +19,11 @@
 </template>
 
 <script>
-    import { formTypeMixin } from "./FormTypeMixin";
+    import { formWidgetMixin } from "./FormWidgetMixin";
 
     export default {
-        name: 'FormType',
-        mixins: [formTypeMixin],
+        name: 'FormWidget',
+        mixins: [formWidgetMixin],
         data: () => ({
             componentType: null,
         }),
@@ -47,7 +47,7 @@
             setAttributes() {
                 let attr = {};
                 attr['form'] = this.form;
-                attr['label'] = this.form.vars.label;
+                attr['label'] = this.form.vars.label ?? this.form.vars.name;
                 attr['hint'] = this.form.vars.help;
                 attr['error-messages'] = this.form.vars.errors;
                 attr['error'] = !!this.form.vars.errors;
