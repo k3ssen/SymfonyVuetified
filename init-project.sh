@@ -1,74 +1,10 @@
 #!/bin/bash
 
-for ARGUMENT in "$@"
-do
-    KEY=$(echo $ARGUMENT | cut -f1 -d=)
-    VALUE=$(echo $ARGUMENT | cut -f2 -d=)
-
-    case "$KEY" in
-            --php)              php=${VALUE} ;;
-            *)
-    esac
-done
-
-echo "php version = ${php}"
-
 command_exists () {
     type "$1" &> /dev/null ;
 }
 
-if command_exists ddev ; then
-    ddev config --project-type=laravel --php-version="${php}" --docroot=public --create-docroot &&
-    ddev start &&
-
-  # create bash file to open database with heidisql
-    cat > ./.ddev/commands/host/heidisql << 'ENDOFFILE'
-#!/bin/bash
-
-## Description: Run Heidisql (in Windows) against current db
-## Usage: heidisql
-## Example: "ddev heidisql"
-
-'/mnt/c/Program Files/HeidiSQL/heidisql.exe' --user=root --host="127.0.0.1" --port=${DDEV_HOST_DB_PORT} --password=root
-
-ENDOFFILE
-
-  # create bash file to add command 'ddev c' as shortcut for 'ddev ssh' -> 'php bin/console'
-    cat > ./.ddev/commands/web/binconsole << 'ENDOFFILE'
-#!/bin/bash
-
-## Description: Execute php bin/console in the web container
-## Usage: c
-## Example: "ddev c list"
-
-php bin/console $@
-ENDOFFILE
-
-  # create bash file to add command 'ddev c' as shortcut for 'ddev ssh' -> 'yarn'
-    cat > ./.ddev/commands/web/yarn << 'ENDOFFILE'
-#!/bin/bash
-
-## Description: Execute yarn in the web container
-## Usage: yarn
-## Example: "yarn install"
-
-yarn $@
-ENDOFFILE
-
-  # create .enc.local file'
-    cat > ./.env.local << 'ENDOFFILE'
-DATABASE_URL=mysql://db:db@db:3306/db?serverVersion=5.7
-ENDOFFILE
-
-    ddev restart
-fi
-
-
-if command_exists ddev ; then
-    ddev composer install --ignore-platform-reqs
-else
-    composer install --ignore-platform-reqs
-fi
+composer install --ignore-platform-reqs
 
 echo "Updating assets/app.js";
 echo >> ./assets/app.js  &&
@@ -106,43 +42,39 @@ count=0;
 runYarnDev() {
   ((count++)); # use count to prevent infinite loop in case something goes wrong
   if [[ $count < 8 ]]; then
-    if command_exists ddev ; then
-      ddev yarn dev | cap;
-    else
-      yarn dev | cap;
-    fi
+    yarn dev | cap;
     string=$(cat /tmp/capture.out);
     if [[ "$string" == *"yarn add "* ]]; then
-      yarnAddCommand=$(echo ${string} | sed 's/.*\(yarn add [^ ]*\( \-\-dev\)*\).*/\1/');
-      echo "Trying to automatically add package.";
-      if command_exists ddev ; then
-        ddev exec ${yarnAddCommand};
-      else
-        eval ${yarnAddCommand};
-      fi
+      yarnAddCommand=$(echo ${string} | sed 's/.*\(yarn add [a-zA-Z0-9.@^ -]*\( \-\-dev\)*\).*/\1/');
+      echo "Trying to automatically add package(s) by executing: ${yarnAddCommand}";
+      eval ${yarnAddCommand};
       runYarnDev;
     fi
   fi
 }
 
-if command_exists ddev ; then
-      # it's risky to add vuetify without specifying any version, but otherwise the process can't continue.
-    # check https://vuetifyjs.com/en/getting-started/installation/#webpack-install for requirements
-    ddev yarn add vuetify &&
-    ddev yarn add sass sass-loader deepmerge vuetify-loader -D &&
-    ddev yarn install &&
-    runYarnDev &&
-    ddev launch;
-else
-    if command_exists yarn ; then
-        yarn add vuetify &&
-        yarn add sass sass-loader deepmerge vuetify-loader -D &&
-        yarn install &&
-        runYarnDev;
-    else
-        npm install vuetify -P &&
-        npm install  sass sass-loader deepmerge vuetify-loader -D &&
-        npm install &&
-        npm run dev;
+runNpmDev() {
+  ((count++)); # use count to prevent infinite loop in case something goes wrong
+  if [[ $count < 8 ]]; then
+    npm run dev | cap;
+    string=$(cat /tmp/capture.out);
+    if [[ "$string" == *"npm install "* ]]; then
+      npmAddCommand=$(echo ${string} | sed 's/.*\(npm install [a-zA-Z0-9.@^ -]*\( \-\-save\(\-dev\)*\)*\).*/\1/');
+      echo "Trying to automatically add package(s) by executing: ${npmAddCommand}";
+      eval ${npmAddCommand};
+      runNpmDev;
     fi
+  fi
+}
+
+if command_exists yarn ; then
+    yarn add vuetify &&
+    yarn add sass sass-loader deepmerge vuetify-loader -D &&
+    yarn install --force &&
+    runYarnDev;
+else
+    npm install vuetify -P &&
+    npm install  sass sass-loader deepmerge vuetify-loader -D &&
+    npm install --force &&
+    runNpmDev;
 fi

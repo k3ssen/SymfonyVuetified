@@ -8,26 +8,17 @@ with Symfony 5.x and the addition of `"symfony/webpack-encore-bundle": "*"`.
 
 ## Getting started
 
-### Requirements
+Assuming you run a server with php7.4+, mysql, composer, yarn (or npm) and required modules:
 
-The setup was created/tested with [DDEV-local](https://ddev.readthedocs.io/en/stable/).
-If you're running your own development environment, then you at least need to have php,
-composer and yarn (or npm) installed.
-
-### Setup
-
-1. Clone the project
-2. `cd` into the project
-3. run`./init-project.sh --php=7.4` (you can use --php=8.0 instead if you want).  
-   **Note:** you may see Errors when the script is trying to run Webpack.
+1. Checkout project
+2. run`./init-project.sh`  
+   You'll see Errors about missing packages when the script is trying to run Webpack.
    The script will try to install missing packages automatically.
-   If this isn't working, then check step 12 in the manual setup.
+   If this isn't working, then check step 12 in the manual steps.
 
-After these steps, you can see running examples in the website.
+Check the manual steps below if you're running into trouble.
 
-Check the manual setup below if you're running into trouble.
-
-### Manual setup (only needed if automatic setup failed)
+### Manual steps (only needed if automatic setup failed)
 
 3. run `composer install --ignore-platform-reqs`  
    --ignore-platform-reqs is needed for php8.0 at the moment of writing.
@@ -63,7 +54,7 @@ import './app-vue';
 # Concept/usage
 
 The aim is to make it easy to use Twig and Vue without resorting to API's or
-cumbersome 'data-' attributes in html.
+cumbersome `data-` attributes in html.
 
 ## global vue object
 
@@ -93,9 +84,9 @@ object will be used for creating the vue-instance.
 {% endblock %}
 ```
 
-> **Note:** Vue and Twig both use `{{` and `}}` delimiters by default, so for Vue a `@{` and `}` are used instead.
+> **Note:** Both Vue and Twig use `{{` and `}}` delimiters by default, so for Vue `@{` and `}` are used instead.
 > You can specify different delimiters if you want, but avoid using `${` 
-> like [in Symfony's example](https://symfony.com/doc/5.2/frontend/encore/vuejs.html#using-vue-inside-twig-templates):
+> like [Symfony's example](https://symfony.com/doc/5.2/frontend/encore/vuejs.html#using-vue-inside-twig-templates):
 > if you pass twig content as template to vue you'll need to render the content between ticks (\`).
 > When using ticks `${` will be parsed as javascript variable, causing unwanted behaviour.
 
@@ -104,11 +95,6 @@ object will be used for creating the vue-instance.
 When passing data,  you’ll often need to do things like this:
 
 ```vue
-{% block body %}
-    <div v-if="someObject && anotherObject">
-        This tekst is only shown if both objects have a value.
-    </div>
-{% endblock %}
 {% block script %}
     <script>
         vue = {
@@ -194,7 +180,6 @@ To take full control of your form-rendering you can also render parts individual
     <form-type :form="form"></form-type> <!-- renders remaining form-fields -->
 {% endblock %}
 ```
-
 
 ### Custom form-type-components
 
