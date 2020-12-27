@@ -8,7 +8,7 @@ with Symfony 5.x and the addition of `"symfony/webpack-encore-bundle": "*"`.
 
 ## Getting started
 
-Assuming you run a server with php7.4+, mysql, composer, yarn (or npm) and required modules:
+Assuming you run a server with php7.2.5+, mysql, composer, yarn (or npm) and required modules:
 
 1. Checkout project
 2. run`./init-project.sh`  
@@ -22,7 +22,6 @@ Check the manual steps below if you're running into trouble.
 
 3. run `composer install --ignore-platform-reqs`  
    --ignore-platform-reqs is needed for php8.0 at the moment of writing.
-   You can omit it for php7.4 (and probably 8.0 as well in the near future).
 7. Add the following line at the top of your webpack.config.js file:
 ```js
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
@@ -53,13 +52,12 @@ import './app-vue';
 
 # Concept/usage
 
-The aim is to make it easy to use Twig and Vue without resorting to API's or
-cumbersome `data-` attributes in html.
+The aim is to make it easy to use Twig and Vue without resorting to API's or `data-` attributes in html.
 
 ## global vue object
 
-The basic concept is that you can use a global vue object. This
-object will be used for creating the vue-instance.
+The basic concept is that you can use a global vue object.
+This object will be used for creating the vue-instance.
 
 ```vue
 {% extends 'base.vue.twig' %}
@@ -134,7 +132,6 @@ data available to all vue components.
     </div>
 {% endblock %}
 ```
-
 
 ## Using Fetch
 

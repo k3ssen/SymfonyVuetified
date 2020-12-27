@@ -22,10 +22,13 @@ class VueForm implements \JsonSerializable
 //        'vich_image' => 'WysiwygType',
     ];
 
-    private array $vars;
+    /**
+     * @var array
+     */
+    private $vars;
 
     /** @var VueForm[] */
-    private array $children = [];
+    private $children = [];
 
     public static function create(FormInterface $form): self
     {
@@ -82,6 +85,6 @@ class VueForm implements \JsonSerializable
 
     public function __toString()
     {
-        return json_encode($this, JSON_THROW_ON_ERROR);
+        return json_encode($this);
     }
 }

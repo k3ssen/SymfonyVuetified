@@ -45,7 +45,7 @@ runYarnDev() {
     yarn dev | cap;
     string=$(cat /tmp/capture.out);
     if [[ "$string" == *"yarn add "* ]]; then
-      yarnAddCommand=$(echo ${string} | sed 's/.*\(yarn add [a-zA-Z0-9.@^ -]*\( \-\-dev\)*\).*/\1/');
+      yarnAddCommand=$(echo ${string} | sed 's/.*\(yarn add [a-zA-Z0-9.@^ -/]*\( \-\-dev\)*\).*/\1/');
       echo "Trying to automatically add package(s) by executing: ${yarnAddCommand}";
       eval ${yarnAddCommand};
       runYarnDev;
@@ -59,7 +59,7 @@ runNpmDev() {
     npm run dev | cap;
     string=$(cat /tmp/capture.out);
     if [[ "$string" == *"npm install "* ]]; then
-      npmAddCommand=$(echo ${string} | sed 's/.*\(npm install [a-zA-Z0-9.@^ -]*\( \-\-save\(\-dev\)*\)*\).*/\1/');
+      npmAddCommand=$(echo ${string} | sed 's/.*\(npm install [a-zA-Z0-9.@^ -/]*\( \-\-save\(\-dev\)*\)*\).*/\1/');
       echo "Trying to automatically add package(s) by executing: ${npmAddCommand}";
       eval ${npmAddCommand};
       runNpmDev;
