@@ -8,7 +8,7 @@ composer install --ignore-platform-reqs
 
 echo "Updating assets/app.js";
 echo >> ./assets/app.js  &&
-echo "import './app-vue';" >> ./assets/app.js  &&
+echo "import './main';" >> ./assets/app.js  &&
 
 echo "Updating webpack.config.js for enableSassLoader, enableVueLoader, enableTypeScriptLoader";
 
@@ -28,9 +28,9 @@ line_new='.enableTypeScriptLoader()'
 sed -i "s%$line_old%$line_new%g" ./webpack.config.js &&
 
 # disable stimulus (we're using vue already)
-line_old='.enableStimulusBridge()'
-line_new='//.enableStimulusBridge()'
-sed -i "s%$line_old%$line_new%g" ./webpack.config.js &&
+#line_old='.enableStimulusBridge()'
+#line_new='//.enableStimulusBridge()'
+#sed -i "s%$line_old%$line_new%g" ./webpack.config.js &&
 
 
 # capture the output of a command so it can be retrieved with ret
@@ -69,12 +69,12 @@ runNpmDev() {
 
 if command_exists yarn ; then
     yarn add vuetify &&
-    yarn add sass sass-loader deepmerge vuetify-loader -D &&
+    yarn add sass sass-loader deepmerge vuetify-loader vue-property-decorator vue-class-component -D &&
     yarn install --force &&
     runYarnDev;
 else
     npm install vuetify -P &&
-    npm install  sass sass-loader deepmerge vuetify-loader -D &&
+    npm install  sass sass-loader deepmerge vuetify-loader vue-property-decorator vue-class-component -D &&
     npm install --force &&
     runNpmDev;
 fi

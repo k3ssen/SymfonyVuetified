@@ -12,17 +12,16 @@
     </v-list-item>
 </template>
 
-<script>
-    export default {
-        props: {
-            href: {
-                type: String,
-                default: null
-            },
-            icon: {
-                type: String,
-                default: ""
-            },
-        },
+
+<script lang="ts">
+    import {Vue, Prop, Component} from 'vue-property-decorator';
+
+    @Component({})
+    export default class MenuItem extends Vue {
+        @Prop({type: String, default: null})
+        public href!: string;
+
+        @Prop({type: String, default: ''})
+        public icon!: string;
     }
 </script>

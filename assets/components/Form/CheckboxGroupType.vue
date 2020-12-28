@@ -8,12 +8,16 @@
         </div>
     </div>
 </template>
-<script>
-    import {formWidgetMixin} from "./FormWidgetMixin";
+
+<script lang="ts">
+    import {Component, Mixins} from 'vue-property-decorator';
+    import FormWidgetMixin from "./FormWidgetMixin.ts";
     import FormWidget from "./FormWidget";
 
-    export default {
-        components: {FormWidget},
-        mixins: [formWidgetMixin],
-    };
+    @Component({
+        components: { FormWidget }
+    })
+    export default class CheckboxGroupType extends Mixins(FormWidgetMixin) {
+
+    }
 </script>

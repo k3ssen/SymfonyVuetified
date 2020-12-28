@@ -24,31 +24,28 @@
     </v-sheet>
 </template>
 
-<script>
-    import {formWidgetMixin} from "./FormWidgetMixin";
+<script lang="ts">
+    import {Component, Mixins} from 'vue-property-decorator';
+    import FormWidgetMixin from "./FormWidgetMixin.ts";
 
-    export default {
-        mixins: [formWidgetMixin],
-        computed: {
-            prototypeName() {
-                return this.form.vars.prototype.vars.name;
-            },
-            prototype() {
-                return JSON.stringify(this.form.vars.prototype);
-            },
-            childCount() {
-                return this.form.children.length;
-            }
-        },
-        methods: {
-            addItem() {
-                let prototypeString = this.prototype.replace(new RegExp(this.prototypeName, 'g'), this.childCount);
-                this.form.children.push(JSON.parse(prototypeString));
-            },
-            removeItem(key) {
-                this.form.children.splice(key, 1);
-            }
-        },
+    @Component({})
+    export default class CollectionType extends Mixins(FormWidgetMixin) {
+        get prototypeName() {
+            return this.form.vars.prototype.vars.name;
+        }
+        get prototype() {
+            return JSON.stringify(this.form.vars.prototype);
+        }
+        get childCount() {
+            return this.form.children.length;
+        }
+        addItem() {
+            let prototypeString = this.prototype.replace(new RegExp(this.prototypeName, 'g'), this.childCount.toString());
+            this.form.children.push(JSON.parse(prototypeString));
+        }
+        removeItem(key: any) {
+            this.form.children.splice(key, 1);
+        }
     }
 </script>
 

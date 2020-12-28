@@ -22,31 +22,38 @@ Check the manual steps below if you're running into trouble.
 
 3. run `composer install --ignore-platform-reqs`  
    --ignore-platform-reqs is needed for php8.0 at the moment of writing.
-7. Add the following line at the top of your webpack.config.js file:
+7. Make the changes in webpack.config.js file to enable Typescript, Vue, Vuetify.
+   And while we're at it, you probably also want to enable Sass.
+:
 ```js
+// add the line below at the top of the file
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
-```
-And enable vue with jsx by adding the following in webpack.config.js:
- ```js
-    //...
+// [...]
+Encore.
+    
+    // [...]
+    
+    // Enable Sass, TypeScript, add VueLoader and add VuetifyLoaderPlugin
+    
+    .enableSassLoader()
+    .enableTypeScriptLoader()
     .enableVueLoader(() => {}, {
         useJsx: true
     })
     .addPlugin(new VuetifyLoaderPlugin())
- ```
-(source: https://symfony.com/doc/current/frontend/encore/vuejs.html#jsx-support)
 
-While not required for this setup, you may want to uncomment enableSassLoader and enableTypeScriptLoader.
+    // [...]
+```
+(source: https://symfony.com/doc/current/frontend/encore/vuejs.html#jsx-support)
 
 8. Add the following line to your `assets/app.js` file:
 ```js
-import './app-vue';
+import './main';
 ```
-9. run `yarn add vuetify` (or use `npm install vuetify -P` instead)
-10. run `yarn add sass sass-loader deepmerge vuetify-loader -D`
-    (or use `npm install sass sass-loader deepmerge vuetify-loader -D` instead)
-11. run `yarn install` (or use `npm install`)
-12. Run `yarn dev` (or use `npm run dev`)  
+9. run `yarn add vuetify`
+10. run `yarn add sass sass-loader deepmerge vuetify-loader vue-property-decorator vue-class-component -D`
+11. run `yarn install`
+12. Run `yarn dev`
     Add the additional packages that you'll see in the Error(s).
     Repeat this step until no further packages are required.
 

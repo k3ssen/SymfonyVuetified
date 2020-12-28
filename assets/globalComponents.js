@@ -29,3 +29,4 @@ Vue.component('TextType', () => import('./components/Form/TextType'));
 Vue.component('App', () => import('./components/App'));
 Vue.component('FetchComponent', () => import('./components/FetchComponent'));
 Vue.component('MenuItem', () => import('./components/MenuItem'));
+
