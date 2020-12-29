@@ -1,9 +1,9 @@
 import {Vue, Component, Prop} from "vue-property-decorator";
 import IForm from "./IForm";
 
-@Component({})
+@Component
 export default class FormWidgetMixin extends Vue {
-    @Prop({})
+    @Prop()
     form!: IForm;
 
     alreadyRendered: boolean = false;

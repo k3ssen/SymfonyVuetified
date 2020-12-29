@@ -51,12 +51,12 @@ class VueForm implements \JsonSerializable
     public function jsonSerialize()
     {
         unset($this->vars['form']);
+        if ($this->vars['data'] === null) {
+            $this->vars['data'] = $this->vars['value'] ?? null;
+        }
         if ($this->vars['compound']) {
             $this->vars['data'] = null;
             $this->vars['value'] = null;
-        }
-        if (!$this->vars['data'] && $this->vars['value']) {
-            $this->vars['data'] = $this->vars['value'];
         }
         $this->vars['errors'] = (string) $this->vars['errors'];
         return [

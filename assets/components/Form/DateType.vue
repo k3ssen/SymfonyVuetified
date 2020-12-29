@@ -27,7 +27,7 @@
     import {Component, Mixins} from 'vue-property-decorator';
     import FormWidgetMixin from "./FormWidgetMixin.ts";
 
-    @Component({})
+    @Component
     export default class DateType extends Mixins(FormWidgetMixin) {
         locale: string = 'nl';
         fromDateMenu: boolean = false;

@@ -11,6 +11,7 @@ for (const i in VuetifyComponents) {
 // This is because importing the components like below will help IDE to provide autocompletion.
 
 // FormWidgets
+Vue.component('VueForm', () => import('./components/Form/VueForm'));
 Vue.component('CheckboxGroupType', () => import('./components/Form/CheckboxGroupType'));
 Vue.component('CheckboxType', () => import('./components/Form/CheckboxType'));
 Vue.component('ChoiceType', () => import('./components/Form/ChoiceType'));

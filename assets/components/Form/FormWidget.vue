@@ -1,6 +1,9 @@
 <template>
     <div v-if="!alreadyRendered">
         <template v-if="form.vars.compound && !componentType">
+            <v-alert v-if="form.vars.errors" type="error">
+                {{ form.vars.errors }}
+            </v-alert>
             <label v-if="form.vars.label" v-bind="form.vars.label_attr">
                 {{ form.vars.label }}
             </label>
@@ -22,7 +25,7 @@
     import {Component, Mixins} from 'vue-property-decorator';
     import FormWidgetMixin from "./FormWidgetMixin.ts";
 
-    @Component({})
+    @Component
     export default class FormWidget extends Mixins(FormWidgetMixin) {
         componentType: string|null = null;
 

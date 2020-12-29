@@ -5,7 +5,7 @@
     import {Component, Mixins} from 'vue-property-decorator';
     import FormWidgetMixin from "./FormWidgetMixin.ts";
 
-    @Component({})
+    @Component
     export default class CheckboxType extends Mixins(FormWidgetMixin) {
         created() {
             this.attributes['value'] = this.form.vars.value;

@@ -13,7 +13,7 @@
     import {Component, Mixins} from 'vue-property-decorator';
     import FormWidgetMixin from "./FormWidgetMixin.ts";
 
-    @Component({})
+    @Component
     export default class RadioGroupType extends Mixins(FormWidgetMixin) {
         created() {
             for (const child of this.form.children) {

@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <v-app v-cloak>
         <div ref="appContent">
             <v-navigation-drawer v-model="drawer" app clipped>
                 <slot name="menu"></slot>
@@ -26,8 +26,8 @@
 
     @Component({})
     export default class App extends Vue {
-        @Prop({type: String, default: 'Application'})
-        public title!: boolean;
+        @Prop({default: 'Application'})
+        public title!: string;
 
         private drawer: boolean = true;
     };

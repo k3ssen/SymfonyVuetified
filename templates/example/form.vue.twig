@@ -17,11 +17,10 @@
         Form
     </h1>
     <p>
-        To keep the project-skeleton lean (and hopefully a little future-proof), no classes for forms and controllers
-        are included.
-        You can see an example by first creating an entity and crud. Before doing so, make sure
-        you have correctly set <code>DATABASE_URL</code> in your <code>.env.local</code> file.
-        After that, run the following commands:
+        First make sure you have correctly set <code>DATABASE_URL</code> in your <code>.env.local</code> file.
+    </p>
+    <p>
+       To create a form for a product entity, for example, run the following commands:
     </p>
     <ul>
         <li>
@@ -53,10 +52,7 @@
 <pre v-pre>
 {{ '
 {{ vue_data(\'form\', form) }}
-&lt;v-form method="post">
-    &lt;form-type :form="form">&lt;/form-type>
-    &lt;v-btn type="submit">Submit&lt;/v-btn>
-&lt;/v-form>
+&lt;vue-form :form="form" label-submit="{{ button_label|default(\'Save\') }}">&lt;/vue-form>
 ' }}</pre>
     <p>
         You'll see the form with vuetify styling. If you're missing the labels, that's because the <code>ProductType</code>
@@ -70,7 +66,7 @@
 <pre v-pre>
 {{ '
 {{ vue_data(\'form\', form) }}
-&lt;v-form method="post">
+&lt;vue-form :form="form">
     &lt;v-row>
         &lt;v-col>
             <form-type :form="form.children.name">&lt;/form-type>
@@ -83,9 +79,7 @@
         The amount must be 10 or more.
     &lt;/v-alert>
     &lt;v-btn type="submit" :disabled="form.children.amount.vars.data < 10">Submit&lt;/v-btn>
-
-    &lt;form-type :form="form">&lt;/form-type> {# make sure to render the remainder of the form (e.g. field for csrf) #}
-&lt;/v-form>
+&lt;/vue-form>
 ' }}</pre>
 
 {% endblock %}

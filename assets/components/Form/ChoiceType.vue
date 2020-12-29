@@ -1,17 +1,37 @@
 <template>
-    <v-select v-model="form.vars.data" v-bind="attributes"/>
+    <v-combobox v-if="attributes.allow_add"
+                v-model="form.vars.data"
+                v-bind="attributes"
+                :return-object="false">
+        <template v-slot:selection="{ item }">
+            <v-chip>
+                {{ getItemByValue(item).label }}
+            </v-chip>
+        </template>
+    </v-combobox>
+    <v-autocomplete v-else v-model="form.vars.data" v-bind="attributes"></v-autocomplete>
 </template>
 
 <script lang="ts">
     import {Component, Mixins} from 'vue-property-decorator';
     import FormWidgetMixin from "./FormWidgetMixin.ts";
 
-    @Component({})
+    @Component
     export default class ChoiceType extends Mixins(FormWidgetMixin) {
         created() {
-            this.form.vars.data = this.form.vars.data === true ? this.form.vars.value : null;
             this.attributes['value'] = this.form.vars.value;
+            if (this.form.vars.value) {
+                this.form.vars.data = this.form.vars.value;
+            }
             this.setChoiceTypeAttributes();
+        }
+        getItemByValue(value: any) {
+            return this.attributes['items'].find((item: any) => {
+                return item.value === value;
+            }) || {
+                value,
+                label: value,
+            };
         }
         setChoiceTypeAttributes() {
             let attr: any = {};

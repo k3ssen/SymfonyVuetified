@@ -155,33 +155,36 @@ if you're using fetch, only a template and the script will be loaded. Otherwise 
 
 ## Symfony's FormView as Vue component
 
-Symfony's `FormView` can't be directly used in Vuejs,
-so a Twig extension is created to enable serializing the FormView into json.
-This can be passed to the `FormType` vue-component where it will render the form,
-similar to twig's `{{ form(form) }}`.
+Messing around in Twig to get the desired vuetify-forms is a pain.
+It becomes especially troublesome when dealing with sub-forms and combo-boxes.
+
+Instead of using Twig's `{{ form(form) }}`, this project creates a `VueForm` based on
+Symfony's `FormView` to have it passed to vue. The rendering of the form can now be done
+entirely in vue.
 
 Example:
 ```vue
 {% block body %}
     {{ vue_data('form', form) }}
-    <form-type :form="form"></form-type>
+    <vue-form :form="form"></vue-form>
 {% endblock %}
 ```
 
-To take full control of your form-rendering you can also render parts individually:
+To take full control you can also render parts individually:
 
 ```vue
 {% block body %}
     {{ vue_data('form', form) }}
-    <v-row>
-        <v-col>
-            <form-type :form="form.children.name"></form-type>
-        </v-col>
-        <v-col>
-            <form-type :form="form.children.email"></form-type>
-        </v-col>
-    </v-row>
-    <form-type :form="form"></form-type> <!-- renders remaining form-fields -->
+    <vue-form :form="form">
+        <v-row>
+            <v-col>
+                <form-widget :form="form.children.name"></form-widget>
+            </v-col>
+            <v-col>
+                <form-widget :form="form.children.email"></form-widget>
+            </v-col>
+        </v-row>
+    </vue-form>
 {% endblock %}
 ```
 
@@ -221,6 +224,6 @@ have a form property defined. To make it easier, just use the FormTypeMixin:
 Have a look at the components in /assets/components/Form and you'll notice that most of these
 aren't more complex than the example above.
 
-> **Note:** The form components are just an example implementation to help get started.
+> **Note:** The form components are an example implementation to help get started.
 > They haven't been perfectly refined for all kinds of different forms, so you may need to do
 > some tweaking to make it suitable for your own project.

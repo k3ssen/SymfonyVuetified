@@ -5,8 +5,13 @@
         </h2>
         <table>
             <tr v-for="(child, key) in form.children" :key="key">
-                <td v-for="subChild in child.children" v-bind="subChild.vars.row_attr">
-                    <form-widget :form="subChild" :parentForm="subChild"></form-widget>
+                <template v-if="child.children.length">
+                    <td v-for="subChild in child.children" v-bind="subChild.vars.row_attr">
+                        <form-widget :form="subChild" :parentForm="subChild"></form-widget>
+                    </td>
+                </template>
+                <td v-else>
+                    <form-widget :form="child" :parentForm="child"></form-widget>
                 </td>
                 <td>
                     <v-btn v-if="form.vars.allow_delete" @click.stop="removeItem(key)">
@@ -28,7 +33,7 @@
     import {Component, Mixins} from 'vue-property-decorator';
     import FormWidgetMixin from "./FormWidgetMixin.ts";
 
-    @Component({})
+    @Component
     export default class CollectionType extends Mixins(FormWidgetMixin) {
         get prototypeName() {
             return this.form.vars.prototype.vars.name;

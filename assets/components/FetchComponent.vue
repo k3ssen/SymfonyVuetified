@@ -9,7 +9,7 @@
 <script lang="ts">
 import {Vue, Prop, Component, Watch} from 'vue-property-decorator';
 
-@Component({})
+@Component
 export default class FetchComponent extends Vue {
     @Prop()
     public url!: string;

@@ -6,7 +6,7 @@
     import {Component, Mixins} from 'vue-property-decorator';
     import FormWidgetMixin from "./FormWidgetMixin.ts";
 
-    @Component({})
+    @Component
     export default class PasswordType extends Mixins(FormWidgetMixin) {
     }
 </script>
