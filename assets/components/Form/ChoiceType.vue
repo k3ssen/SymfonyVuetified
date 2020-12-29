@@ -3,8 +3,9 @@
                 v-model="form.vars.data"
                 v-bind="attributes"
                 :return-object="false">
-        <template v-slot:selection="{ item }">
-            <v-chip>
+        <template v-slot:selection="{ item, parent, disabled }">
+            <v-chip :disabled="disabled" close
+                    @click:close="parent.selectItem(item)">
                 {{ getItemByValue(item).label }}
             </v-chip>
         </template>
