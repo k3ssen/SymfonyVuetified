@@ -1,5 +1,5 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-    <v-sheet elevation="2" class="pa-5">
+    <v-sheet elevation="2" class="pa-5 mb-3">
         <h2>
             {{ form.vars.label }}
         </h2>

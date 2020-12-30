@@ -1,16 +1,18 @@
 <template>
     <v-combobox v-if="attributes.allow_add"
                 v-model="form.vars.data"
-                v-bind="attributes"
+                v-bind="Object.assign(attributes, $attrs)"
                 :return-object="false">
-        <template v-slot:selection="{ item, parent, disabled }">
-            <v-chip :disabled="disabled" close
-                    @click:close="parent.selectItem(item)">
+        <template v-slot:selection="{ item, parent, disabled, select }">
+            <v-chip v-if="attributes.multiple" :disabled="disabled" close @click:close="parent.selectItem(item)">
                 {{ getItemByValue(item).label }}
             </v-chip>
+            <span v-else>
+                {{ getItemByValue(item).label }}
+            </span>
         </template>
     </v-combobox>
-    <v-autocomplete v-else v-model="form.vars.data" v-bind="attributes"></v-autocomplete>
+    <v-autocomplete v-else v-model="form.vars.data" v-bind="Object.assign(attributes, $attrs)"></v-autocomplete>
 </template>
 
 <script lang="ts">
@@ -53,6 +55,7 @@
             attr['required'] = this.form.vars.required;
             attr['return-object'] = false;
             attr['items'] = Object.values(JSON.parse(JSON.stringify(this.form.vars.choices)));
+            attr['clearable'] = this.attributes?.clearable ?? !this.form.vars.required;
 
             Object.assign(this.attributes, attr);
         }

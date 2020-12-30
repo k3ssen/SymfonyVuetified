@@ -1,5 +1,5 @@
 <template>
-    <v-radio v-model="form.vars.data" v-bind="attributes"/>
+    <v-radio v-model="form.vars.data" v-bind="Object.assign(attributes, $attrs)"></v-radio>
 </template>
 
 <script lang="ts">

@@ -1,12 +1,9 @@
 <template>
-    <div>
-        <label v-if="form.vars.label" v-bind="form.vars.label_attr">
-            {{ form.vars.label }}
-        </label>
-        <div v-for="(child, key) in form.children" :key="key" v-bind="child.vars.row_attr" style="margin-bottom: -10px;">
-            <form-widget :form="child" />
+    <v-radio-group v-bind="Object.assign(attributes, $attrs)">
+        <div v-for="(child, key) in form.children" :key="key">
+            <form-widget :form="child"></form-widget>
         </div>
-    </div>
+    </v-radio-group>
 </template>
 
 <script lang="ts">

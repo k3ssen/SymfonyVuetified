@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!alreadyRendered">
+    <div v-if="!alreadyRendered" v-bind="row_attributes">
         <template v-if="form.vars.compound && !componentType">
             <v-alert v-if="form.vars.errors" type="error">
                 {{ form.vars.errors }}
@@ -12,7 +12,7 @@
             </div>
         </template>
 
-        <component v-else-if="componentType" :is="componentType" v-model="form.vars.data" v-bind="attributes" />
+        <component v-else-if="componentType" :is="componentType" v-model="form.vars.data" v-bind="Object.assign(attributes, $attrs)" :form="form" />
 
         <!-- In case of a multi-select, create a hidden field for each selected value -->
         <template v-if="form.vars.multiple">

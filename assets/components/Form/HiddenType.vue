@@ -1,5 +1,5 @@
 <template>
-    <input type="hidden" v-model="form.vars.data" v-bind="attributes"/>
+    <input type="hidden" v-model="form.vars.data" v-bind="Object.assign(attributes, $attrs)" />
 </template>
 
 <script lang="ts">

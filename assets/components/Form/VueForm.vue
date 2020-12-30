@@ -5,7 +5,7 @@
         </slot>
         <form-widget :form="form"></form-widget><!-- render remainder -->
         <slot name="actions">
-            <v-btn type="submit">
+            <v-btn color="primary" type="submit">
                 {{ labelSubmit }}
             </v-btn>
         </slot>

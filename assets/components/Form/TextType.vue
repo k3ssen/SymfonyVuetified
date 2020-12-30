@@ -1,5 +1,5 @@
 <template>
-    <v-text-field v-model="form.vars.data" v-bind="attributes"/>
+    <v-text-field v-model="form.vars.data" v-bind="Object.assign(attributes, $attrs)"></v-text-field>
 </template>
 
 <script lang="ts">

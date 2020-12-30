@@ -9,7 +9,7 @@
                 <v-text-field
                     :value="form.vars.data"
                     append-outer-icon="mdi-calendar"
-                    v-bind="attributes"
+                    v-bind="Object.assign(attributes, $attrs)"
                     v-on="on"
                     autocomplete="off"
                 />

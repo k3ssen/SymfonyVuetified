@@ -14,72 +14,51 @@
 
 {% block body %}
     <h1>
-        Form
+        Form example
     </h1>
     <p>
-        First make sure you have correctly set <code>DATABASE_URL</code> in your <code>.env.local</code> file.
-    </p>
-    <p>
-       To create a form for a product entity, for example, run the following commands:
-    </p>
-    <ul>
-        <li>
-            <code>php bin/console make:entity Product</code><br />
-            For example, add the properties 'name' (string) and 'amount' (integer)
-        </li>
-        <li>
-            <code>php bin/console doctrine:schema:update --force</code> (or use migrations if you intend to keep this product)
-        </li>
-        <li>
-            <code>php bin/console make:crud Product</code>
-        </li>
-    </ul>
-    <p class="mt-4">
-        You should now be able to visit the url <code>/product/new</code> and see a form without style. This is just the html-form created
-        by symfony, but you can edit it by going to the <code>template/products/_form.html.twig</code> file. You should
-        see something like the following:
-    </p>
-<pre v-pre>
-{{ '
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    &lt;button class="btn">{{ button_label|default(\'Save\') }}&lt;/button>
-{{ form_end(form) }}
-' }}</pre>
-    <p>
-        Instead of rendering the form by twig, let's replace it with the code below:
-    </p>
-<pre v-pre>
-{{ '
-{{ vue_data(\'form\', form) }}
-&lt;vue-form :form="form" label-submit="{{ button_label|default(\'Save\') }}">&lt;/vue-form>
-' }}</pre>
-    <p>
-        You'll see the form with vuetify styling. If you're missing the labels, that's because the <code>ProductType</code>
-        class has not labels set yet. Add labels there and you'll see them added in the view as well.
+        With the <code>vue-form</code> and <code>form-widget</code> components you can take control over your form,
+        similar to twig, but with the extra benefits of vue.
     </p>
 
-    <p>
-        Just like twig-rendering, you can render specific fields. Moreover, the form values are now mapped as v-models,
-        so you can use the form in your vue conditions.
-    </p>
-<pre v-pre>
-{{ '
-{{ vue_data(\'form\', form) }}
-&lt;vue-form :form="form">
-    &lt;v-row>
-        &lt;v-col>
-            <form-type :form="form.children.name">&lt;/form-type>
-        &lt;/v-col>
-        &lt;v-col>
-            &lt;form-type :form="form.children.amount">&lt;/form-type>
-        &lt;/v-col>
-    &lt;/v-row>
-    &lt;v-alert v-if="form.children.amount.vars.data && form.children.amount.vars.data < 10" type="warning">
-        The amount must be 10 or more.
-    &lt;/v-alert>
-    &lt;v-btn type="submit" :disabled="form.children.amount.vars.data < 10">Submit&lt;/v-btn>
-&lt;/vue-form>
-' }}</pre>
+    {{ vue_data('form', exampleForm) }}
 
+    <vue-form :form="form">
+        <v-row>
+            <v-col>
+                <form-widget :form="form.children.name"></form-widget>
+            </v-col>
+            <v-col>
+                <form-widget  outlined
+                              hint="This field is outlined for no good reason"
+                              :form="form.children.amount" :disabled="form.children.checkbox.vars.data"></form-widget>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col>
+                <form-widget :form="form.children.datetime.children.date"></form-widget>
+            </v-col>
+            <v-col>
+                <form-widget :form="form.children.datetime.children.time.children.hour"></form-widget>
+            </v-col>
+            <v-col>
+                <form-widget :form="form.children.datetime.children.time.children.minute"></form-widget>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col>
+                <form-widget :form="form.children.checkboxChoice" :label="false"></form-widget>
+            </v-col>
+            <v-col>
+                <form-widget :form="form.children.checkbox"></form-widget>
+                <form-widget :form="form.children.toggle" color="error"></form-widget>
+                <form-widget :form="form.children.radioChoice"></form-widget>
+            </v-col>
+            <v-col>
+                <form-widget :form="form.children.select"></form-widget>
+                <form-widget :form="form.children.selectAllowAdd"></form-widget>
+                <form-widget :form="form.children.multiple"></form-widget>
+            </v-col>
+        </v-row>
+    </vue-form>
 {% endblock %}

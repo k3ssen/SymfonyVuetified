@@ -1,7 +1,7 @@
 export default interface IForm {
     rendered: boolean;
     vars: IFormVars;
-    children: IForm[];
+    children: object|IForm[];
 }
 
 interface IFormVars {

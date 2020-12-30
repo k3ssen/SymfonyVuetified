@@ -1,6 +1,6 @@
 <template>
         <v-radio-group
-            v-bind="attributes"
+            v-bind="Object.assign(attributes, $attrs)"
             v-model="form.vars.data"
         >
             <div v-for="(child, key) in form.children" :key="key">
