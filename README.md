@@ -26,9 +26,11 @@ Check the manual steps below if you're running into trouble.
    And while we're at it, you probably also want to enable Sass.
 :
 ```js
-// add the line below at the top of the file
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
+const WebTypesPlugin = require('./assets/plugins/WebTypesPlugin');
+
 // [...]
+
 Encore.
     
     // [...]
@@ -41,6 +43,7 @@ Encore.
         useJsx: true
     })
     .addPlugin(new VuetifyLoaderPlugin())
+    .addPlugin(new WebTypesPlugin())
 
     // [...]
 ```
@@ -139,6 +142,16 @@ data available to all vue components.
     </div>
 {% endblock %}
 ```
+
+## Global vue components
+Vue-components aren't global by default, so they can't be used in Twig.
+By using the `.global.vue` extension instead of just `.vue` the
+component will be made globally available, allowing you to use it inside Twig.
+
+> Autocompletion in PhpStorm doesn't seem to work (yet?) for global components.
+> This project lets webpack create a `web-types.json` to define references for the global components.
+> It won't give autocompletion for props/slots/events, but at least you'll have autocompletion
+> for the component name and reference to the file.
 
 ## Using Fetch
 

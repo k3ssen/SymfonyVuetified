@@ -24,8 +24,33 @@
 <script lang="ts">
     import {Component, Mixins} from 'vue-property-decorator';
     import FormWidgetMixin from "./FormWidgetMixin.ts";
+    import CheckboxGroupType from "./CheckboxGroupType.vue";
+    import CheckboxType from "./CheckboxType.vue";
+    import ChoiceType from "./ChoiceType.vue";
+    import CollectionType from "./CollectionType.vue";
+    import DateType from "./DateType.vue";
+    import HiddenType from "./HiddenType.vue";
+    import PasswordType from "./PasswordType.vue";
+    import RadioGroupType from "./RadioGroupType.vue";
+    import RadioType from "./RadioType.vue";
+    import SwitchType from "./SwitchType.vue";
+    import TextareaType from "./TextareaType.vue";
+    import TextType from "./TextType.vue";
 
-    @Component
+    @Component({ components: {
+        CheckboxGroupType,
+        CheckboxType,
+        ChoiceType,
+        CollectionType,
+        DateType,
+        HiddenType,
+        PasswordType,
+        RadioGroupType,
+        RadioType,
+        SwitchType,
+        TextareaType,
+        TextType,
+    }})
     export default class FormWidget extends Mixins(FormWidgetMixin) {
         componentType: string|null = null;
 

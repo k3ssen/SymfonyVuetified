@@ -16,7 +16,7 @@
     @Component
     export default class RadioGroupType extends Mixins(FormWidgetMixin) {
         created() {
-            for (const child of this.form.children) {
+            for (const child of (this.form.children as any)) {
                 if (child.vars.data === true) {
                     this.form.vars.data = child.vars.value;
                 }

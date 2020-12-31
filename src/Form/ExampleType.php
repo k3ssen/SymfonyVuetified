@@ -9,12 +9,10 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * An example form to demonstrate how the form can be used with Vue.
@@ -124,18 +122,11 @@ class ExampleType extends AbstractType implements \JsonSerializable
                 'label' => 'Descriptions',
                 'allow_add' => true,
                 'allow_delete' => true,
-                'entry_type' => TextareaType::class,
+                'entry_type' => TextType::class,
                 'entry_options' => [
                     'label' => 'Text'
                 ]
             ])
         ;
-    }
-
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-//            'data_class' => Product::class,
-        ]);
     }
 }

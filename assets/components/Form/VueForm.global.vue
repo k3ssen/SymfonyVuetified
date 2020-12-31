@@ -13,10 +13,13 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
-import IForm from "./IForm";
+    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import IForm from "./IForm";
+    import FormWidget from "./FormWidget.global.vue";
 
-    @Component
+    @Component({
+        components: { FormWidget },
+    })
     export default class VueForm extends Vue{
         @Prop()
         form!: IForm;

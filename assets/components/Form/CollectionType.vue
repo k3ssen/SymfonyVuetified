@@ -32,6 +32,7 @@
 <script lang="ts">
     import {Component, Mixins} from 'vue-property-decorator';
     import FormWidgetMixin from "./FormWidgetMixin.ts";
+    import IForm from "./IForm";
 
     @Component
     export default class CollectionType extends Mixins(FormWidgetMixin) {
@@ -42,14 +43,14 @@
             return JSON.stringify(this.form.vars.prototype);
         }
         get childCount() {
-            return this.form.children.length;
+            return (this.form.children as IForm[]).length;
         }
         addItem() {
             let prototypeString = this.prototype.replace(new RegExp(this.prototypeName, 'g'), this.childCount.toString());
-            this.form.children.push(JSON.parse(prototypeString));
+            (this.form.children as IForm[]).push(JSON.parse(prototypeString));
         }
         removeItem(key: any) {
-            this.form.children.splice(key, 1);
+            (this.form.children as IForm[]).splice(key, 1);
         }
     }
 </script>

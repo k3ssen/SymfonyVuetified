@@ -9,7 +9,7 @@
 <script lang="ts">
     import {Component, Mixins} from 'vue-property-decorator';
     import FormWidgetMixin from "./FormWidgetMixin.ts";
-    import FormWidget from "./FormWidget";
+    import FormWidget from "./FormWidget.global";
 
     @Component({
         components: { FormWidget }

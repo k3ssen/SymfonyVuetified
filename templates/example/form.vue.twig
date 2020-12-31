@@ -23,6 +23,7 @@
 
     {{ vue_data('form', exampleForm) }}
 
+
     <vue-form :form="form">
         <v-row>
             <v-col>
@@ -47,7 +48,7 @@
         </v-row>
         <v-row>
             <v-col>
-                <form-widget :form="form.children.checkboxChoice" :label="false"></form-widget>
+                <form-widget :form="form.children.checkboxChoice" :label="null"></form-widget>
             </v-col>
             <v-col>
                 <form-widget :form="form.children.checkbox"></form-widget>
