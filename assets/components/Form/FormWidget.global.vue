@@ -4,9 +4,12 @@
             <div class="form-widget" :class="{ 'use-flex': row }">
                 <v-input v-bind="Object.assign(attributes, $attrs)">
                     <slot name="default" v-bind="{ children: form.children }">
-                        <form-widget v-for="(child, key) in form.children" :key="key"
+                        <form-widget v-for="(child, key) in form.children"
+                                     :key="key"
+                                     :class="{ col: row }"
                                      v-bind="child.vars.row_attr"
-                                     :form="child"></form-widget>
+                                     :form="child"
+                        ></form-widget>
                     </slot>
                 </v-input>
             </div>

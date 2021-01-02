@@ -70,17 +70,12 @@ class ExampleType extends AbstractType implements \JsonSerializable
                     'prepend-inner-icon' => 'mdi-currency-eur',
                 ],
             ])
-            ->add('dateField', DateType::class, [
-                'label' => 'Start date',
-            ])
-            ->add('timeField', TimeType::class, [
-                'label' => 'Start time',
-            ])
-            ->add('datetime', DateTimeType::class, [
-                'label' => 'Date & time',
-                'minutes' => [0, 15, 30, 45],
+            ->add('dateTimeField', DateTimeType::class, [
+                'label' => 'DateTime field',
                 'date_label' => 'Date',
                 'time_label' => 'Time',
+                'minutes' => [0, 15, 30, 45],
+                'time_widget' => 'single_text'
             ])
             ->add('rangeType', RangeType::class, [
                 'label' => 'Range',
@@ -128,16 +123,13 @@ class ExampleType extends AbstractType implements \JsonSerializable
                 'label' => 'Select multi option',
                 'expanded' => true,
                 'multiple' => true,
-                'choice_attr' => function() {
+                'choice_attr' => function($value) {
                     return [
-                        'hint' => 'Some hint!',
+                        'hint' => 'Some hint for '. $value,
                         'persistent-hint' => true,
                         'style' => 'margin-top: 0px;'
                     ];
                 },
-                'attr' => [
-                    'row' => true,
-                ],
                 'choices' => array_combine($values = [
                     'A', 'B', 'C'
                 ], $values),

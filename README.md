@@ -236,7 +236,3 @@ have a form property defined. To make it easier, just use the FormTypeMixin:
 
 Have a look at the components in /assets/components/Form and you'll notice that most of these
 aren't more complex than the example above.
-
-> **Note:** The form components are an example implementation to help get started.
-> They haven't been perfectly refined for all kinds of different forms, so you may need to do
-> some tweaking to make it suitable for your own project.

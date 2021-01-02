@@ -1,6 +1,6 @@
 <template>
     <v-form :method="method" v-bind="$attrs">
-
+        <!-- Make sure that any remaining errors (in non-rendered components) are displayed. -->
         <v-alert v-if="remainingErrors.length > 0" type="error">
             <div v-for="error in remainingErrors">
                 <strong>{{ error.label }}:</strong> {{ error.message }}

@@ -8,6 +8,7 @@ interface IFormVars {
     block_prefixes: string[];
     value: any;
     data: any;
+    id: string;
     name: string;
     full_name: string;
     label: string|boolean;
