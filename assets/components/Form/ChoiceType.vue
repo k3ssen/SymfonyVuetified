@@ -1,8 +1,15 @@
 <template>
-    <v-combobox v-if="attributes.allow_add"
-                v-model="form.vars.data"
-                v-bind="Object.assign(attributes, $attrs)"
-                :return-object="false">
+    <v-combobox
+            v-if="attributes.allow_add"
+            v-model="form.vars.data"
+            v-bind="Object.assign(attributes, $attrs)"
+        >
+        <template slot="append-outer">
+            <!-- In case of a multi-select, create a hidden field for each selected value -->
+            <template v-if="form.vars.multiple">
+                <input type="hidden" v-for="value in form.vars.data" :name="form.vars.full_name" :value="value" />
+            </template>
+        </template>
         <template v-slot:selection="{ item, parent, disabled, select }">
             <v-chip v-if="attributes.multiple" :disabled="disabled" close @click:close="parent.selectItem(item)">
                 {{ getItemByValue(item).label }}

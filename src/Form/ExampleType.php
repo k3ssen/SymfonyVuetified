@@ -8,11 +8,16 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Validator\Constraints\Count;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotEqualTo;
 
 /**
  * An example form to demonstrate how the form can be used with Vue.
@@ -24,23 +29,33 @@ class ExampleType extends AbstractType implements \JsonSerializable
      * @var FormFactory
      */
     private $factory;
+    /**
+     * @var RequestStack
+     */
+    private RequestStack $requestStack;
 
-    public function __construct(FormFactoryInterface $factory)
+    public function __construct(FormFactoryInterface $factory, RequestStack $requestStack)
     {
         $this->factory = $factory;
+        $this->requestStack = $requestStack;
     }
 
     public function jsonSerialize()
     {
         $builder = $this->factory->createBuilder();
         $this->buildForm($builder, []);
-        return VueForm::create($builder->getForm());
+        $form = $builder->getForm();
+        $form->handleRequest($this->requestStack->getMasterRequest());
+        return VueForm::create($form);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name', TextType::class, [
+                'constraints' => [
+                    new Length(['value' => 5, 'exactMessage' => 'The name must contain 5 characters']),
+                ],
                 'label' => 'Name',
                 'attr' => [
                     'counter' => '25',
@@ -51,6 +66,9 @@ class ExampleType extends AbstractType implements \JsonSerializable
                 'attr' => [
                     'prepend-inner-icon' => 'mdi-currency-eur',
                 ],
+            ])
+            ->add('dateField', DateType::class, [
+                'label' => 'Start date',
             ])
             ->add('datetime', DateTimeType::class, [
                 'label' => 'Date & time',
@@ -63,6 +81,9 @@ class ExampleType extends AbstractType implements \JsonSerializable
             ->add('toggle', CheckboxType::class, [
                 'label' => 'toggle',
                 'block_prefix' => 'SwitchType',
+                'constraints' => [
+                    new NotEqualTo(true),
+                ],
             ])
             ->add('radioChoice', ChoiceType::class, [
                 'label' => 'Select single option',
@@ -79,6 +100,9 @@ class ExampleType extends AbstractType implements \JsonSerializable
                 'choices' => array_combine($values = [
                     'A', 'B', 'C'
                 ], $values),
+                'constraints' => [
+                    new NotEqualTo('B'),
+                ],
             ])
             ->add('checkboxChoice', ChoiceType::class, [
                 'label' => 'Select multi option',
@@ -91,6 +115,9 @@ class ExampleType extends AbstractType implements \JsonSerializable
                         'style' => 'margin-top: 0px;'
                     ];
                 },
+                'attr' => [
+                    'row' => true,
+                ],
                 'choices' => array_combine($values = [
                     'A', 'B', 'C'
                 ], $values),
@@ -125,7 +152,10 @@ class ExampleType extends AbstractType implements \JsonSerializable
                 'entry_type' => TextType::class,
                 'entry_options' => [
                     'label' => 'Text'
-                ]
+                ],
+                'constraints' => [
+                    new Count(1),
+                ],
             ])
         ;
     }

@@ -3,15 +3,19 @@
         <h2>
             {{ form.vars.label }}
         </h2>
+        <v-alert dense v-if="form.vars.errors" type="error">
+            {{ form.vars.errors }}
+        </v-alert>
+
         <table>
             <tr v-for="(child, key) in form.children" :key="key">
                 <template v-if="child.children.length">
                     <td v-for="subChild in child.children" v-bind="subChild.vars.row_attr">
-                        <form-widget :form="subChild" :parentForm="subChild"></form-widget>
+                        <form-widget :form="subChild"></form-widget>
                     </td>
                 </template>
                 <td v-else>
-                    <form-widget :form="child" :parentForm="child"></form-widget>
+                    <form-widget :form="child"></form-widget>
                 </td>
                 <td>
                     <v-btn v-if="form.vars.allow_delete" @click.stop="removeItem(key)">

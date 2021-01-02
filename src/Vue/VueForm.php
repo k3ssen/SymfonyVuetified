@@ -54,11 +54,7 @@ class VueForm implements \JsonSerializable
         if ($this->vars['data'] === null) {
             $this->vars['data'] = $this->vars['value'] ?? null;
         }
-        if ($this->vars['compound']) {
-            $this->vars['data'] = null;
-            $this->vars['value'] = null;
-        }
-        $this->vars['errors'] = (string) $this->vars['errors'];
+        $this->vars['errors'] = str_replace(['ERROR: ', "\n"], ['', ' / '], trim((string) $this->vars['errors'], "\n"));
         return [
             'vars' => $this->vars,
             'children' => $this->children,

@@ -1,9 +1,6 @@
 <template>
     <div v-if="!alreadyRendered" v-bind="row_attributes">
         <template v-if="form.vars.compound && !componentType">
-            <v-alert v-if="form.vars.errors" type="error">
-                {{ form.vars.errors }}
-            </v-alert>
             <label v-if="form.vars.label" v-bind="form.vars.label_attr">
                 {{ form.vars.label }}
             </label>
@@ -13,11 +10,6 @@
         </template>
 
         <component v-else-if="componentType" :is="componentType" v-model="form.vars.data" v-bind="Object.assign(attributes, $attrs)" :form="form" />
-
-        <!-- In case of a multi-select, create a hidden field for each selected value -->
-        <template v-if="form.vars.multiple">
-            <input type="hidden" v-for="value in form.vars.data" :name="form.vars.full_name" :value="value" />
-        </template>
     </div>
 </template>
 
@@ -36,6 +28,7 @@
     import SwitchType from "./SwitchType.vue";
     import TextareaType from "./TextareaType.vue";
     import TextType from "./TextType.vue";
+    import IForm from "./IForm";
 
     @Component({ components: {
         CheckboxGroupType,
@@ -88,6 +81,10 @@
                 attr = Object.assign(attr, this.form.vars.attr);
             }
             this.attributes = attr;
+        }
+
+        isRendered(form: IForm) {
+            return form.rendered;
         }
     }
 </script>

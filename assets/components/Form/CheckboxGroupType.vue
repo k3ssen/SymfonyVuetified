@@ -1,20 +1,35 @@
 <template>
+    <!-- purpose of v-radio-group is ability to pass on attributes, in particular for 'label' and 'row' -->
     <v-radio-group v-bind="Object.assign(attributes, $attrs)">
-        <div v-for="(child, key) in form.children" :key="key">
-            <form-widget :form="child"></form-widget>
-        </div>
+        <v-checkbox
+            v-for="(choice, key) of choices" :key="key"
+            v-model="form.vars.data"
+            :name="form.vars.full_name + '[]'"
+            :label="choice.label"
+            :value="choice.value"
+            v-bind="choice.attr"
+        ></v-checkbox>
     </v-radio-group>
 </template>
 
 <script lang="ts">
     import {Component, Mixins} from 'vue-property-decorator';
     import FormWidgetMixin from "./FormWidgetMixin.ts";
-    import FormWidget from "./FormWidget.global";
+    import IForm from "./IForm";
 
-    @Component({
-        components: { FormWidget }
-    })
+    @Component
     export default class CheckboxGroupType extends Mixins(FormWidgetMixin) {
+        choices: any = [];
+        created() {
+            this.attributes['value'] = this.form.vars.value;
+            if (this.form.vars.value) {
+                this.form.vars.data = this.form.vars.value;
+            }
+            this.choices = Object.values(JSON.parse(JSON.stringify(this.form.vars.choices)));
 
+            for (const child of (this.form.children as IForm[])) {
+                child.rendered = true;
+            }
+        }
     }
 </script>

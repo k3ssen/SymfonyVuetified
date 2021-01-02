@@ -14,7 +14,9 @@ export default class FormWidgetMixin extends Vue {
         this.attributes = this.$attrs;
         this.row_attributes = this.form.vars.row_attr;
         this.alreadyRendered = this.fullyRendered(this.form);
-        this.form.rendered = true;
+        if (!this.alreadyRendered) {
+            this.form.rendered = true;
+        }
     }
 
     fullyRendered(form: IForm) {

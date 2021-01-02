@@ -23,7 +23,7 @@ interface IFormVars {
     row_attr: any;
     label_attr?: any;
     choices?: object|string[]|number[];
-    errors?: any;
+    errors?: string;
     help?: any;
     // add more attributes when needed.
 }
