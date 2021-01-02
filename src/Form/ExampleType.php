@@ -10,13 +10,16 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraints\Count;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\LessThan;
 use Symfony\Component\Validator\Constraints\NotEqualTo;
 
 /**
@@ -70,9 +73,26 @@ class ExampleType extends AbstractType implements \JsonSerializable
             ->add('dateField', DateType::class, [
                 'label' => 'Start date',
             ])
+            ->add('timeField', TimeType::class, [
+                'label' => 'Start time',
+            ])
             ->add('datetime', DateTimeType::class, [
                 'label' => 'Date & time',
                 'minutes' => [0, 15, 30, 45],
+                'date_label' => 'Date',
+                'time_label' => 'Time',
+            ])
+            ->add('rangeType', RangeType::class, [
+                'label' => 'Range',
+                'attr' => [
+                    'min' => 5,
+                    'max' => 50,
+                    'thumb-size' => 20,
+                    'thumb-label' => 'always'
+                ],
+                'constraints' => [
+                    new LessThan('30'),
+                ],
             ])
             ->add('checkbox', CheckboxType::class, [
                 'label' => 'checkbox',
@@ -156,6 +176,7 @@ class ExampleType extends AbstractType implements \JsonSerializable
                 'constraints' => [
                     new Count(1),
                 ],
+                'error_bubbling' => false,
             ])
         ;
     }

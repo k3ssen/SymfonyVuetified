@@ -35,17 +35,21 @@
                               :form="form.children.amount" :disabled="form.children.checkbox.vars.data"></form-widget>
             </v-col>
         </v-row>
-        <v-row>
-            <v-col>
-                <form-widget :form="form.children.datetime.children.date"></form-widget>
-            </v-col>
-            <v-col>
-                <form-widget :form="form.children.datetime.children.time.children.hour"></form-widget>
-            </v-col>
-            <v-col>
-                <form-widget :form="form.children.datetime.children.time.children.minute"></form-widget>
-            </v-col>
-        </v-row>
+        <form-widget :form="form.children.datetime" :label="null">
+            <template v-slot:default="{ children }">
+                <v-row>
+                    <v-col>
+                        <form-widget :form="children.date"></form-widget>
+                    </v-col>
+                    <v-col>
+                        <form-widget :form="children.time.children.hour" label="hour"></form-widget>
+                    </v-col>
+                    <v-col>
+                        <form-widget :form="children.time.children.minute" label="minute"></form-widget>
+                    </v-col>
+                </v-row>
+            </template>
+        </form-widget>
         <v-row>
             <v-col>
                 <form-widget :form="form.children.checkboxChoice"></form-widget>
@@ -61,5 +65,11 @@
                 <form-widget :form="form.children.multiple"></form-widget>
             </v-col>
         </v-row>
+        <form-widget :form="form.children.timeField" row>
+            <template v-slot:default="{ children }">
+                <form-widget :form="children.hour" label="hours" class="col"></form-widget>
+                <form-widget :form="children.minute" label="minutes" class="col"></form-widget>
+            </template>
+        </form-widget>
     </vue-form>
 {% endblock %}

@@ -33,3 +33,11 @@
         }
     }
 </script>
+
+<style lang="scss">
+    .v-input--radio-group__input {
+        >.v-input--selection-controls {
+            margin-top: 0;
+        }
+    }
+</style>

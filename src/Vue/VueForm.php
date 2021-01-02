@@ -19,6 +19,7 @@ class VueForm implements \JsonSerializable
         'textarea' => 'TextareaType',
         'password' => 'PasswordType',
         'file' => 'FileType',
+        'range' => 'RangeType',
 //        'vich_image' => 'WysiwygType',
     ];
 

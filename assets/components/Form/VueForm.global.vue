@@ -43,7 +43,7 @@
         }
 
         public setRemainingErrors(form: any) {
-            if ((!form.rendered || form.vars.compound) && form.vars.errors) {
+            if (!form.rendered && form.vars.errors) {
                 this.remainingErrors.push({
                     label: form.vars?.label || form.vars.name,
                     message: form.vars.errors,

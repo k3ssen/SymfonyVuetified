@@ -29,7 +29,7 @@
 
     @Component
     export default class DateType extends Mixins(FormWidgetMixin) {
-        locale: string = 'nl';
+        locale: string = 'en';
         fromDateMenu: boolean = false;
     }
 </script>
