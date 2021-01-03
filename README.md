@@ -15,15 +15,13 @@ Assuming you run a server with php7.2.5+ (or 8.0+), mysql, composer, yarn (or np
 3. Run`./init-project.sh`    
    You'll see Errors about missing packages when the script is trying to run Webpack.
    The script will try to install missing packages automatically.
-   If this isn't working, then check step 12 in the manual steps.
+   If this isn't working, then check the last manual step.
 
-Check the manual steps below if you're running into trouble.
+Follow the manual steps below if you're running into trouble.
 
 ### Manual steps (only needed if automatic setup failed)
 
-3. Make the changes in webpack.config.js file to enable Typescript, Vue, Vuetify.
-   And while we're at it, you probably also want to enable Sass.
-:
+3. Make changes in `webpack.config.js` file to enable Typescript, Sass, Vue and Vuetify:
 ```js
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 const WebTypesPlugin = require('./assets/plugins/WebTypesPlugin');
@@ -33,9 +31,7 @@ const WebTypesPlugin = require('./assets/plugins/WebTypesPlugin');
 Encore.
     
     // [...]
-    
-    // Enable Sass, TypeScript, add VueLoader and add VuetifyLoaderPlugin
-    
+
     .enableSassLoader()
     .enableTypeScriptLoader()
     .enableVueLoader(() => {}, {
@@ -46,14 +42,14 @@ Encore.
 
     // [...]
 ```
-(source: https://symfony.com/doc/current/frontend/encore/vuejs.html#jsx-support)
+(more info: https://symfony.com/doc/current/frontend/encore/vuejs.html#jsx-support)
 
 4. Add the following line to your `assets/app.js` file:
 ```js
 import './main';
 ```
 5. Run `yarn add vuetify`
-6. Run `yarn add sass sass-loader deepmerge vuetify-loader vue-property-decorator vue-class-component -D`
+6. Run `yarn add sass deepmerge vuetify-loader vue-property-decorator vue-class-component -D`
 7. Run `yarn install`
 8. Add `"web-types": "web-types.json"` to the root-object in `packages.json`  
     This will help PhpStorms (and possible other IDE's) recognize global vue objects. The `web-types.json` is a file
@@ -64,9 +60,9 @@ import './main';
 
 # Concept/usage
 
-The aim is to make it easy to use Twig and Vue without resorting to API's or `data-` attributes in html.
+This base projects aims to make it easy to use Twig and Vue without resorting to API's or `data-` attributes in HTML.
 
-## global vue object
+## Global vue object
 
 The basic concept is that you can use a global vue object.
 This object will be used for creating the vue-instance.
@@ -80,29 +76,28 @@ This object will be used for creating the vue-instance.
 {% endblock %}
 {% block script %}
     <script>
-    vue = {
-        data: () => ({
-            seconds: 0,
-        }),
-        mounted() {
-            setInterval(() => {
-                this.seconds++;
-            }, 1000);
-        },
-    };
+        vue = {
+            data: () => ({
+                seconds: 0,
+            }),
+            mounted() {
+                setInterval(() => {
+                    this.seconds++;
+                }, 1000);
+            },
+        };
     </script>
 {% endblock %}
 ```
 
-> **Note:** Both Vue and Twig use `{{` and `}}` delimiters by default, so for Vue `@{` and `}` are used instead.
+> **Note:** Vue and Twig both use `{{` and `}}` delimiters by default, so here `@{` and `}` are used instead for Vue.
 > You can specify different delimiters if you want, but avoid using `${` 
 > like [Symfony's example](https://symfony.com/doc/5.2/frontend/encore/vuejs.html#using-vue-inside-twig-templates):
-> if you pass twig content as template to vue you'll need to render the content between ticks (\`).
-> When using ticks `${` will be parsed as javascript variable, causing unwanted behaviour.
+> When you use `${something}` this is parsed as javascript variable when used inside ticks ( \` ), which is needed sometimes.
 
 ## Passing data (`vue_data`)
 
-When passing data,  you’ll often need to do things like this:
+When passing data, you’ll often need to do things like below:
 
 ```vue
 {% block script %}
@@ -133,7 +128,7 @@ Data added this way will be json encoded and merged with the global vue object.
 
 ## Global observable (`$store` and `vue_store`)
 
-In addition to adding data to the vue-instance, data can also be added to the vue $store observable, making
+In addition to adding data to the vue-instance, data can be added to the vue $store observable, making
 data available to all vue components.
 ```vue
 {% block body %}
@@ -148,7 +143,7 @@ data available to all vue components.
 ## Global vue components
 Vue-components aren't global by default, so they can't be used in Twig.
 By using the `.global.vue` extension instead of just `.vue` the
-component will be made globally available, allowing you to use it inside Twig.
+component will be made global, allowing you to use it inside Twig.
 
 > Autocompletion in PhpStorm doesn't seem to work (yet?) for global components.
 > This project lets webpack create a `web-types.json` to define references for the global components.

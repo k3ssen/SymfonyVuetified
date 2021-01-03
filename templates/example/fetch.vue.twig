@@ -5,8 +5,8 @@
     <h1>FetchComponent example</h1>
 
     <p class="mt-5">
-        By using the open dialog button below, the dialog will be opened and inside the
-        <code>fetch-component</code> component is used to load this page.
+        By using the open dialog button below, the dialog will be opened. Inside the dialog
+        <code>fetch-component</code> is used to load this page.
     </p>
     <p>
         <v-btn color="primary" @click="dialog = true">Open dialog</v-btn>
@@ -19,7 +19,7 @@
     <p>
         Be aware that this can cause conflicts with already loaded javascript. If this page would've defined
         a constant <code>const something = "value"</code>, then executing the same javascript again would result in
-        an error saying that this constant has already been initialized.
+        an error saying that this constant has already been defined.
     </p>
     <p>
         Below you see a counter that uses <code v-text="'@{ $store.count }'"></code>.
@@ -42,7 +42,7 @@
         <strong>Reset only after initialization</strong><br />
         What happens if you increment to count, close the dialog and then open the dialog again?
         This time it is not reset to 0!
-        That is because vue didn't destroy the component when closing it. So after
+        That is because Vue didn't destroy the component when closing it. So after
         opening the dialog a second time, the page isn't actually fetched and no new javascript is executed.
     </p>
 
