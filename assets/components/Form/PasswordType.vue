@@ -1,10 +1,12 @@
 <template>
-    <v-text-field type="password" v-model="form.vars.data" v-bind="attributes"/>
+    <v-text-field type="password" v-model="form.vars.data" v-bind="Object.assign(attributes, $attrs)"/>
 </template>
-<script>
-    import {formWidgetMixin} from "./FormWidgetMixin";
 
-    export default {
-        mixins: [formWidgetMixin],
-    };
+<script lang="ts">
+    import {Component, Mixins} from 'vue-property-decorator';
+    import FormWidgetMixin from "./FormWidgetMixin.ts";
+
+    @Component
+    export default class PasswordType extends Mixins(FormWidgetMixin) {
+    }
 </script>

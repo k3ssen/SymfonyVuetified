@@ -1,23 +1,33 @@
 <template>
-        <v-radio-group
-            v-bind="attributes"
-            v-model="form.vars.data"
-        >
-            <div v-for="(child, key) in form.children" :key="key">
-                <form-widget :form="child"></form-widget>
-            </div>
-        </v-radio-group>
+    <v-radio-group v-bind="Object.assign(attributes, $attrs)" v-model="form.vars.data">
+        <v-radio
+            v-for="(choice, key) of choices" :key="key"
+            :name="form.vars.full_name + '[]'"
+            :label="choice.label"
+            :value="choice.value"
+            v-bind="choice.attr"
+        ></v-radio>
+    </v-radio-group>
 </template>
-<script>
-    import {formWidgetMixin} from "./FormWidgetMixin";
-    export default {
-        mixins: [formWidgetMixin],
+
+<script lang="ts">
+    import {Component, Mixins} from 'vue-property-decorator';
+    import FormWidgetMixin from "./FormWidgetMixin.ts";
+    import IForm from "./IForm";
+
+    @Component
+    export default class RadioGroupType extends Mixins(FormWidgetMixin) {
+        choices: any = [];
         created() {
-            for (const child of this.form.children) {
-                if (child.vars.data === true) {
-                    this.form.vars.data = child.vars.value;
-                }
+            this.attributes['value'] = this.form.vars.value;
+            if (this.form.vars.value) {
+                this.form.vars.data = this.form.vars.value;
             }
-        },
-    };
+            this.choices = Object.values(JSON.parse(JSON.stringify(this.form.vars.choices)));
+
+            for (const child of (this.form.children as IForm[])) {
+                child.rendered = true;
+            }
+        }
+    }
 </script>

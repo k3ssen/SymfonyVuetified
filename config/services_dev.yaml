@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\Maker\Generator:
+        decorates: 'maker.generator'
+
+# You can remove the code below - it's just an example.
+twig:
+    globals:
+        exampleForm: '@App\Form\ExampleType'

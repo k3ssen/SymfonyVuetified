@@ -9,7 +9,7 @@
                 <v-text-field
                     :value="form.vars.data"
                     append-outer-icon="mdi-calendar"
-                    v-bind="attributes"
+                    v-bind="Object.assign(attributes, $attrs)"
                     v-on="on"
                     autocomplete="off"
                 />
@@ -22,14 +22,14 @@
             ></v-date-picker>
         </v-menu>
 </template>
-<script>
-    import {formWidgetMixin} from "./FormWidgetMixin";
 
-    export default {
-        mixins: [formWidgetMixin],
-        data: () => ({
-            locale: 'nl', // get locale from config-value
-            fromDateMenu: false,
-        }),
-    };
+<script lang="ts">
+    import {Component, Mixins} from 'vue-property-decorator';
+    import FormWidgetMixin from "./FormWidgetMixin.ts";
+
+    @Component
+    export default class DateType extends Mixins(FormWidgetMixin) {
+        locale: string = 'en';
+        fromDateMenu: boolean = false;
+    }
 </script>

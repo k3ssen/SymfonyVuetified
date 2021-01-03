@@ -1,39 +1,70 @@
 <template>
-    <v-select v-model="form.vars.data" v-bind="attributes"/>
+    <v-combobox
+            v-if="attributes.allow_add"
+            v-model="form.vars.data"
+            v-bind="Object.assign(attributes, $attrs)"
+        >
+        <template slot="append-outer">
+            <!-- In case of a multi-select, create a hidden field for each selected value -->
+            <template v-if="form.vars.multiple">
+                <input type="hidden" v-for="value in form.vars.data" :name="form.vars.full_name" :value="value" />
+            </template>
+        </template>
+        <template v-slot:selection="{ item, parent, disabled, select }">
+            <v-chip v-if="attributes.multiple" :disabled="disabled" close @click:close="parent.selectItem(item)">
+                {{ getItemByValue(item).label }}
+            </v-chip>
+            <span v-else>
+                {{ getItemByValue(item).label }}
+            </span>
+        </template>
+    </v-combobox>
+    <v-autocomplete v-else v-model="form.vars.data" v-bind="Object.assign(attributes, $attrs)"></v-autocomplete>
 </template>
-<script>
-    import {formWidgetMixin} from "./FormWidgetMixin";
 
-    export default {
-        mixins: [formWidgetMixin],
+<script lang="ts">
+    import {Component, Mixins} from 'vue-property-decorator';
+    import FormWidgetMixin from "./FormWidgetMixin.ts";
+
+    @Component
+    export default class ChoiceType extends Mixins(FormWidgetMixin) {
         created() {
-            this.form.vars.data = this.form.vars.data === true ? this.form.vars.value : null;
             this.attributes['value'] = this.form.vars.value;
-            this.setChoiceTypeAttributes();
-        },
-        methods: {
-            setChoiceTypeAttributes() {
-                let attr = {};
-                if (this.form.vars.multiple) {
-                    let dataObjects = [];
-                    if (this.form.vars.data) {
-                        dataObjects = Object.values(JSON.parse(JSON.stringify(this.form.vars.data)));
-                    } else if (this.form.vars.value) {
-                        dataObjects = Object.values(JSON.parse(JSON.stringify(this.form.vars.value)));
-                    }
-                    this.form.vars.data = dataObjects;
-                    attr['multiple'] = true;
-                    attr['deletable-chips'] = true;
-                    attr['chips'] = true;
-                }
-                attr['item-text'] = 'label';
-                attr['item-value'] = 'value';
-                attr['required'] = this.form.vars.required;
-                attr['return-object'] = false;
-                attr['items'] = Object.values(JSON.parse(JSON.stringify(this.form.vars.choices)));
-
-                Object.assign(this.attributes, attr);
+            if (this.form.vars.value) {
+                this.form.vars.data = this.form.vars.value;
             }
+            this.setChoiceTypeAttributes();
         }
-    };
+        getItemByValue(value: any) {
+            return this.attributes['items'].find((item: any) => {
+                return item.value === value;
+            }) || {
+                value,
+                label: value,
+            };
+        }
+        setChoiceTypeAttributes() {
+            let attr: any = {};
+            if (this.form.vars.multiple) {
+                let dataObjects: any = [];
+                if (this.form.vars.data) {
+                    dataObjects = Object.values(JSON.parse(JSON.stringify(this.form.vars.data)));
+                } else if (this.form.vars.value) {
+                    dataObjects = Object.values(JSON.parse(JSON.stringify(this.form.vars.value)));
+                }
+                this.form.vars.data = dataObjects;
+                attr['multiple'] = true;
+                attr['deletable-chips'] = true;
+                attr['chips'] = true;
+            }
+            attr['item-text'] = 'label';
+            attr['item-value'] = 'value';
+            attr['required'] = this.form.vars.required;
+            attr['return-object'] = false;
+            attr['items'] = Object.values(JSON.parse(JSON.stringify(this.form.vars.choices)));
+            attr['clearable'] = this.attributes?.clearable ?? !this.form.vars.required;
+
+            Object.assign(this.attributes, attr);
+        }
+    }
 </script>

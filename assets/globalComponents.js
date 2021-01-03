@@ -7,25 +7,13 @@ for (const i in VuetifyComponents) {
     Vue.component(i, VuetifyComponents[i]);
 }
 
-// Note that the custom components below aren't imported using "import * as components from '.components'"
-// This is because importing the components like below will help IDE to provide autocompletion.
+// All components that end with '.global.vue' are made globally available.
 
-// FormWidgets
-Vue.component('CheckboxGroupType', () => import('./components/Form/CheckboxGroupType'));
-Vue.component('CheckboxType', () => import('./components/Form/CheckboxType'));
-Vue.component('ChoiceType', () => import('./components/Form/ChoiceType'));
-Vue.component('CollectionType', () => import('./components/Form/CollectionType'));
-Vue.component('FormWidget', () => import('./components/Form/FormWidget'));
-Vue.component('DateType', () => import('./components/Form/DateType'));
-Vue.component('HiddenType', () => import('./components/Form/HiddenType'));
-Vue.component('PasswordType', () => import('./components/Form/PasswordType'));
-Vue.component('RadioGroupType', () => import('./components/Form/RadioGroupType'));
-Vue.component('RadioType', () => import('./components/Form/RadioType'));
-Vue.component('SwitchType', () => import('./components/Form/SwitchType'));
-Vue.component('TextareaType', () => import('./components/Form/TextareaType'));
-Vue.component('TextType', () => import('./components/Form/TextType'));
+const requireComponent = require.context('./components', true, /[A-Z]\w+\.global\.(vue|js)$/);
 
-// Other components
-Vue.component('App', () => import('./components/App'));
-Vue.component('FetchComponent', () => import('./components/FetchComponent'));
-Vue.component('MenuItem', () => import('./components/MenuItem'));
+requireComponent.keys().forEach(fileName => {
+    const componentConfig = requireComponent(fileName)
+    const componentName = fileName.split('/').pop().replace(/\.global\.\w+$/, '');
+    // Register component globally
+    Vue.component(componentName,componentConfig.default || componentConfig);
+});

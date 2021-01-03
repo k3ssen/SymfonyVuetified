@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <v-app v-cloak>
         <div ref="appContent">
             <v-navigation-drawer v-model="drawer" app clipped>
                 <slot name="menu"></slot>
@@ -21,22 +21,14 @@
     </v-app>
 </template>
 
-<script>
-    import FetchComponent from "./FetchComponent";
-    export default {
-        components: {FetchComponent},
-        props: {
-            useFetch: {
-                type: Boolean,
-                default: true
-            },
-            title: {
-                type: String,
-                default: "Application"
-            },
-        },
-        data: () => ({
-            drawer: null,
-        }),
+<script lang="ts">
+    import {Vue, Prop, Component} from 'vue-property-decorator';
+
+    @Component
+    export default class App extends Vue {
+        @Prop({default: 'Application'})
+        public title!: string;
+
+        private drawer: boolean = true;
     };
 </script>
