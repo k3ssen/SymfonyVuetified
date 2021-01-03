@@ -20,6 +20,11 @@
         With the <code>vue-form</code> and <code>form-widget</code> components you can take control over your form,
         similar to twig, but with the extra benefits of vue.
     </p>
+    <p>
+        It's quite powerful, but also a bit complex, because you need to wrap your head around how things are intertwined.
+        It may be a bit daunting, especially when you run into problems, but once you master these things you can do
+        all kinds of things, often in a short amount of time.
+    </p>
 
     {{ vue_data('form', exampleForm) }}
 
@@ -60,7 +65,7 @@
         <form-widget :form="form.children.dateTimeField" row force-render label="date & time">
             <template v-slot:default="{ children }">
                 <form-widget :form="children.date" class="col"></form-widget>
-                <form-widget :form="children.time" label="Time" hint="HH:ii" class="col" :rules="timeRules"></form-widget>
+                <form-widget type="text" :form="children.time" label="Time" hint="hours:minutes (e.g. 23:59)" persistent-hint class="col" :rules="timeRules"></form-widget>
             </template>
         </form-widget>
 

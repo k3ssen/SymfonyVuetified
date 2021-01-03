@@ -57,11 +57,11 @@ class ExampleType extends AbstractType implements \JsonSerializable
         $builder
             ->add('name', TextType::class, [
                 'constraints' => [
-                    new Length(['value' => 5, 'exactMessage' => 'The name must contain 5 characters']),
+                    new Length(['max' => 5, 'exactMessage' => 'The name must contain 5 characters']),
                 ],
                 'label' => 'Name',
                 'attr' => [
-                    'counter' => '25',
+                    'counter' => '5',
                 ]
             ])
             ->add('amount', NumberType::class, [
@@ -74,8 +74,6 @@ class ExampleType extends AbstractType implements \JsonSerializable
                 'label' => 'DateTime field',
                 'date_label' => 'Date',
                 'time_label' => 'Time',
-                'minutes' => [0, 15, 30, 45],
-                'time_widget' => 'single_text'
             ])
             ->add('rangeType', RangeType::class, [
                 'label' => 'Range',
