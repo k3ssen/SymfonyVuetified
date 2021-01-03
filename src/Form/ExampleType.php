@@ -35,7 +35,7 @@ class ExampleType extends AbstractType implements \JsonSerializable
     /**
      * @var RequestStack
      */
-    private RequestStack $requestStack;
+    private $requestStack;
 
     public function __construct(FormFactoryInterface $factory, RequestStack $requestStack)
     {

@@ -4,8 +4,6 @@ command_exists () {
     type "$1" &> /dev/null ;
 }
 
-composer install --ignore-platform-reqs
-
 echo "Updating assets/app.js";
 echo >> ./assets/app.js  &&
 echo "import './main';" >> ./assets/app.js  &&
@@ -14,7 +12,7 @@ echo "Updating webpack.config.js for enableSassLoader, enableVueLoader, enableTy
 
 # add VuetifyLoaderPlugin constant
 line_old="webpack-encore');"
-line_new="webpack-encore');\nconst VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');\n    const WebTypesPlugin = require('./assets/plugins/WebTypesPlugin');"
+line_new="webpack-encore');\nconst VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');\nconst WebTypesPlugin = require('./assets/plugins/WebTypesPlugin');"
 sed -i "s%$line_old%$line_new%g" ./webpack.config.js &&
 
 # enable sassloader, vueLoader with jsx and add VuetifyLoaderPlugin as plugin
@@ -67,16 +65,18 @@ runNpmDev() {
   fi
 }
 
-echo "`jq '.web-types="web-types.json"' ./package.json`" > ./package.json
-
 if command_exists yarn ; then
-    yarn add vuetify &&
-    yarn add sass sass-loader deepmerge vuetify-loader vue-property-decorator vue-class-component -D &&
     yarn install --force &&
+    yarn add vuetify &&
+    yarn add sass deepmerge vuetify-loader vue-property-decorator vue-class-component -D &&
     runYarnDev;
 else
-    npm install vuetify -P &&
-    npm install  sass sass-loader deepmerge vuetify-loader vue-property-decorator vue-class-component -D &&
     npm install --force &&
+    npm install vuetify -P &&
+    npm install sass deepmerge vuetify-loader vue-property-decorator vue-class-component -D &&
     runNpmDev;
 fi
+
+line_old='{'
+line_new='{\n    "web-types": "web-types.json",'
+sed -i "0,/$line_old/s//$line_new/" ./package.json
