@@ -11,8 +11,7 @@ with Symfony 5.x and the addition of `"symfony/webpack-encore-bundle": "*"`.
 Assuming you run a server with php7.2.5+ (or 8.0+), mysql, composer, yarn (or npm) and required modules:
 
 1. Checkout project
-2. Run `composer install`  
-   At moment of writing you need `composer install --ignore-platform-reqs` for php 8.0.
+2. Run `composer install`
 3. Run`./init-project.sh`    
    You'll see Errors about missing packages when the script is trying to run Webpack.
    The script will try to install missing packages automatically.
