@@ -19,6 +19,8 @@ class CollectionTypeExtension extends AbstractTypeExtension
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            'allow_add' => true,
+            'allow_delete' => true,
             'btn_add_txt' => 'Add',
             'btn_delete_txt' => 'Remove',
         ]);

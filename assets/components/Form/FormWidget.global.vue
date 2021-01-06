@@ -3,7 +3,7 @@
         <template v-if="form.vars.compound && !componentType">
             <div class="form-widget" :class="{ 'use-flex': row }">
                 <v-input v-bind="Object.assign(attributes, $attrs)">
-                    <slot name="default" v-bind="{ children: form.children }">
+                    <slot name="default" v-bind="{ children: form.children, ...form.children }">
                         <form-widget v-for="(child, key) in form.children"
                                      :key="key"
                                      :class="{ col: row }"
@@ -14,7 +14,16 @@
                 </v-input>
             </div>
         </template>
-        <component v-else-if="componentType" :is="componentType" v-model="form.vars.data" v-bind="Object.assign(attributes, $attrs)" :form="form" />
+        <component v-else-if="componentType" :is="componentType" v-model="form.vars.data" v-bind="Object.assign(attributes, $attrs)" :form="form">
+            <!-- Vue 3 -->
+            <template v-if="$slots" v-for="(_, slot) of $slots" v-slot:[slot]="scope">
+                <slot :name="slot" v-bind="scope"/>
+            </template>
+            <!-- Vue 2.6 -->
+            <template v-if="$scopedSlots" v-for="(_, slot) of $scopedSlots" v-slot:[slot]="scope">
+                <slot :name="slot" v-bind="scope"/>
+            </template>
+        </component>
     </div>
 </template>
 
@@ -78,7 +87,8 @@
         setAttributes() {
             let attr: any = {};
             attr['form'] = this.form;
-            attr['label'] = this.form.vars.label; // ?? this.form.vars.name;
+            attr['label'] = this.form.vars.label ?? this.form.vars.name;
+            attr['label'] = attr['label'] === false ? null : attr['label'];
             attr['hint'] = this.form.vars.help;
             attr['error-messages'] = this.form.vars.errors;
             attr['error'] = !!this.form.vars.errors;

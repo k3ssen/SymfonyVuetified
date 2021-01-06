@@ -7,7 +7,7 @@
             </div>
         </v-alert>
 
-        <slot name="default">
+        <slot name="default" v-bind="{ children: form.children, ...form.children }">
             <form-widget :form="form"></form-widget>
         </slot>
         <form-widget :form="form"></form-widget><!-- render remainder -->
