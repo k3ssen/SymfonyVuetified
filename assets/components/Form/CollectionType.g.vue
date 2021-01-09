@@ -20,7 +20,7 @@
                         </slot>
                     </span>
                     <v-tabs-items v-model="tab">
-                        <v-tab-item v-for="(child, key) in form.children" :key="key"  class="pa-4">
+                        <v-tab-item v-for="(child, key) in form.children" :key="key" class="pa-4">
                             <slot name="default" v-bind="{ children: child.children, ...child.children}">
                                 <form-widget :form="child"></form-widget>
                             </slot>

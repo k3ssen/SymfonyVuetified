@@ -12,6 +12,22 @@ export default class FormWidgetMixin extends Vue {
     attributes: any = {};
     row_attributes: any = {};
 
+    get scopedSlots() {
+        // Vue 2.5 uses '$slots' as named slots and '$scopedSlots' for parameterized slots.
+        // In Vue 2.6, all slots are merged into '$scopedSlots'.
+        // In Vue 3 the '$scopedSlots' are renamed to '$slots'
+        // In Vue 2.6 '$scopedSlots' are used; In Vue 3 these are renamed to '$slots'
+        return this.$scopedSlots ?? this.$slots;
+    }
+
+    get namedSlots() {
+        // Once (in Vue 3) $slots have replaced $scopedSlots, the namedSlots are no longer used.
+        if (!!this.$scopedSlots) {
+            return this.$slots;
+        }
+        return null;
+    }
+
     created() {
         if (this.forceRender) {
             this.resetRendered(this.form);
@@ -22,6 +38,26 @@ export default class FormWidgetMixin extends Vue {
         if (!this.alreadyRendered) {
             this.form.rendered = true;
         }
+
+        this.setAttributes();
+    }
+
+    setAttributes() {
+        let attr: any = this.$attrs;
+        attr['label'] = this.form.vars.label ?? this.form.vars.name;
+        attr['label'] = attr['label'] === false ? null : attr['label'];
+        attr['hint'] = this.form.vars.help;
+        attr['error-messages'] = this.form.vars.errors;
+        attr['error'] = !!this.form.vars.errors;
+        attr['persistent-hint'] = !!this.form.vars.help;
+
+        if (!this.form.vars.multiple) {
+            attr['name'] = this.form.vars.full_name;
+        }
+        if (!Array.isArray(this.form.vars.attr)) {
+            attr = Object.assign(attr, this.form.vars.attr);
+        }
+        this.attributes = Object.assign(this.attributes, attr);
     }
 
     resetRendered(form: IForm) {

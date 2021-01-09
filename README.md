@@ -3,8 +3,9 @@
 A base project for creating a [Symfony](https://symfony.com/) application that uses
 [Vuetify](https://vuetifyjs.com/en/) as frontend, while making it easy to pass serverside data.
 
-This project is based on the [symfony/website-skeleton](https://github.com/symfony/website-skeleton)
-with Symfony 5.x and the addition of `"symfony/webpack-encore-bundle": "*"`.
+The composer.json of this project is a copy of the Symfony 5.x
+[symfony/website-skeleton](https://github.com/symfony/website-skeleton)
+and the addition of `"symfony/webpack-encore-bundle": "*"`. 
 
 ## Getting started
 

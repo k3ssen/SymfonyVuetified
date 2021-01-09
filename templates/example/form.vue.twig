@@ -29,16 +29,18 @@
     {{ vue_data('form', exampleForm) }}
 
 
-    <vue-form :form="form">
+    <vue-form :form="form" v-slot="{ children }">
         <v-row>
             <v-col>
-                <form-widget :form="form.children.name"></form-widget>
+                <text-type :form="children.name">
+                    <template v-slot:prepend>prepend</template>
+                </text-type>
             </v-col>
             <v-col>
                 <form-widget  outlined
                               hint="This field is outlined for no good reason"
-                              :form="form.children.amount"
-                              :disabled="!!form.children.checkbox.vars.data"></form-widget>
+                              :form="children.amount"
+                              :disabled="!!children.checkbox.vars.data"></form-widget>
             </v-col>
         </v-row>
 
@@ -50,7 +52,7 @@
         </p>
 
         {{ vue_data('dateTimeFieldAsRow', false) }}
-        <form-widget :form="form.children.dateTimeField" :row="dateTimeFieldAsRow"></form-widget>
+        <form-widget :form="children.dateTimeField" :row="dateTimeFieldAsRow"></form-widget>
 
         <p>
             By default, all fields are rendered below each-other, but by setting <code>row</code> on the widget
@@ -62,7 +64,7 @@
             It is recommended to keep it wrapped inside the <code>form-widget</code> of the parent.
         </p>
 
-        <form-widget :form="form.children.dateTimeField" row force-render label="date & time">
+        <form-widget :form="children.dateTimeField" row force-render label="date & time">
             <template v-slot:default="{ children }">
                 <form-widget :form="children.date" class="col"></form-widget>
                 <form-widget type="text" :form="children.time" label="Time" hint="hours:minutes (e.g. 23:59)" persistent-hint class="col" :rules="timeRules"></form-widget>
@@ -72,19 +74,20 @@
         <h2>Select fields</h2>
         <v-row>
             <v-col>
-                <form-widget :form="form.children.checkboxChoice"></form-widget>
+                <form-widget :form="children.checkboxChoice"></form-widget>
             </v-col>
             <v-col>
-                <form-widget :form="form.children.checkbox"></form-widget>
-                <form-widget :form="form.children.toggle" color="error"></form-widget>
-                <form-widget :form="form.children.radioChoice"></form-widget>
+                <form-widget :form="children.checkbox"></form-widget>
+                <form-widget :form="children.toggle" color="error"></form-widget>
+                <form-widget :form="children.radioChoice"></form-widget>
             </v-col>
             <v-col>
-                <form-widget :form="form.children.select"></form-widget>
-                <form-widget :form="form.children.selectAllowAdd"></form-widget>
-                <form-widget :form="form.children.multiple"></form-widget>
+                <form-widget :form="children.select"></form-widget>
+                <form-widget :form="children.selectAllowAdd"></form-widget>
+                <form-widget :form="children.multiple"></form-widget>
             </v-col>
         </v-row>
+        <form-widget :form="form"></form-widget>
     </vue-form>
 {% endblock %}
 

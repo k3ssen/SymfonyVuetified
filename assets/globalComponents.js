@@ -9,11 +9,11 @@ for (const i in VuetifyComponents) {
 
 // All components that end with '.global.vue' are made globally available.
 
-const requireComponent = require.context('./components', true, /[A-Z]\w+\.global\.(vue|js)$/);
+const requireComponent = require.context('./components', true, /[A-Z]\w+\.(g|glob|global)\.(vue|js)$/);
 
 requireComponent.keys().forEach(fileName => {
     const componentConfig = requireComponent(fileName)
-    const componentName = fileName.split('/').pop().replace(/\.global\.\w+$/, '');
+    const componentName = fileName.split('/').pop().replace(/\.(g|glob|global)\.\w+$/, '');
     // Register component globally
     Vue.component(componentName,componentConfig.default || componentConfig);
 });
