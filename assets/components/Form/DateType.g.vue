@@ -19,7 +19,13 @@
                 v-model="form.vars.data"
                 no-title
                 @input="fromDateMenu = false"
-            ></v-date-picker>
+            >
+                <!-- Pass on all slots -->
+                <slot v-if="namedSlots" v-for="slot in Object.keys(namedSlots)" :name="slot" :slot="slot"/>
+                <template v-for="slot in Object.keys(scopedSlots)" :slot="slot" slot-scope="scope">
+                    <slot :name="slot" v-bind="scope"/>
+                </template>
+            </v-date-picker>
         </v-menu>
 </template>
 

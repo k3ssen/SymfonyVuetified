@@ -37,8 +37,8 @@ class WebTypesPlugin {
                 },
             }
             const glob = require('glob');
-            glob.sync( './assets/components/**/*.global.vue' ).forEach( function( file ) {
-                const name = file.split('/').pop().replace(/\.global\.\w+$/, '');
+            glob.sync('./assets/components/**/*.g*.vue').forEach( function( file ) {
+                const name = file.split('/').pop().replace(/\.(g|glob|global)\.\w+$/, '');
 
                 const tag = {
                     name,

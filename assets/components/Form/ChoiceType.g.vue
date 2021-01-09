@@ -4,6 +4,12 @@
             v-model="form.vars.data"
             v-bind="Object.assign(attributes, $attrs)"
         >
+        <!-- Pass on all slots (not that the append-outer and selection slots will be overwritten below ) -->
+        <slot v-if="namedSlots" v-for="slot in Object.keys(namedSlots)" :name="slot" :slot="slot"/>
+        <template v-for="slot in Object.keys(scopedSlots)" :slot="slot" slot-scope="scope">
+            <slot :name="slot" v-bind="scope"/>
+        </template>
+
         <template slot="append-outer">
             <!-- In case of a multi-select, create a hidden field for each selected value -->
             <template v-if="form.vars.multiple">
@@ -19,7 +25,13 @@
             </span>
         </template>
     </v-combobox>
-    <v-autocomplete v-else v-model="form.vars.data" v-bind="Object.assign(attributes, $attrs)"></v-autocomplete>
+    <v-autocomplete v-else v-model="form.vars.data" v-bind="Object.assign(attributes, $attrs)">
+        <!-- Pass on all slots -->
+        <slot v-if="namedSlots" v-for="slot in Object.keys(namedSlots)" :name="slot" :slot="slot"/>
+        <template v-for="slot in Object.keys(scopedSlots)" :slot="slot" slot-scope="scope">
+            <slot :name="slot" v-bind="scope"/>
+        </template>
+    </v-autocomplete>
 </template>
 
 <script lang="ts">
