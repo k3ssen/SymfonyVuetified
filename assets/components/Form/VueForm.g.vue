@@ -9,7 +9,7 @@
 
         <slot name="default" v-bind="{ children: form.children, ...form.children }">
             <div v-for="(child, key) in form.children" :key="key">
-                <slot :name="'subform_' + child.vars.name" v-bind="{ form: child }" >
+                <slot :name="'subform_' + child.vars.name" v-bind="{ subform: child }" >
 
                     <form-widget v-bind="child.vars.row_attr" :form="child"></form-widget>
                 </slot>

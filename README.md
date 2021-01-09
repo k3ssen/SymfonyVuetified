@@ -7,7 +7,7 @@ The composer.json of this project is a copy of the Symfony 5.x
 [symfony/website-skeleton](https://github.com/symfony/website-skeleton)
 and the addition of `"symfony/webpack-encore-bundle": "*"`. 
 
-## Getting started
+# Getting started
 
 Assuming you run a server with php7.2.5+ (or 8.0+), mysql, composer, yarn (or npm) and required modules:
 
@@ -20,7 +20,7 @@ Assuming you run a server with php7.2.5+ (or 8.0+), mysql, composer, yarn (or np
 
 Follow the manual steps below if you're running into trouble.
 
-### Manual steps (only needed if automatic setup failed)
+## Manual steps (only needed if automatic setup failed)
 
 3. Make changes in `webpack.config.js` file to enable Typescript, Sass, Vue and Vuetify:
 ```js
@@ -143,7 +143,7 @@ data available to all vue components.
 
 ## Global vue components
 Vue-components aren't global by default, so they can't be used in Twig.
-By using the `.global.vue` extension instead of just `.vue` the
+By using the `.global.vue` or `.g.vue` extension instead of just `.vue` the
 component will be made global, allowing you to use it inside Twig.
 
 > Autocompletion in PhpStorm doesn't seem to work (yet?) for global components.
@@ -151,7 +151,7 @@ component will be made global, allowing you to use it inside Twig.
 > It won't give autocompletion for props/slots/events, but at least you'll have autocompletion
 > for the component name and reference to the file.
 
-## Using Fetch
+# Using Fetch
 
 Because dynamic vue components can be rendered at runtime, the same principles can be used with `fetch` and load the
 response in a component.
@@ -162,75 +162,134 @@ This project includes a FetchComponent that makes it really easy:
 ```
 
 The `base.html.twig` file in this project checks if a fetch was used to choose the suitable file to extend:
-if you're using fetch, only a template and the script will be loaded. Otherwise the entire page is loaded.
+if you're using fetch, only a template and the script will be loaded. Otherwise, the entire page is loaded.
 
-## Symfony's FormView as Vue component
+> **Note:** this component requires loading the fetched javascript. 
+> Fetching a page that defines variables/constants that were defined already will result in javascript-errors.
+> Therefore, this project uses `window` to put global objects (like the global `vue`) into.  
+> The fetchComponents specifically takes the global objects vue, vueData, vueStoreData into account by clearing these
+> objects before fetching new content.
 
-Messing around in Twig to get the desired vuetify-forms is a pain.
-It becomes especially troublesome when dealing with sub-forms and combo-boxes.
+# Symfony form as Vue component
 
-Instead of using Twig's `{{ form(form) }}`, this project creates a `VueForm` based on
-Symfony's `FormView` to have it passed to vue. The rendering of the form can now be done
-entirely in vue.
+Using form-functions in Twig or form_themes to create a Vuetify-form is a pain (at least in my experience),
+so instead this project uses a `FormVue` class that json_encodes Symfony's `FormView`.
+This json is passed to the vue component, `vue_form`, to have the entire form render by using Vue.
 
-Example:
+Example Usage:
 ```vue
 {% block body %}
-    {{ vue_data('form', form) }}
+    {{ vue_data('form', form) }} {# json_encoding of the form is handled by the vueDataStorage #}
     <vue-form :form="form"></vue-form>
 {% endblock %}
 ```
 
-To take full control you can also render parts individually:
+Just like you could in Twig, you can take full control and render parts individually. It takes some getting used to
+it, because obviously Vue works differently, but it is quite powerful. 
+
+There are several ways you can use to render different parts of your form:
+
+**1) Using form-widget and full object paths**
 
 ```vue
-{% block body %}
-    {{ vue_data('form', form) }}
-    <vue-form :form="form">
-        <v-row>
-            <v-col>
-                <form-widget :form="form.children.name"></form-widget>
-            </v-col>
-            <v-col>
-                <form-widget :form="form.children.email"></form-widget>
-            </v-col>
-        </v-row>
-    </vue-form>
-{% endblock %}
+<vue-form :form="form">
+    <form-widget :form="form.children.name"></form-widget>
+    <form-widget :form="form.children.email"></form-widget>
+</vue-form>
+```
+**2) Using the `children` parameter provided by the default slot:**
+```vue
+<vue-form :form="form" v-slot="{ children }">
+    <form-widget v-for="(child, key) of children" :key="key" :form="child"></form-widget>
+</vue-form>
+```
+(this approach can be mixed with the first approach)  
+
+**3) Using the child form names of default slot:**
+```vue
+<vue-form :form="form" v-slot="{ name, email }">
+    <form-widget :form="name"></form-widget>
+    <form-widget :form="email"></form-widget>
+</vue-form>
+```
+(this approach can be mixed with the previous approaches)  
+
+**4) Using subform slots for the children:**
+```vue
+<vue-form :form="form">
+    <template v-slot:subform_name="{ subform }">
+        <form-widget :form="subform"></form-widget>
+    </template>
+    <!-- email is still rendered by the vue-form -->
+</vue-form>
+```
+The `subform_` prefix is being used here to make sure slots won't overlap (e.g. when a field is called 'default').
+
+Subform slots are defined within the default slot, so this approach cannot be combined with the previous ones.
+Doing so would result in these subform slots being ignored by vue.
+
+Using subform slots can be useful when you want to make changes for specific fields but don't need to change
+the rendering (or order) of other fields.
+
+
+**5) Using specific component types:**
+```vue
+<vue-form :form="form" v-slot="{ name, email }">
+    <text-type :form="name"></text-type>
+    <textarea-type :form="email"></textarea-type>
+</vue-form>
+```
+Here the text-type and texteara-types components are used despite the 'type' that is provided by
+the serverside form definition.
+
+This last option can be useful when you want to use slots that are defined by Vuetify, since the
+form-widget cannot cascade all slots (this would conflict with the default-slot).
+
+## Custom form-type-components
+
+To create a custom form-type, you should have a look at the `/assets/components/Form` directory.
+Most of the logic you need is put in the `FormTypeMixin`, so you probably want to extend that to have some stuff taken
+care of. 
+
+For example, if you want to create a wysiwyg text-editor using quill, you could create a EditorType:
+```vue
+<template>
+    <div class="text-editor-type">
+        <!-- use a hidden field to use when submitting the form -->
+        <input type="hidden" :name="form.vars.full_name" :value="form.vars.data" />
+        <quill-editor
+            ref="myTextEditor"
+            v-model="form.vars.data"
+        />
+    </div>
+</template>
+
+<script lang="ts">
+    import {Component, Mixins} from 'vue-property-decorator';
+    import FormWidgetMixin from "./FormWidgetMixin.ts";
+    import quillEditor from 'vue-quill-editor';
+    
+    @Component
+    export default class EditorType extends Mixins(FormWidgetMixin) {
+        created() {
+            // do stuff like applying settings to the editor...
+        }
+    }
+</script>
 ```
 
-### Custom form-type-components
+Now you could use this component directly by using something like `<editor-type :form="form"></editor-type>`.
 
-The `block_prefixes` are used to determine what component should be used for each individual field.
+
+The block_prefixes are used to determine what component should be used for each individual field.
 By setting a `block_prefix` in your FormType, you can specify a different component that you want to use for your
 field. So within your form type class, you can use something like this:
 ```php
 public function buildForm(FormBuilderInterface $builder, array $options): void
 {
-    $builder->add('email', null, [
-        'label' => 'Email',
-        'block_prefix' => 'EmailType',
+    $builder->add('text', null, [
+        'label' => 'Text',
+        'block_prefix' => 'EditorType',
     ]);
 }
 ```
-
-After this you just need to make sure a component with the name `EmailType` has been defined where you at least
-have a form property defined. To make it easier, just use the FormTypeMixin:
-```vue
-<template>
-    <div>
-        <label :for="form.vars.full_name">{{ form.vars.label }}</label>
-        <input type="email" v-model="form.vars.data" v-bind="attributes" />
-    </div>
-</template>
-
-<script>
-    import {formTypeMixin} from "./FormTypeMixin";
-    export default {
-        mixins: [formTypeMixin],
-    };
-</script>
-```
-
-Have a look at the components in /assets/components/Form and you'll notice that most of these
-aren't more complex than the example above.

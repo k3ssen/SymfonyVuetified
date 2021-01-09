@@ -31,45 +31,52 @@
 
     <vue-form :form="form" v-slot="{ children }">
         <v-row>
-            <v-col>
+            <v-col cols="4">
                 <text-type :form="children.name">
-                    <template v-slot:prepend>prepend</template>
+                    <template v-slot:counter="{ props }">count = @{ props.value } / @{ props.max }</template>
                 </text-type>
+                <form-widget :form="children.amount" :disabled="!!children.checkbox.vars.data"></form-widget>
             </v-col>
             <v-col>
-                <form-widget  outlined
-                              hint="This field is outlined for no good reason"
-                              :form="children.amount"
-                              :disabled="!!children.checkbox.vars.data"></form-widget>
+                <form-widget :form="children.collection">
+                    <template v-slot:tab-text="{ key }">
+                        Text @{ key + 1 }
+                    </template>
+                </form-widget>
             </v-col>
         </v-row>
 
         <h2>
             DateTimeType fields
         </h2>
-        <p>
-            A DateTimeType consist of a 'DateType' and 'TimeType' subform.
-        </p>
+        <v-row>
+            <v-col>
+                <p>
+                    A DateTimeType consist of a 'DateType' and 'TimeType' subform.
+                </p>
 
-        {{ vue_data('dateTimeFieldAsRow', false) }}
-        <form-widget :form="children.dateTimeField" :row="dateTimeFieldAsRow"></form-widget>
+                {{ vue_data('dateTimeFieldAsRow', false) }}
+                <form-widget :form="children.dateTimeField" :row="dateTimeFieldAsRow"></form-widget>
 
-        <p>
-            By default, all fields are rendered below each-other, but by setting <code>row</code> on the widget
-             flex-behaviour is used.<br />
-            <v-btn @click="dateTimeFieldAsRow = !dateTimeFieldAsRow">Set row attribute</v-btn>
-        </p>
-        <p>
-            You can render fields of subforms individually, to add a different label or rules for example.
-            It is recommended to keep it wrapped inside the <code>form-widget</code> of the parent.
-        </p>
+                <p>
+                    By default, all fields are rendered below each-other, but by setting <code>row</code> on the widget
+                    flex-behaviour is used.<br />
+                    <v-btn @click="dateTimeFieldAsRow = !dateTimeFieldAsRow">Set row attribute</v-btn>
+                </p>
+            </v-col>
+            <v-col>
 
-        <form-widget :form="children.dateTimeField" row force-render label="date & time">
-            <template v-slot:default="{ children }">
-                <form-widget :form="children.date" class="col"></form-widget>
-                <form-widget type="text" :form="children.time" label="Time" hint="hours:minutes (e.g. 23:59)" persistent-hint class="col" :rules="timeRules"></form-widget>
-            </template>
-        </form-widget>
+                <p>
+                    You can render fields of subforms individually, to add a different label or rules for example.
+                    It is recommended to keep it wrapped inside the <code>form-widget</code> of the parent.
+                </p>
+
+                <form-widget :form="children.dateTimeField" row force-render label="Time & Date" v-slot="{ date, time }">
+                    <form-widget type="text" :form="time" label="Time" hint="hours:minutes (e.g. 23:59)" persistent-hint class="col" :rules="timeRules"></form-widget>
+                    <form-widget :form="date" class="col"></form-widget>
+                </form-widget>
+            </v-col>
+        </v-row>
 
         <h2>Select fields</h2>
         <v-row>
