@@ -1,5 +1,7 @@
 <template>
-    <input type="hidden" v-model="form.vars.data" v-bind="Object.assign(attributes, $attrs)" />
+    <div v-if="attributes.name">
+        <input type="hidden" v-model="form.vars.data" v-bind="Object.assign(attributes, $attrs)" />
+    </div>
 </template>
 
 <script lang="ts">

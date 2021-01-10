@@ -94,7 +94,7 @@
                 <form-widget :form="children.multiple"></form-widget>
             </v-col>
         </v-row>
-        <form-widget :form="form"></form-widget>
+        <form-widget v-for="child of children" :form="child" :label="null"></form-widget><!-- render remainder -->
     </vue-form>
 {% endblock %}
 

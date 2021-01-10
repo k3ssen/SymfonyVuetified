@@ -16,7 +16,7 @@
                 </v-input>
             </div>
         </template>
-        <component v-else-if="componentType" :is="componentType" v-model="form.vars.data" v-bind="$attrs" :form="form">
+        <component v-else-if="componentType" :is="componentType" v-bind="$attrs" :form="form">
             <!-- Pass on all slots -->
             <slot v-if="namedSlots" v-for="slot in Object.keys(namedSlots)" :name="slot" :slot="slot"/>
             <template v-for="slot in Object.keys(scopedSlots)" :slot="slot" slot-scope="scope">
