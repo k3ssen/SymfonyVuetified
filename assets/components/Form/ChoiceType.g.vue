@@ -1,37 +1,38 @@
 <template>
-    <v-combobox
-            v-if="attributes.allow_add"
-            v-model="form.vars.data"
-            v-bind="Object.assign(attributes, $attrs)"
-        >
-        <!-- Pass on all slots (not that the append-outer and selection slots will be overwritten below ) -->
-        <slot v-if="namedSlots" v-for="slot in Object.keys(namedSlots)" :name="slot" :slot="slot"/>
-        <template v-for="slot in Object.keys(scopedSlots)" :slot="slot" slot-scope="scope">
-            <slot :name="slot" v-bind="scope"/>
-        </template>
-
-        <template slot="append-outer">
-            <!-- In case of a multi-select, create a hidden field for each selected value -->
-            <template v-if="form.vars.multiple">
-                <input type="hidden" v-for="value in form.vars.data" :name="form.vars.full_name" :value="value" />
+    <div>
+        <v-combobox
+                v-if="attributes.allow_add"
+                v-model="form.vars.data"
+                v-bind="Object.assign(attributes, $attrs)"
+            >
+            <!-- Pass on all slots (note that the selection slot will be overwritten below ) -->
+            <slot v-if="namedSlots" v-for="slot in Object.keys(namedSlots)" :name="slot" :slot="slot"/>
+            <template v-for="slot in Object.keys(scopedSlots)" :slot="slot" slot-scope="scope">
+                <slot :name="slot" v-bind="scope"/>
             </template>
+
+            <template v-slot:selection="{ item, parent, disabled, select }">
+                <v-chip v-if="attributes.multiple" :disabled="disabled" close @click:close="parent.selectItem(item)">
+                    {{ getItemByValue(item).label }}
+                </v-chip>
+                <span v-else>
+                    {{ getItemByValue(item).label }}
+                </span>
+            </template>
+        </v-combobox>
+        <v-autocomplete v-else v-model="form.vars.data" v-bind="Object.assign(attributes, $attrs)">
+            <!-- Pass on all slots -->
+            <slot v-if="namedSlots" v-for="slot in Object.keys(namedSlots)" :name="slot" :slot="slot"/>
+            <template v-for="slot in Object.keys(scopedSlots)" :slot="slot" slot-scope="scope">
+                <slot :name="slot" v-bind="scope"/>
+            </template>
+        </v-autocomplete>
+
+        <!-- In case of a multi-select, create a hidden field for each selected value -->
+        <template v-if="form.vars.multiple">
+            <input type="hidden" v-for="value in form.vars.data" :name="form.vars.full_name" :value="value" />
         </template>
-        <template v-slot:selection="{ item, parent, disabled, select }">
-            <v-chip v-if="attributes.multiple" :disabled="disabled" close @click:close="parent.selectItem(item)">
-                {{ getItemByValue(item).label }}
-            </v-chip>
-            <span v-else>
-                {{ getItemByValue(item).label }}
-            </span>
-        </template>
-    </v-combobox>
-    <v-autocomplete v-else v-model="form.vars.data" v-bind="Object.assign(attributes, $attrs)">
-        <!-- Pass on all slots -->
-        <slot v-if="namedSlots" v-for="slot in Object.keys(namedSlots)" :name="slot" :slot="slot"/>
-        <template v-for="slot in Object.keys(scopedSlots)" :slot="slot" slot-scope="scope">
-            <slot :name="slot" v-bind="scope"/>
-        </template>
-    </v-autocomplete>
+    </div>
 </template>
 
 <script lang="ts">

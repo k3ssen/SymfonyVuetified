@@ -32,7 +32,6 @@ export default class FormWidgetMixin extends Vue {
         if (this.forceRender) {
             this.resetRendered(this.form);
         }
-        this.attributes = this.$attrs;
         this.row_attributes = this.form.vars.row_attr;
         this.alreadyRendered = this.checkRendered(this.form);
         if (!this.alreadyRendered) {
@@ -43,7 +42,7 @@ export default class FormWidgetMixin extends Vue {
     }
 
     setAttributes() {
-        let attr: any = this.$attrs;
+        let attr: any = {};
         attr['label'] = this.form.vars.label ?? this.form.vars.name;
         attr['label'] = attr['label'] === false ? null : attr['label'];
         attr['hint'] = this.form.vars.help;
