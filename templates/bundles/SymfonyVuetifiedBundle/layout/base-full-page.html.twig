@@ -1,0 +1,13 @@
+{% extends '@!SymfonyVuetified/layout/base-full-page.html.twig' %}
+
+{% block menu_items %}
+    <sv-menu-item href="/" icon="mdi-view-dashboard">
+        Dashboard
+    </sv-menu-item>
+    <sv-menu-item href="{{ path('example_fetch') }}" icon="mdi-file-download">
+        Fetch example
+    </sv-menu-item>
+    <sv-menu-item href="{{ path('example_form') }}" icon="mdi-textbox">
+        Form example
+    </sv-menu-item>
+{% endblock %}

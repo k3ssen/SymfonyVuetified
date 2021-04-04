@@ -4,33 +4,6 @@ command_exists () {
     type "$1" &> /dev/null ;
 }
 
-echo "Updating assets/app.js";
-echo >> ./assets/app.js  &&
-echo "import './main';" >> ./assets/app.js  &&
-
-echo "Updating webpack.config.js for enableSassLoader, enableVueLoader, enableTypeScriptLoader";
-
-# add VuetifyLoaderPlugin constant
-line_old="webpack-encore');"
-line_new="webpack-encore');\nconst VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');\nconst WebTypesPlugin = require('./assets/plugins/WebTypesPlugin');"
-sed -i "s%$line_old%$line_new%g" ./webpack.config.js &&
-
-# enable sassloader, vueLoader with jsx and add VuetifyLoaderPlugin as plugin
-line_old='//.enableSassLoader()'
-line_new='.enableSassLoader()\n    .enableVueLoader(() => {}, {\n        useJsx: true\n    })\n    .addPlugin(new VuetifyLoaderPlugin())\n    .addPlugin(new WebTypesPlugin())'
-sed -i "s%$line_old%$line_new%g" ./webpack.config.js &&
-
-# enable typescript
-line_old='//.enableTypeScriptLoader()'
-line_new='.enableTypeScriptLoader()'
-sed -i "s%$line_old%$line_new%g" ./webpack.config.js &&
-
-# disable stimulus (we're using vue already)
-#line_old='.enableStimulusBridge()'
-#line_new='//.enableStimulusBridge()'
-#sed -i "s%$line_old%$line_new%g" ./webpack.config.js &&
-
-
 # capture the output of a command so it can be retrieved with ret
 cap () {
   tee /tmp/capture.out;
@@ -66,17 +39,9 @@ runNpmDev() {
 }
 
 if command_exists yarn ; then
-    yarn install --force &&
-    yarn add vuetify &&
-    yarn add sass deepmerge vuetify-loader vue-property-decorator vue-class-component -D &&
+    yarn install &&
     runYarnDev;
 else
-    npm install --force &&
-    npm install vuetify -P &&
-    npm install sass deepmerge vuetify-loader vue-property-decorator vue-class-component -D &&
+    npm install &&
     runNpmDev;
 fi
-
-line_old='{'
-line_new='{\n    "web-types": "web-types.json",'
-sed -i "0,/$line_old/s//$line_new/" ./package.json

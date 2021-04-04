@@ -17,32 +17,31 @@
         Form example
     </h1>
     <p>
-        With the <code>vue-form</code> and <code>form-widget</code> components you can take control over your form,
+        With the <code>sv-form</code> and <code>sv-form-widget</code> components you can take control over your form,
         similar to twig, but with the extra benefits of vue.
     </p>
     <p>
         It's quite powerful, but also a bit complex, because you need to wrap your head around how things are intertwined.
-        It may be a bit daunting, especially when you run into problems, but once you master these things you can do
+        It may be daunting at first, especially when you run into problems, but once mastered you can do
         all kinds of things, often in a short amount of time.
     </p>
 
     {{ vue_data('form', exampleForm) }}
 
-
-    <vue-form :form="form" v-slot="{ children }">
+    <sv-form :form="form" v-slot="{ children }">
         <v-row>
             <v-col cols="4">
-                <text-type :form="children.name">
+                <sv-form-widget :form="children.name">
                     <template v-slot:counter="{ props }">count = @{ props.value } / @{ props.max }</template>
-                </text-type>
-                <form-widget :form="children.amount" :disabled="!!children.checkbox.vars.data"></form-widget>
+                </sv-form-widget>
+                <sv-form-widget :form="children.amount" :disabled="!!children.checkbox.vars.data"></sv-form-widget>
             </v-col>
             <v-col>
-                <form-widget :form="children.collection">
+                <sv-form-widget :form="children.collection">
                     <template v-slot:tab-text="{ key }">
                         Text @{ key + 1 }
                     </template>
-                </form-widget>
+                </sv-form-widget>
             </v-col>
         </v-row>
 
@@ -56,7 +55,7 @@
                 </p>
 
                 {{ vue_data('dateTimeFieldAsRow', false) }}
-                <form-widget :form="children.dateTimeField" :row="dateTimeFieldAsRow"></form-widget>
+                <sv-form-widget :form="children.dateTimeField" :row="dateTimeFieldAsRow"></sv-form-widget>
 
                 <p>
                     By default, all fields are rendered below each-other, but by setting <code>row</code> on the widget
@@ -71,31 +70,31 @@
                     It is recommended to keep it wrapped inside the <code>form-widget</code> of the parent.
                 </p>
 
-                <form-widget :form="children.dateTimeField" row force-render label="Time & Date" v-slot="{ date, time }">
-                    <form-widget type="text" :form="time" label="Time" hint="hours:minutes (e.g. 23:59)" persistent-hint class="col" :rules="timeRules"></form-widget>
-                    <form-widget :form="date" class="col"></form-widget>
-                </form-widget>
+                <sv-form-widget :form="children.dateTimeField" row force-render label="Time & Date" v-slot="{ date, time }">
+                    <sv-form-widget type="text" :form="time" label="Time" hint="hours:minutes (e.g. 23:59)" persistent-hint class="col" :rules="timeRules"></sv-form-widget>
+                    <sv-form-widget :form="date" class="col"></sv-form-widget>
+                </sv-form-widget>
             </v-col>
         </v-row>
 
         <h2>Select fields</h2>
         <v-row>
             <v-col>
-                <form-widget :form="children.checkboxChoice"></form-widget>
+                <sv-form-widget :form="children.checkboxChoice"></sv-form-widget>
             </v-col>
             <v-col>
-                <form-widget :form="children.checkbox"></form-widget>
-                <form-widget :form="children.toggle" color="error"></form-widget>
-                <form-widget :form="children.radioChoice"></form-widget>
+                <sv-form-widget :form="children.checkbox"></sv-form-widget>
+                <sv-form-widget :form="children.toggle" color="error"></sv-form-widget>
+                <sv-form-widget :form="children.radioChoice"></sv-form-widget>
             </v-col>
             <v-col>
-                <form-widget :form="children.select"></form-widget>
-                <form-widget :form="children.selectAllowAdd"></form-widget>
-                <form-widget :form="children.multiple"></form-widget>
+                <sv-form-widget :form="children.select"></sv-form-widget>
+                <sv-form-widget :form="children.selectAllowAdd"></sv-form-widget>
+                <sv-form-widget :form="children.multiple"></sv-form-widget>
             </v-col>
         </v-row>
-        <form-widget v-for="child of children" :form="child" :label="null"></form-widget><!-- render remainder -->
-    </vue-form>
+        <sv-form-widget v-for="child of children" :key="child.vars.id" :form="child" :label="null"></sv-form-widget><!-- render remainder -->
+    </sv-form>
 {% endblock %}
 
 {% block script %}
