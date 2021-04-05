@@ -8,7 +8,8 @@ twig-file.
 Assuming you have a Symfony 4.4 or 5+ application installed on a server with php7.1.3+ (or 8.0+), mysql, composer, yarn (or npm)
 and required modules:
 
-1. Run `composer require k3ssen/symfony-vuetified`
+1. Run `composer require k3ssen/symfony-vuetified`  
+   You may need to add `"minimum-stability": "dev", "prefer-stable": true` to your composer.json
 2. Run `php bin/console symfony-vuetified:setup` if you just created a new symfony project.
    Otherwise see 'configure files' below.
 3. Run `yarn install & yarn dev`  
