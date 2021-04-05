@@ -159,7 +159,8 @@ class ExampleType extends AbstractType implements \JsonSerializable
                 'allow_delete' => true,
                 'entry_type' => TextType::class,
                 'entry_options' => [
-                    'label' => 'Text'
+                    'label' => 'Text',
+                    'block_prefix' => 'SvTextEditor',
                 ],
                 'constraints' => [
                     new Count(1),

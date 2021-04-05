@@ -38,10 +38,16 @@ runNpmDev() {
   fi
 }
 
+php bin/console symfony-vuetified:setup -n;
+
 if command_exists yarn ; then
+    yarn add quill-image-resize-module quill-image-resize-vue vue-quill-editor &&
     yarn install &&
     runYarnDev;
 else
+    npm install quill-image-resize-module quill-image-resize-vue vue-quill-editor --save &&
     npm install &&
     runNpmDev;
 fi
+
+php bin/console doctrine:schema:update --force;

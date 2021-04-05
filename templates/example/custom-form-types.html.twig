@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>
+        WYSIWYG
+    </h1>
+    <p>
+        You aren't restricted to using the pre-defined types by this bundle. You can also add your own components!
+    </p>
+    <p>
+        For an easy example you can take a look at <code>SvHidden.vue</code> , but to prove you aren't limited to
+        basic stuff only the example below shows a wysiwyg-editor. The <code>assets/componens/SvTextEditor.vue</code>
+        uses the <code>FormWidgetMixin</code> provided by this bundle and implements the quill library.
+    </p>
+    <p>
+        After this you only need to use <code>'block_prefix' => 'SvTextEditor'</code> in the form-field you wish to have
+        this editor applied to.
+    </p>
+    {{ vue_data('editing', true) }}
+    {% if form.submitted %}
+        {{ vue_data('editing', false) }}
+        <v-card v-if="!editing">
+            <v-card-title>
+                Submitted text
+            </v-card-title>
+            <v-card-text>
+                {{ form.data | raw }}
+            </v-card-text>
+            <v-card-actions>
+                <v-btn color="warning" @click="editing = true">Edit</v-btn>
+            </v-card-actions>
+        </v-card>
+    {% endif %}
+    {{ vue_data('form', form) }}
+    <sv-form v-show="editing" :form="form"></sv-form>
+{% endblock %}
