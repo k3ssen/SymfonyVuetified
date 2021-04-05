@@ -57,11 +57,11 @@
             return null;
         }
 
-        public mounted() {
+        mounted() {
             this.setRemainingErrors(this.form);
         }
 
-        public setRemainingErrors(form: any) {
+        setRemainingErrors(form: any) {
             if (!form.rendered && form.vars.errors) {
                 this.remainingErrors.push({
                     label: form !== this.form ? form.vars?.label || form.vars.name : null,

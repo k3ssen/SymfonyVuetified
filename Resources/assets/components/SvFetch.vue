@@ -12,15 +12,15 @@ import {Vue, Prop, Component, Watch} from 'vue-property-decorator';
 @Component
 export default class SvFetch extends Vue {
     @Prop()
-    public url!: string;
+    url!: string;
     @Prop({default: 'vue', type: String})
-    public vueObjectName!: any;
+    vueObjectName!: any;
     @Prop({default: 'vueData', type: String})
-    public dataObjectName!: any;
+    dataObjectName!: any;
     @Prop({default: 'vueStoreData', type: String})
-    public storeDataObjectName!: any;
+    storeDataObjectName!: any;
 
-    private component: any = null;
+    component: any = null;
 
     async mounted() {
         await this.load();

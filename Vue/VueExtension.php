@@ -13,7 +13,7 @@ class VueExtension extends AbstractExtension
     /**
      * @var VueDataStorage
      */
-    private $vueDataStorage;
+    protected $vueDataStorage;
 
     public function __construct(VueDataStorage $vueDataStorage)
     {

@@ -58,7 +58,6 @@ import {Component, Mixins, Prop} from 'vue-property-decorator';
         collectionErrorMessage!: string;
         @Prop({type: String, default: 'There are no items in this collection.'})
         noItemsText!: string;
-
         @Prop({type: Boolean, default: false})
         verticalTabs!: boolean;
 
@@ -86,7 +85,7 @@ import {Component, Mixins, Prop} from 'vue-property-decorator';
             (this.form.children as IForm[]).splice(key, 1);
         }
 
-        public hasError(form: any) {
+        hasError(form: any) {
             if (form.vars.errors) {
                 return true;
             }

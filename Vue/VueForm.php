@@ -25,10 +25,10 @@ class VueForm implements \JsonSerializable
     /**
      * @var array
      */
-    private $vars;
+    protected $vars;
 
     /** @var VueForm[] */
-    private $children = [];
+    protected $children = [];
 
     public static function create(FormInterface $form): self
     {
@@ -63,7 +63,7 @@ class VueForm implements \JsonSerializable
         ];
     }
 
-    private function addMappedBlockPrefixes()
+    protected function addMappedBlockPrefixes()
     {
         $initialPrefixes = $this->vars['block_prefixes'];
         foreach ($initialPrefixes as $index => $block_prefix) {

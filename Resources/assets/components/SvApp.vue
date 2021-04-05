@@ -27,8 +27,8 @@
     @Component
     export default class SvApp extends Vue {
         @Prop({default: 'Application'})
-        public title!: string;
+        title!: string;
 
-        private drawer: boolean = true;
+        drawer: boolean = true;
     };
 </script>

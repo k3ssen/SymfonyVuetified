@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace K3ssen\SymfonyVuetified\Maker;
 
@@ -18,7 +19,8 @@ class Generator extends BaseGenerator
         );
     }
 
-    private function getProp(BaseGenerator $generator, string $propertyName) {
+    protected function getProp(BaseGenerator $generator, string $propertyName)
+    {
         $reflectionProperty = new \ReflectionProperty($generator, $propertyName);
         $reflectionProperty->setAccessible(true);
         return $reflectionProperty->getValue($generator);

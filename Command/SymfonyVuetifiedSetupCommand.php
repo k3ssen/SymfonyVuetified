@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace K3ssen\SymfonyVuetified\Command;
 
@@ -13,10 +14,11 @@ class SymfonyVuetifiedSetupCommand extends Command
 {
     protected static $defaultName = 'symfony-vuetified:setup';
     protected static $defaultDescription = 'Adds/modifies required files/settings for setup SymfonyVuetified';
+
     /**
      * @var string
      */
-    private $rootDir;
+    protected $rootDir;
 
     public function __construct(string $rootDir)
     {
@@ -26,9 +28,7 @@ class SymfonyVuetifiedSetupCommand extends Command
 
     protected function configure()
     {
-        $this
-            ->setDescription(self::$defaultDescription)
-        ;
+        $this->setDescription(self::$defaultDescription);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

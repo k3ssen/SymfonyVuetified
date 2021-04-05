@@ -18,9 +18,9 @@
     @Component
     export default class SvMenuItem extends Vue {
         @Prop({default: null})
-        public href!: string;
+        href!: string;
 
         @Prop({default: ''})
-        public icon!: string;
+        icon!: string;
     }
 </script>
