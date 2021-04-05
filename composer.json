@@ -35,7 +35,7 @@
         "symfony/validator": "*",
         "symfony/web-link": "*",
         "symfony/yaml": "*",
-        "k3ssen/symfony-vuetified": "dev-bundle"
+        "k3ssen/symfony-vuetified": ">=0.2.0"
     },
     "require-dev": {
     },
