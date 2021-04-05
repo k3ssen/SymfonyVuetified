@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Book{% endblock %}
+
+{% block body %}
+    <h1>Book</h1>
+
+    <v-simple-table>
+        <template v-slot:default>
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ book.id }}</td>
+                </tr>
+                <tr>
+                    <th>Title</th>
+                    <td>{{ book.title }}</td>
+                </tr>
+                <tr>
+                    <th>PublishedAt</th>
+                    <td>{{ book.publishedAt ? book.publishedAt|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>NumberOfPages</th>
+                    <td>{{ book.numberOfPages }}</td>
+                </tr>
+                <tr>
+                    <th>Meta</th>
+                    <td>{{ book.meta ? book.meta|json_encode : '' }}</td>
+                </tr>
+            </tbody>
+        </template>
+    </v-simple-table>
+
+    <v-btn href="{{ path('book_index') }}">back to list</v-btn>
+
+    <v-btn color="warning" href="{{ path('book_edit', {'id': book.id}) }}">edit</v-btn>
+
+    {{ include('book/_delete_form.html.twig') }}
+{% endblock %}

@@ -7,3 +7,12 @@ services:
 twig:
     globals:
         exampleForm: '@App\Form\ExampleType'
+
+doctrine:
+    dbal:
+        default_connection: default
+        connections:
+            default:
+                url: ~
+                driver:   pdo_sqlite
+                path:     '%kernel.cache_dir%/test.db'

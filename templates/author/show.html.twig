@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Author{% endblock %}
+
+{% block body %}
+    <h1>Author</h1>
+
+    <v-simple-table>
+        <template>
+            <tbody>
+                <tr>
+                    <th style="width: 140px;">Id</th>
+                    <td>{{ author.id }}</td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <td>{{ author.name }}</td>
+                </tr>
+            </tbody>
+        </template>
+    </v-simple-table>
+
+    <h2>Books by this athor</h2>
+    {% set books = author.books.toArray %}
+    {% if books|length > 0 %}
+        {{ block('books_datatable', 'book/index.html.twig') }}
+    {% else %}
+        <v-alert type="info">There are no books or this author</v-alert>
+    {% endif %}
+
+    <v-btn href="{{ path('author_index') }}">back to list</v-btn>
+
+    <v-btn color="warning" href="{{ path('author_edit', {'id': author.id}) }}">edit</v-btn>
+
+    {{ include('author/_delete_form.html.twig') }}
+{% endblock %}
