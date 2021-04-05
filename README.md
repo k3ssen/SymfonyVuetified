@@ -164,7 +164,7 @@ import Vue from 'vue';
 
 import vueObject from '@k3ssen/symfony-vuetified/vue-object-init';
 
-if (document.getElementById('vs-app') && typeof window.vue === 'object') {
+if (document.getElementById('sv-app') && typeof window.vue === 'object') {
     new Vue(vueObject);
 }
 ```

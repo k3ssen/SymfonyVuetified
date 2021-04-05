@@ -8,7 +8,10 @@
         </v-alert>
 
         <slot name="default" v-bind="{ children: form.children, ...form.children }">
-            <div v-for="(child, key) in form.children" :key="key">
+            <div v-if="form.children.length === 0">
+                <sv-form-widget v-bind="form.vars.row_attr" :form="form"></sv-form-widget>
+            </div>
+            <div v-else v-for="(child, key) in form.children" :key="key">
                 <slot :name="'subform_' + child.vars.name" v-bind="{ subform: child }" >
                     <sv-form-widget v-bind="child.vars.row_attr" :form="child"></sv-form-widget>
                 </slot>

@@ -1,7 +1,7 @@
 <script>
     window.vue =(Object.assign({
         {% if isFetchRequest|default(false) == false %}
-            el: '#vs-app',
+            el: '#sv-app',
         {% endif %}
         delimiters: ['@{', '}'], {# Make sure to set the same delimiters in 'base-fetched-page.html.twig #}
     }, window.vue ?? {}));
