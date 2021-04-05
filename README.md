@@ -8,7 +8,7 @@ twig-file.
 Assuming you have a Symfony 4.4 or 5+ application installed on a server with php7.1.3+ (or 8.0+), mysql, composer, yarn (or npm)
 and required modules:
 
-1. Run `composer require k3ssen/symfony-vuetified:dev-bundle`
+1. Run `composer require k3ssen/symfony-vuetified`
 2. Run `php bin/console symfony-vuetified:setup` if you just created a new symfony project.
    Otherwise see 'configure files' below.
 3. Run `yarn install & yarn dev`  
@@ -22,18 +22,15 @@ add a `tsconfig.json` file to the root of your project.
 **webpack.config.js**  
 enable Typescript, Sass, Vue and Vuetify:
 ```
-enable Typescript, Sass, Vue and Vuetify:
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 // [...]
 
 Encore.
-
     // [...]
 
     .enableSassLoader()
     .enableTypeScriptLoader()
-    .enableVueLoader(() => {
-    }, {
+    .enableVueLoader(() => {}, {
         useJsx: true
     })
     .addPlugin(new VuetifyLoaderPlugin())
@@ -45,24 +42,9 @@ Encore.
 ```
 
 **tsconfig.json**  
-add the `tsconfig.json` file to the root of your project. You can use the following content:
-```
-{
-    "compilerOptions": {
-        "target": "esnext",
-        "module": "esnext",
-        "strict": true,
-        "jsx": "preserve",
-        "importHelpers": true,
-        "moduleResolution": "node",
-        "experimentalDecorators": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "sourceMap": true,
-        "types": ["vuetify"]
-    }
-}
-```
+To add the `tsconfig.json` file to the root of your project, you can copy it from this bundle:  
+`cp vendor/k3ssen/symfony-vuetified/Resources/assets/tsconfig.json ./tsconfig.json`  
+
 
 **assets/app.js**  
 Add `import 'k3ssen/symfony-vuetified';` to your `assets/app.js` file.
@@ -75,26 +57,9 @@ If you have a new symfony project, you could replace the content of `base.html.t
 ```twig
 {% extends '@SymfonyVuetified/base.html.twig' %}
 ```
-Alternatively, you can use something like the code below in your `base.html.twig` file.
-```
-{% block javascripts %}
-    {% block script %}{% endblock %}
-    {% block vue_script %}
-        {% include '@SymfonyVuetified/layout/_vue_script.html.twig' %}
-    {% endblock %}
-    {# It is important that the rendered app.js is loaded after the vue_script to make sure the vue object is available#}
-    {{ encore_entry_script_tags('app') }}
-{% endblock %}
-```
-You'll need a `<div id="sv-app">` wrapper for any content you want to use SymfonyVuetify components in.
-For example your 'base.html.twig` should contain something like:
-```
- <body>
-     <div id="sv-app">
-        {% block body %}{% endblock %}
-     </div>
- </body>
-```
+Alternatively, you can use `{% include '@SymfonyVuetified/layout/_vue_script.html.twig' %}` 
+and add a `<div id="sv-app">` wrapper yourself.
+Have a look at the *Resources/views/base.html.twig* file of this bundle how this is done.
 
 # Concept/usage
 
