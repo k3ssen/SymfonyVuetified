@@ -1,0 +1,10 @@
+<script>
+    window.vue =(Object.assign({
+        {% if isFetchRequest|default(false) == false %}
+            el: '#vs-app',
+        {% endif %}
+        delimiters: ['@{', '}'], {# Make sure to set the same delimiters in 'base-fetched-page.html.twig #}
+    }, window.vue ?? {}));
+    window.vueData = {{ get_vue_data() | raw }};
+    window.vueStoreData = {{ get_vue_store() | raw }};
+</script>

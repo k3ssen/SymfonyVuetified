@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}
+{#            <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">#}
+            <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+    </head>
+    <body>
+        <div id="vs-app">
+            <sv-app>
+                <div slot="menu">
+                    {% block menu %}
+                        <v-list nav>
+                            {% block menu_items %}
+                                <sv-menu-item href="/" icon="mdi-view-dashboard">
+                                    Dashboard
+                                </sv-menu-item>
+                            {% endblock %}
+                        </v-list>
+                    {% endblock %}
+                </div>
+                {% block flash_messages %}
+                    {% include '@SymfonyVuetified/layout/_flash_messages.vue.twig' %}
+                {% endblock %}
+                {% block body %}{% endblock %}
+            </sv-app>
+        </div>
+        {% block javascripts %}
+            {% block script %}{% endblock %}
+            {% block vue_script %}
+                {% include '@SymfonyVuetified/layout/_vue_script.html.twig' %}
+            {% endblock %}
+            {# It is important that the rendered app.js is loaded after the vue_script to make sure the vue object is available#}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </body>
+</html>
