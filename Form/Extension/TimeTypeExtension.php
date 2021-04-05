@@ -19,7 +19,7 @@ class TimeTypeExtension extends AbstractTypeExtension
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'input' => 'datetime_immutable',
+            // 'input' => 'datetime_immutable',
             'type' => 'time',
             'widget' => 'single_text',
             'placeholder' => 'dd-mm-yyyy',

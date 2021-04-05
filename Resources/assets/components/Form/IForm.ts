@@ -26,5 +26,7 @@ interface IFormVars {
     choices?: object|string[]|number[];
     errors?: string;
     help?: any;
+    action?: string;
+    method?: string;
     // add more attributes when needed.
 }

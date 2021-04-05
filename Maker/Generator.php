@@ -26,7 +26,7 @@ class Generator extends BaseGenerator
 
     public function generateTemplate(string $targetPath, string $templateName, array $variables = [])
     {
-        $templatePath = __DIR__ . '/../../templates/generator/' . $templateName;
+        $templatePath = str_replace('/', DIRECTORY_SEPARATOR , __DIR__ . '/../Resources/views/generator/' . $templateName);
         if (file_exists($templatePath)) {
             $templateName = $templatePath;
         }

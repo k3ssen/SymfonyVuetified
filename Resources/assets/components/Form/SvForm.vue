@@ -1,5 +1,5 @@
 <template>
-    <v-form :method="method" v-bind="$attrs">
+    <v-form :method="method" :action="form.vars.action" v-bind="$attrs">
         <!-- Make sure that any remaining errors (in non-rendered components) are displayed. -->
         <v-alert v-if="remainingErrors.length > 0" type="error">
             <div v-for="error in remainingErrors">

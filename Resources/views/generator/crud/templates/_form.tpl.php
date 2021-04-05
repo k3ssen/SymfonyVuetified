@@ -1,2 +1,4 @@
 {{ vue_data('form', form) }}
-<vue-form :form="form" label-submit="{{ button_label|default('Save') }}"></vue-form>
+<sv-form :form="form" label-submit="{{ button_label|default('Save') }}"></sv-form>
+
+<v-divider class="my-5"></v-divider>
