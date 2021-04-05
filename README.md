@@ -21,7 +21,7 @@ You'll need to modify `webpack.config.json`, `assets/app.js`, `templates/base.ht
 add a `tsconfig.json` file to the root of your project.
 
 **webpack.config.js**  
-enable Typescript, Sass, Vue and Vuetify:
+Enable Typescript, Sass, Vue and Vuetify:
 ```
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 // [...]
@@ -124,7 +124,7 @@ If you need to pass server data to vue, you can use `vue_data` instead:
     {{ vue_data('someObject', someObject) }}
     {{ vue_data('anotherObject', anotherObject) }}
     <div v-if="someObject && anotherObject">
-        This tekst is only shown if both objects have a value.
+        This text is only shown if both objects have a value.
     </div>
 {% endblock %}
 ```
@@ -141,7 +141,7 @@ data available to all vue components.
     {{ vue_store('someObject', someObject) }}
     {{ vue_store('anotherObject', anotherObject) }}
     <div v-if="$store.someObject && $store.anotherObject">
-        This tekst is only shown if both objects have a value.
+        This text is only shown if both objects have a value.
     </div>
 {% endblock %}
 ```
@@ -149,8 +149,8 @@ data available to all vue components.
 ## Global vue components
 Custom and vendor Vue-components aren't global by default, so they can't be used in Twig.
 
-The `globalComponents.js` asset makes the components of Vuetify and this bundle globally available.
-This way you can use these components wherever you want, also in twig.
+The `globalComponents.js` file makes the components of Vuetify and this bundle globally available.
+This way you can use these components almost wherever you want, including Twig.
 
 The downside is that this'll increase the size of your javascript resources. 
 If you want don't want to make all these components global, you can coose to use the 
@@ -175,7 +175,6 @@ If you want to make specific components available to twig, `<sv-app>` for exampl
 Vue.component('SvApp', () => import('@k3ssen/symfony-vuetified/components/SvApp'));
 ```
 
-
 # Using Fetch
 
 Because dynamic vue components can be rendered at runtime, the same principles can be used with `fetch` and load the
@@ -198,9 +197,9 @@ if you're using fetch, only a template and the script will be loaded. Otherwise,
 
 # Symfony form as Vue component
 
-Using form-functions in Twig or form_themes to create a Vuetify-form is conceptually easy, but very hard when dealing with
-edge-cases. This bundle uses a `FormVue` class that json_encodes Symfony's `FormView`.
-This json is passed to the vue component, `vue_form`, to have the entire form render by using Vue.
+Using form-functions in Twig or form_themes to create a Vuetify-form is difficult, especially when dealing with
+edge-cases. This bundle introduces the `FormVue` class that processes Symfony's `FormView` to enable json_encoding.
+This json is passed to the `sv_form` vue component to have the entire form rendered in Vue.
 
 Example Usage:
 ```vue
@@ -210,8 +209,8 @@ Example Usage:
 {% endblock %}
 ```
 
-Just like you could in Twig, you can take full control and render parts individually. It takes some getting used to
-it, because obviously Vue works differently, but it is quite powerful. 
+You can take full control and render parts individually. It takes some getting used to
+it, because obviously Vue works differently from Twig's form-method, but it is quite powerful. 
 
 There are several ways you can use to render different parts of your form:
 
@@ -260,12 +259,12 @@ the rendering (or order) of other fields.
 
 **5) Using specific component types:**
 ```vue
-<sv-form :form="form" v-slot="{ name, email }">
+<sv-form :form="form" v-slot="{ name, text }">
     <sv-text :form="name"></sv-text>
-    <sv-textarea :form="email"></sv-textarea>
+    <sv-textarea :form="text"></sv-textarea>
 </sv-form>
 ```
-Here the text-type and texteara-types components are used despite the 'type' that is provided by
+Here the sv-text and sv-texteara components are used no matter what type that is provided by
 the serverside form definition.
 
 This last option can be useful when you want to use slots that are defined by Vuetify, since the
@@ -273,7 +272,7 @@ form-widget cannot cascade all slots (this would conflict with the default-slot)
 
 ## Custom form-type-components
 
-To create a custom form-type, you should have a look at the `/assets/components/Form` directory.
+To create a custom form-type, you should have a look at the `Resources/assets/components/Form` directory in this bundle.
 Most of the logic you need is put in the `FormTypeMixin`, so you probably want to extend that to have some stuff taken
 care of. 
 
