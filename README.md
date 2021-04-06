@@ -1,7 +1,6 @@
 # SymfonyVuetifiedBundle
 
-Integrate Vuetify into your Symfony application, making it easy to pass serverside data through
-twig-file.
+Integrate Vuetify into your Symfony application, making it easy to pass serverside data to Vue through Twig.
 
 # Getting started
 

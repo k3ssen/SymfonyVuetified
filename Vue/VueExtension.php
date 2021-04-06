@@ -6,6 +6,7 @@ namespace K3ssen\SymfonyVuetified\Vue;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class VueExtension extends AbstractExtension
@@ -24,10 +25,18 @@ class VueExtension extends AbstractExtension
     {
         return [
             new TwigFunction('vue_data', [$this, 'addVueData']),
+            new TwigFunction('vue_prop', [$this, 'addVueDataProp']),
             new TwigFunction('get_vue_data', [$this, 'getVueData']),
             new TwigFunction('vue_store', [$this, 'addVueStore']),
             new TwigFunction('get_vue_store', [$this, 'getVueStore']),
             new TwigFunction('vue_form', [$this, 'getVueForm']),
+        ];
+    }
+
+    public function getFilters(): array
+    {
+        return [
+            new TwigFilter('vue', [$this, 'addVueDataPropFilter'], ['needs_context' => true]),
         ];
     }
 
@@ -43,6 +52,38 @@ class VueExtension extends AbstractExtension
     public function addVueData(String $key, $value): void
     {
         $this->vueDataStorage->addData($key, $value);
+    }
+
+    /**
+     * Same as addVueData, but returns the key
+     */
+    public function addVueDataProp(String $key, $value): string
+    {
+        $this->vueDataStorage->addData($key, $value);
+        return $key;
+    }
+
+    public function addVueDataPropFilter($context, $value, ?string $key = null): string
+    {
+        // Default behaviour would be same as using {{ vue_prop(key, value) }}
+        if ($key) {
+            return $this->addVueDataProp($key, $value);
+        }
+        // If there's no key and the value is a string, then treat the value as a key and use null as value.
+        if (is_string($value)) {
+            return $this->addVueDataProp($value, null);
+        }
+        // if there's no key and the value is an object, then use the key found in context.
+        if (is_object($value)) {
+            foreach ($context as $contextKey => $contextValue) {
+                if ($value === $contextValue) {
+                    return $this->addVueDataProp($contextKey, $value);
+                }
+            }
+        }
+        // If so far no key could be determined, then generate a random key.
+        $key = 'vue_prop_' . bin2hex(random_bytes(5));
+        return $this->addVueDataProp($key, $value);
     }
 
     public function getVueData(): string

@@ -4,7 +4,7 @@
             <div class="form-widget" :class="{ 'use-flex': row }">
                 <v-input v-bind="Object.assign(attributes, $attrs)">
                     <slot name="default" v-bind="{ children: form.children, ...form.children }">
-                        <slot v-for="(child, key) in form.children" :name="'subform_' + child.vars.name" v-bind="{ subform: child }" >
+                        <slot v-for="(child, key) in form.children" :name="'subform_' + child.vars.name.toLowerCase()" v-bind="{ subform: child }" >
                             <sv-form-widget
                                 :key="key"
                                  :class="{ col: row }"

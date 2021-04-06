@@ -12,7 +12,7 @@
                 <sv-form-widget v-bind="form.vars.row_attr" :form="form"></sv-form-widget>
             </div>
             <div v-else v-for="(child, key) in form.children" :key="key">
-                <slot :name="'subform_' + child.vars.name" v-bind="{ subform: child }" >
+                <slot :name="'subform_' + child.vars.name.toLowerCase()" v-bind="{ subform: child }" >
                     <sv-form-widget v-bind="child.vars.row_attr" :form="child"></sv-form-widget>
                 </slot>
             </div>
