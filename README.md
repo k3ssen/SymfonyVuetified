@@ -1,8 +1,8 @@
 # Symfony Vuetified
 
 A [Symfony](https://symfony.com/) 5 demo-project that utilizes the
-[SymfonyVuetified](https://github.com/k3ssen/SymfonyVuetified/tree/bundle)
-bundle
+[SymfonyVuetified bundle](https://github.com/k3ssen/SymfonyVuetified)
+
 
 ### Getting started
 
