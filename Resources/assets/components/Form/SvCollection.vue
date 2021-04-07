@@ -26,7 +26,7 @@
                             </slot>
                             <template>
                                 <v-btn v-if="form.vars.allow_delete" @click.stop="removeItem(key)">
-                                    <slot name="btn-delete-text" v-bind="{ text: form.vars.btn_add_txt }">
+                                    <slot name="btn-delete-text" v-bind="{ text: form.vars.btn_delete_txt }">
                                         {{ form.vars.btn_delete_txt }}
                                     </slot>
                                 </v-btn>
