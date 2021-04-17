@@ -50,6 +50,12 @@ export default class FormWidgetMixin extends Vue {
         attr['error'] = !!this.form.vars.errors;
         attr['persistent-hint'] = !!this.form.vars.help;
 
+        if (this.form.vars.disabled) {
+            attr['disabled'] = true;
+        }
+        if (this.form.vars.required) {
+            attr['required'] = true;
+        }
         if (!this.form.vars.multiple) {
             attr['name'] = this.form.vars.full_name;
         }

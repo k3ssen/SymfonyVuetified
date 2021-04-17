@@ -17,6 +17,7 @@ interface IFormVars {
     btn_add_txt?: string;
     btn_delete_txt?: string;
     required: boolean;
+    disabled?: boolean;
     compound: boolean;
     multiple?: boolean;
     prototype?: any;
