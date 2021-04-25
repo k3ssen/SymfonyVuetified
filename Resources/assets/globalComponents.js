@@ -26,6 +26,7 @@ Vue.component('SvRange', () => import('./components/Form/SvRange'));
 Vue.component('SvSwitch', () => import('./components/Form/SvSwitch'));
 Vue.component('SvTextarea', () => import('./components/Form/SvTextarea'));
 Vue.component('SvText', () => import('./components/Form/SvText'));
+Vue.component('SvFile', () => import('./components/Form/SvFile'));
 
 // Other components
 Vue.component('SvApp', () => import('./components/SvApp'));
