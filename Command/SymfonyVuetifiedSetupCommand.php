@@ -88,6 +88,7 @@ class SymfonyVuetifiedSetupCommand extends Command
     })
     .enableVueLoader(() => {
     }, {
+        runtimeCompilerBuild: true,
         useJsx: true
     })
     .addPlugin(new VuetifyLoaderPlugin())
