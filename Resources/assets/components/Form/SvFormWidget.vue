@@ -43,7 +43,9 @@
         }
 
         setComponentType() {
-            for (const blockPrefix of this.form.vars.block_prefixes.reverse()) {
+            // 'clone' the block_prefixes, because otherwise the reverse will be applied again when re-rendering.
+            const reversedBlockPrefixes = JSON.parse(JSON.stringify(this.form.vars.block_prefixes)).reverse();
+            for (const blockPrefix of reversedBlockPrefixes) {
                 if ((this.$options as any).components[blockPrefix as any]) {
                     this.componentType = blockPrefix;
                     return;

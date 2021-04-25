@@ -41,6 +41,10 @@ export default class FormWidgetMixin extends Vue {
         this.setAttributes();
     }
 
+    destroyed() {
+        this.resetRendered(this.form);
+    }
+
     setAttributes() {
         let attr: any = {};
         attr['label'] = this.form.vars.label ?? this.form.vars.name;

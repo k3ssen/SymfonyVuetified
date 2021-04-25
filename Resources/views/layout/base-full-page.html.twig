@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app.request.locale | default('en') }}">
     <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}
-{#            <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">#}
-            <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
-            {{ encore_entry_link_tags('app') }}
+        {% block head %}
+            {% block head_meta %}
+                <meta charset="UTF-8">
+            {% endblock %}
+            <title>{% block title %}{% endblock %}</title>
+            {% block stylesheets %}
+                <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+                {{ encore_entry_link_tags('app') }}
+            {% endblock %}
         {% endblock %}
     </head>
     <body>
-        <div id="sv-app">
-            <sv-app>
+        <div id="{{ vueAppId | default('sv-app') }}">
+            <sv-app {% block vue_app_properties %}v-cloak title="{{ application_title | default('') }}" {% endblock %}>
                 <div slot="menu">
                     {% block menu %}
                         <v-list nav>
@@ -34,7 +37,7 @@
             {% block vue_script %}
                 {% include '@SymfonyVuetified/layout/_vue_script.html.twig' %}
             {% endblock %}
-            {# It is important that the rendered app.js is loaded after the vue_script to make sure the vue object is available#}
+            {# app.js must be loaded after the vue_script to make sure the vue object is available. #}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </body>
