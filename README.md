@@ -10,14 +10,24 @@ and required modules:
 1. Run `composer require k3ssen/symfony-vuetified`  
    You may need to add `"minimum-stability": "dev", "prefer-stable": true` to your composer.json
 2. Run `php bin/console symfony-vuetified:setup` if you just created a new symfony project.
-   Otherwise see 'configure files' below.
+   Otherwise, see 'configure files' below.
 3. Run `yarn install & yarn dev`  
    When you see an Error for missing required bundles, install that bundle and run `yarn dev` again.
    Keep repeating this process (about 4 or 5 times) until DONE.
 
+> Note: as of writing, Vuetify has sass-code that results in lots of deprecation warnings since sass version 1.33.  
+> Run **yarn add sass@~1.32.0** to get rid of these deprecation warnings.
+
 ### Configure files
-You'll need to modify `webpack.config.json`, `assets/app.js`, `templates/base.html.twig` and 
+You'll need to modify `package.json`, `webpack.config.json`, `assets/app.js`, `templates/base.html.twig` and 
 add a `tsconfig.json` file to the root of your project.
+
+**package.json**  
+Add this bundle to your dependencies in package.json:
+```
+   "@k3ssen/symfony-vuetified": "file:vendor/k3ssen/symfony-vuetified/Resources/assets",
+```
+(It might've been added automatically already. If it wasn't, make sure to add it yourself)
 
 **webpack.config.js**  
 Enable Typescript, Sass, Vue and Vuetify:

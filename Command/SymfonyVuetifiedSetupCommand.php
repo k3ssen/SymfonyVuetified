@@ -44,6 +44,7 @@ class SymfonyVuetifiedSetupCommand extends Command
             return 1; // (Command::FAILURE  not supported in 4.4)
         }
 
+        $this->modifyPackageJson($io, $filesystem);
         $this->appendTsConfigJs($io, $filesystem);
         $this->modifyWebpackConfig($io, $filesystem);
         $this->modifyAppJs($io, $filesystem);
@@ -72,15 +73,31 @@ class SymfonyVuetifiedSetupCommand extends Command
 
     protected function askContinue(SymfonyStyle $io)
     {
-        $io->warning('This command will modify the webpack.config.js file, modify the assets/app.js file, replace templates/base.html.twig, and add the tsconfig.json file. It is strongly advised to commit any changes you\'ve made so far, so that you can evaluate the changes that are made after running this command.');
+        $io->warning('This command will modify package.json, modify the webpack.config.js file, modify the assets/app.js file, replace templates/base.html.twig, and add the tsconfig.json file. It is strongly advised to commit any changes you\'ve made so far, so that you can evaluate the changes that are made after running this command.');
         return $io->askQuestion( new ConfirmationQuestion('Do you want to continue?', false));
+    }
+
+    protected function modifyPackageJson(SymfonyStyle $io, Filesystem $filesystem)
+    {
+        $packagePath = $this->rootDir . DIRECTORY_SEPARATOR . 'package.json';
+        $packageJsonContent = file_get_contents($packagePath);
+        if (stripos($packageJsonContent, '"@k3ssen/symfony-vuetified"') === false) {
+            $io->comment('Trying to modify package.json ...');
+            $packageJsonContent = str_replace(
+                '"devDependencies": {',
+                "\"devDependencies\": {\n        \"@k3ssen/symfony-vuetified\": \"file:vendor/k3ssen/symfony-vuetified/Resources/assets\",",
+                $packageJsonContent
+            );
+            $filesystem->dumpFile($packagePath, $packageJsonContent);
+            $io->comment('package.json modified');
+        }
     }
 
     protected function modifyWebpackConfig(SymfonyStyle $io, Filesystem $filesystem)
     {
         $io->comment('Trying to modify webpack.config.js');
         $webpackFilePath = $this->rootDir . DIRECTORY_SEPARATOR . 'webpack.config.js';
-        $webpackConfig = "const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');\n" . file_get_contents($webpackFilePath);
+        $webpackConfig = "const { VuetifyLoaderPlugin } = require('vuetify-loader');\n" . file_get_contents($webpackFilePath);
         $webpackConfig = str_replace('//.enableSassLoader()', '.enableSassLoader()', $webpackConfig);
         $webpackConfig = str_replace('//.enableTypeScriptLoader()', '.enableTypeScriptLoader()
     .configureLoaderRule(\'typescript\', rule => {
