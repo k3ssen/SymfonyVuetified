@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    K3ssen\SymfonyVuetified\Command\SymfonyVuetifiedSetupCommand:
+        $rootDir: '%kernel.project_dir%'
+
+    K3ssen\SymfonyVuetified\Maker\Generator:
+        decorates: 'maker.generator'
+        arguments:
+            $generator: '@K3ssen\SymfonyVuetified\Maker\Generator.inner'

@@ -1,34 +1,13 @@
-# TODO: define aliased services explicitly, see: http://symfony.com/doc/current/bundles/best_practices.html#services
-
-parameters:
-
 services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: false
-#        bind:
-
-#    K3ssen\SymfonyVuetified\:
-#        resource: '../../*'
-#        exclude: '../../{Entity,Migrations,Tests,vendor,Resources,var}'
-
-    K3ssen\SymfonyVuetified\Command\SymfonyVuetifiedSetupCommand:
-        autoconfigure: true
-        arguments:
-            $rootDir: '%kernel.project_dir%'
-
-    K3ssen\SymfonyVuetified\Maker\Generator:
-        decorates: 'maker.generator'
-        arguments:
-            $generator: '@K3ssen\SymfonyVuetified\Maker\Generator.inner'
 
     K3ssen\SymfonyVuetified\Vue\VueDataStorage:
         autoconfigure: true
 
     K3ssen\SymfonyVuetified\Vue\VueExtension:
-        arguments:
-            $vueDataStorage: '@K3ssen\SymfonyVuetified\Vue\VueDataStorage'
+        $vueDataStorage: '@K3ssen\SymfonyVuetified\Vue\VueDataStorage'
 
     K3ssen\SymfonyVuetified\Form\:
         resource: '../../Form/*'

@@ -14,5 +14,8 @@ class SymfonyVuetifiedExtension extends Extension
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
+        if(strtolower($container->getParameter('kernel.environment')) === 'dev') {
+            $loader->load('services_dev.yaml');
+        }
     }
 }
