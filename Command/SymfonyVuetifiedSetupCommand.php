@@ -101,9 +101,6 @@ class SymfonyVuetifiedSetupCommand extends Command
         $webpackConfig = str_replace('/app.js', '/app.ts', $webpackConfig);
         $webpackConfig = str_replace('//.enableSassLoader()', '.enableSassLoader()', $webpackConfig);
         $webpackConfig = str_replace('//.enableTypeScriptLoader()', '.enableTypeScriptLoader()
-    .configureLoaderRule(\'typescript\', rule => {
-        delete rule.exclude;
-    })
     .enableVueLoader(() => {
     }, {
         runtimeCompilerBuild: true,
