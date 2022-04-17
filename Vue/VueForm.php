@@ -6,6 +6,10 @@ namespace K3ssen\SymfonyVuetified\Vue;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 
+/**
+ * This VueForm class helps transform Symfony's {@see FormView} into a json-object that can be used by the
+ * SvForm vue-component.
+ */
 class VueForm implements \JsonSerializable
 {
     const MAPPED_TYPES = [
@@ -27,7 +31,9 @@ class VueForm implements \JsonSerializable
      */
     protected $vars;
 
-    /** @var VueForm[] */
+    /**
+     * @var VueForm[]
+     */
     protected $children = [];
 
     public static function create(FormInterface $form): self
@@ -73,9 +79,9 @@ class VueForm implements \JsonSerializable
         }
         if ($this->vars['expanded'] ?? false) {
             if ($this->vars['multiple'] === false) {
-                array_splice( $this->vars['block_prefixes'], -1, 0, 'RadioGroupType');
+                array_splice( $this->vars['block_prefixes'], -1, 0, 'SvRadioGroup');
             } else {
-                $this->vars['block_prefixes'][] = 'CheckboxGroupType';
+                $this->vars['block_prefixes'][] = 'SvCheckboxGroup';
             }
         }
     }

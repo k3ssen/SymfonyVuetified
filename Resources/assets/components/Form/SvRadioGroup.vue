@@ -18,7 +18,7 @@
 
 <script lang="ts">
     import {Component, Mixins} from 'vue-property-decorator';
-    import FormWidgetMixin from "./FormWidgetMixin.ts";
+    import FormWidgetMixin from "./FormWidgetMixin";
     import IForm from "./IForm";
 
     @Component

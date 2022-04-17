@@ -20,11 +20,11 @@
 
 <script lang="ts">
     import {Component, Mixins} from 'vue-property-decorator';
-    import FormWidgetMixin from "./FormWidgetMixin.ts";
+    import FormWidgetMixin from "./FormWidgetMixin";
     import IForm from "./IForm";
 
     @Component
-    export default class SvCheckboxGroupType extends Mixins(FormWidgetMixin) {
+    export default class SvCheckboxGroup extends Mixins(FormWidgetMixin) {
         choices: any = [];
         created() {
             this.attributes['value'] = this.form.vars.value;

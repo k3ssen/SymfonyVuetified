@@ -98,6 +98,7 @@ class SymfonyVuetifiedSetupCommand extends Command
         $io->comment('Trying to modify webpack.config.js');
         $webpackFilePath = $this->rootDir . DIRECTORY_SEPARATOR . 'webpack.config.js';
         $webpackConfig = "const { VuetifyLoaderPlugin } = require('vuetify-loader');\n" . file_get_contents($webpackFilePath);
+        $webpackConfig = str_replace('/app.js', '/app.ts', $webpackConfig);
         $webpackConfig = str_replace('//.enableSassLoader()', '.enableSassLoader()', $webpackConfig);
         $webpackConfig = str_replace('//.enableTypeScriptLoader()', '.enableTypeScriptLoader()
     .configureLoaderRule(\'typescript\', rule => {
@@ -117,10 +118,15 @@ class SymfonyVuetifiedSetupCommand extends Command
 
     protected function modifyAppJs(SymfonyStyle $io, Filesystem $filesystem)
     {
-        $appJsPath = $this->rootDir . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'app.js';
         $io->comment('Trying to modify assets/app.js ...');
-        $filesystem->appendToFile($appJsPath, "\n\nimport '@k3ssen/symfony-vuetified';");
-        $io->comment('assets/app.js modified');
+        $appJsPath = $this->rootDir . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'app.js';
+
+        $contents = file_get_contents($appJsPath) . "\n\nimport '@k3ssen/symfony-vuetified';";
+
+        $filesystem->dumpFile(str_replace('app.js', 'app.ts', $appJsPath), $contents);
+        $filesystem->remove($appJsPath);
+
+        $io->comment('assets/app.js replaced by assets/app.ts');
     }
 
     protected function modifyBaseHtmlTwig(SymfonyStyle $io, Filesystem $filesystem)

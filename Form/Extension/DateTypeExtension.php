@@ -19,11 +19,7 @@ class DateTypeExtension extends AbstractTypeExtension
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            // 'input' => 'datetime_immutable',
-            'type' => 'date',
             'widget' => 'single_text',
-            'placeholder' => 'dd-mm-yyyy',
-            'format' => 'yyyy-MM-dd', # http://symfony.com/doc/current/reference/forms/types/date.html#format
         ]);
     }
 

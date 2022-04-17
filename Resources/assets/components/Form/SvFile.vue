@@ -10,7 +10,7 @@
 
 <script lang="ts">
     import {Component, Mixins} from 'vue-property-decorator';
-    import FormWidgetMixin from '@k3ssen/symfony-vuetified/components/Form/FormWidgetMixin';
+    import FormWidgetMixin from './FormWidgetMixin';
 
     @Component
     export default class SvFile extends Mixins(FormWidgetMixin) {

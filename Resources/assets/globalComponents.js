@@ -12,7 +12,7 @@ for (const i in VuetifyComponents) {
 
 // FormTypes
 Vue.component('SvCheckbox', () => import('./components/Form/SvCheckbox'));
-Vue.component('SvCheckboxGroupType', () => import('./components/Form/SvCheckboxGroupType'));
+Vue.component('SvCheckboxGroup', () => import('./components/Form/SvCheckboxGroup'));
 Vue.component('SvChoice', () => import('./components/Form/SvChoice'));
 Vue.component('SvCollection', () => import('./components/Form/SvCollection'));
 Vue.component('SvDate', () => import('./components/Form/SvDate'));
