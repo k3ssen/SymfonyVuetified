@@ -1,177 +1,237 @@
-# SymfonyVuetifiedBundle
+# SymfonyVueBundle
 
-Integrate Vuetify into your Symfony application, making it easy to pass serverside data to Vue through Twig.
+A small SymfonyBundle that makes it easy to make serverside-data available to Vue.
 
-# Getting started
+Rather than using cumbersome `data-*` attributes or creating an API-endpoint for just about anything,
+this bundle lets you pass data to vue by simply calling `{{ vue_data('someVariable', someObjectOrValue) }}`.
 
-Assuming you have a Symfony 4.4, 5+ or 6+ application installed on a server with composer, yarn (or npm)
-and required modules:
+## Setup - quickstart
 
-1. Run `composer require k3ssen/symfony-vuetified`
-2. Run `php bin/console symfony-vuetified:setup` if you just created a new symfony project.
-   Otherwise, see the [manual setup](./Resources/docs/setup.md) documentation.
-3. Install dependencies
-   1. Start by running `yarn install`.
-   2. Make sure to add the peer-dependencies as well. Preferably you should check the output in your console, though
-   the following should probably suffice:  
-       `
-       yarn --dev add vue@^2.5 vue-class-component@^7.2 vue-property-decorator@^9.1 vue-template-compiler@^2.6.10 vuetify@^2.4 vuetify-loader@^1.7
-       `
-   3. Run `yarn dev`  
-   When you see an Error for missing required bundles, install that bundle and run `yarn dev` again.
-   Keep repeating this process (about 5 times) until DONE.
+### Requirements
+
+This bundle requires php 7.4 or higher. It has been developed with Symfony 6, but it should also work with Symfony 4 and 5.
+
+### Getting started
+
+Install the bundle:
+`composer require k3ssen/symfony-vue-bridge`
+
+You'll probably want to use setup VueJs with Symfony Encore 
+(see [Setup with Encore](#setup-with-encore) for details below), but for quickly trying out this bundle
+you can use the include-script below in your Twig code.
+```
+{% include '@SymfonyVue/_vue3_script.html.twig' %}
+```
+
+This will activate vue on the element with `id="app"`, so you'll need an element that has this id set on
+it.
 
 
-# Concept/usage
-
-This bundle aims to quickly achieve the following:
-* Communicate serverside data from Twig to Vue without resorting to API's or `data-` attributes in HTML.
-* Build your vue-components using Vuetify, Typescript and the [vue-property-decorator](https://npm.io/package/vue-property-decorator).
-* Render your Symfony form in Vuetify by using client-side form-rendering.
-* Render dynamic vue components that are fetched and loaded via twig-files.
-
-## Global vue object
-
-The basic concept is that you can use a global vue object.
-This object will be used for creating the vue-instance.
-
-```vue
+### Example
+If you use 
+[Symfony's MakerBundle](https://symfony.com/bundles/SymfonyMakerBundle/current/index.html) 
+to run `php bin/console maker:controller Dashboard` you should have an 
+`template/dashboard/index.html.twig` file that looks something like below:
+```
 {% extends 'base.html.twig' %}
+
+{% block title %}Hello DashboardController!{% endblock %}
+
 {% block body %}
-    <p>
-        @{ seconds } seconds have passed.
-    </p>
+    [...]
 {% endblock %}
-{% block script %}
+```
+
+You can replace the body with the following:
+```
+{% block body %}
+    <div id="app">
+        {{ vue_data('count', 1) }}
+        <button @click="count++" v-text="'Counter: ' + count"></button>
+    </div>
+    {% include '@SymfonyVue/_vue3_script.html.twig' %}
+{% endblock %}
+```
+
+If you head to *yourlocaldoman/dashboard* you should see a button that increments the counter once
+you click on it.
+
+
+# Setup with Encore
+You can find elaborate information on Symfony's guides for installing
+[Encore](https://symfony.com/doc/current/frontend/encore/installation.html)
+and [Enabling Vue](https://symfony.com/doc/current/frontend/encore/vuejs.html).
+
+Basically, you'll need to do the following steps:
+
+### 1. Install encore
+ `composer require symfony/webpack-encore-bundle`
+
+
+### 2. Enable Vue.js
+Enable Vue in `webpack.config.js`:
+```js
+    // ...
+    Encore
+        // ...
+        .enableVueLoader(() => {}, {
+            runtimeCompilerBuild: true,
+            useJsx: true
+        })
+    // ...
+```
+
+> **Tips:**
+> * You'll probably want to also uncomment the `// enableSassLoader` in webpack.config.js to use scss
+>   (which can be used in vue-components as well).
+> * If you're a fan of Typescript, you should also uncomment `//.enableTypeScriptLoader()`
+>    * Make sure to rename `assets/app.js` to `assets/app.ts` to prevent some
+>      [nasty exceptions during yarn watch](https://stackoverflow.com/questions/67925815/cannot-find-module-in-node-modules-folder-but-file-exist)
+> * If you have no plans of using Stimulus, you may want to remove (or comment out) `enableStimulusBridge`
+ > and remove `assets/controllers`, `assets/controllers.json` and `assets/bootstrap.js`.
+
+### 3. Install assets
+Run `yarn install` followed by  `yarn dev`. 
+You may see errors that you need to install some additional packages. Simply follow these instructions and re-run `yarn dev` until done.
+
+### 4. Twig vue-javascript setup
+The serverside data must be passed to vue, for which you can use the global `window` object.
+For example, you can add the following code in your `base.html.twig`:
+```
+<div id="app">
+    {% block body %}{% endblock %}
+</div>
+<script>
+    window.vueData = {{ get_vue_data() | raw }};
+    window.vueStoreData = {{ get_vue_store() | raw }};
+</script>
+```
+
+The following things are relevant:
+* the content you want to use Vue in is wrapped inside an element with the "app" id.
+* `window.vueData` and `window.vueStoreData` must be created AFTER your content.
+ (using `vue_add()` after this code won't have any effect).
+* `window.vueData` and `window.vueStoreData` must be created BEFORE the app.js is loaded
+  Encore uses `defer` on the script-tag by default, in which case this should work correctly.
+
+### 5. Create Vue instance
+Finally, you'll want to create a vue-instance that uses this data.
+Open your `assets/app.js` to add some code (see below).
+
+
+**Vue2**  
+```
+import Vue from 'vue';
+// Make sure there is a vue-object-variable set on the global window-object.
+window.vue = window.vue ?? {};
+// Make sure this vue-object has a data property.
+const vueObjectData = window.vue.data ?? {};
+// Merge the vueObjectData (defined in Twig) with the data property that already exists on the vue-object.
+window.vue.data = () => Object.assign(
+    window.vueData,
+    typeof vueObjectData === 'function' ? vueObjectData(): vueObjectData
+);
+const vueApp = createApp(window.vue);
+// Create a reactive global $store variable which can be used in all components.
+Vue.prototype.$store = Vue.observable(window.vueStoreData ?? {});
+// Mount the app on the provided 'el'. If none provided, default to '#app'
+window.vue.el = window.vue.el ?? '#app';
+// Instantiate Vue.
+new Vue(window.vue);
+```
+
+**Vue3**
+```
+import { createApp, reactive } from 'vue';
+// Make sure there is a vue-object-variable set on the global window-object.
+window.vue = window.vue ?? {};
+// Make sure this vue-object has a data property.
+const vueObjectData = window.vue.data ?? {};
+// Merge the vueObjectData (defined in Twig) with the data property that already exists on the vue-object.
+window.vue.data = () => Object.assign(
+    window.vueData,
+    typeof vueObjectData === 'function' ? vueObjectData(): vueObjectData
+);
+// Create the vue app
+const vueApp = createApp(window.vue);
+// Create a reactive global $store variable which can be used in all components.
+vueApp.config.globalProperties.$store = reactive(window.vueStoreData ?? {});
+// Mount the app on the provided 'el'. If none provided, default to '#app'
+vueApp.mount(window.vue.el ?? '#app');
+```
+
+**Typescript**  
+If you're using Typescript, you should edit `app.ts` instead. 
+You can use basically the same code, but you'll need to make some small changes:
+For example, `window.vue` probably won't be allowed, but you could use `window['vue']` instead.
+
+## Usage
+
+There are two key-points to this bundle and while they are not hard to implement, they can save a lot of time
+compared to alternatives.
+
+### Using a global Vue-object
+
+Though complex Vue-logic should be written in Vue-components, there are times when you want to do
+simple Vue-stuff inside Twig without any hassle.
+
+By using a global object, this becomes fairly easy:
+```
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="app">
+        <h1>Seconds passed: ${ seconds }</h1>
+        <p v-if="seconds > 5">
+            More than 5 seconds have passed.
+        </p>
+    </div>
     <script>
         vue = {
+            delimiters: ['${', '}'],
             data: () => ({
                 seconds: 0,
             }),
             mounted() {
-                setInterval(() => {
-                    this.seconds++;
-                }, 1000);
+                setInterval(() => this.seconds++, 1000);
             },
-        };
-    </script>
-{% endblock %}
-```
-
-> **Note:** Vue and Twig both use `{{` and `}}` delimiters by default, so here `@{` and `}` are used instead for Vue.
-> You can specify different delimiters if you want, but avoid using `${` 
-> like [Symfony's example](https://symfony.com/doc/5.2/frontend/encore/vuejs.html#using-vue-inside-twig-templates):
-> When you use `${something}` this is parsed as javascript variable when used inside ticks ( \` ), which 
-> can be really confusing.
-
-## Passing serverside data to vue: `vue_data`
-
-When passing data, you’ll often need to do things like below:
-
-```vue
-{% block script %}
-    <script>
-        vue = {
-            data: () => ({
-                someObject: {{ someObject | json_encode | raw }},
-                anotherObject: {{ anotherObject | json_encode | raw }},
-            })
         }
     </script>
 {% endblock %}
 ```
 
-If you need to pass server data to vue, you can use `vue_data` instead:
+Here you have the power of Vue and Twig at the same time.
 
-```vue
-{% block body %}
-    {{ vue_data('someObject', someObject) }}
-    {{ vue_data('anotherObject', anotherObject) }}
-    <div v-if="someObject && anotherObject">
-        This text is only shown if both objects have a value.
-    </div>
-{% endblock %}
+
+### Passing server-side data to Vue
+
+When you want to pass server-side data like an entity to Vue, you'd need something like this:
+```
+<script>
+    vue = {
+        data: () => ({
+            someObject: {{ someObject | json_encode | raw }},
+        })
+    }
+</script>
 ```
 
-Data added this way will be json encoded and merged with the global vue object.
+This works fine, but this has a bit too much boilerplate for simple scenario's where you only need to make data available.
+
+To make this simple and more concise, this bundle adds these Twig functions:
+
+* `vue_add('someObject', someObject)` - in practise has the same effect as the code above.
+* `vue_store('someObject', someObject)` - to create a global `$store.someObject` variable than can be accessed in all components.
+* `vue('someObject', someObject)` - does the same as vue_add, but it returns the key, so you can use this directly as a property.
+
+There's also a `vue` filter that works like the vue-function, but it allows you to omit the key-name for objects:
+the key name will be the same as the object variable name.
+For example: `someObject|vue`
 
 
-## Global observable: `$store` and `vue_store`
+# Extending this bundle - custom logic
 
-In addition to adding data to the vue-instance, data can be added to the vue $store observable, making
-data available to all vue components.
-```vue
-{% block body %}
-    {{ vue_store('someObject', someObject) }}
-    {{ vue_store('anotherObject', anotherObject) }}
-    <div v-if="$store.someObject && $store.anotherObject">
-        This text is only shown if both objects have a value.
-    </div>
-{% endblock %}
-```
-
-## Global vue components
-Custom and vendor Vue-components aren't global by default, so they can't be used in Twig.
-
-The `globalComponents.ts` file makes the components of Vuetify and this bundle globally available.
-This way you can use these components almost wherever you want, including Twig.
-
-The downside is that this'll increase the size of your javascript resources. 
-If you want don't want to make all these components global, you can choose to use the 
-`vue-object.init.ts` file instead of using `import '@k3ssen/symfony-vuetified'`.
-Inside your `app.ts`, it would look something like below:
-
-```js
-//... other stuff in your app.js file 
-
-import Vue from 'vue';
-
-import vueObject from '@k3ssen/symfony-vuetified/vue-object-init';
-
-if (document.getElementById('sv-app') && typeof window.vue === 'object') {
-    new Vue(vueObject);
-}
-```
-Now only components of the vue-core will work in twig, so you won't be able
-to use components like `<sv-form>` of `<v-alert>` in your twig files. 
-If you want to make specific components available to twig, `<sv-app>` for example, you could use something like this:
-```
-Vue.component('SvApp', () => import('@k3ssen/symfony-vuetified/components/SvApp'));
-```
-
-# Fetch component
-
-Because dynamic vue components can be rendered at runtime, the same principles can be used with `fetch` and load the
-response in a component.
-
-This project includes a FetchComponent that makes it really easy:
-```vue
-<sv-fetch url="/url-to-controller-action"></sv-fetch>
-```
-
-If you're using `{% extends '@SymfonyVuetified/base.html.twig' %}` in your `base.html.twig`
-then the suitable file to extend will be used:
-if you're using fetch, only a template and the script will be loaded. Otherwise, the entire page is loaded.
-
-> **Note:** this component requires loading the fetched javascript. 
-> Fetching a page that defines variables/constants that were defined already will result in javascript-errors.
-> Therefore, this bundle uses `window` to put global objects (like the global `vue`) into.  
-> The `sv-fetch` component specifically takes the global objects vue, vueData, vueStoreData into account by clearing these
-> objects before fetching new content.
-
-
-## Symfony form rendered in Vue
-
-Using form-functions in Twig or form_themes to create a Vuetify-form is difficult, especially when dealing with
-edge-cases. This bundle enables you to render Symfony's `FormView` clientside:
-
-```twig|vue
-{% block body %}
-    <sv-form :form="{{ form | vue}}"></sv-form>
-{% endblock %}
-```
-
-You can take full control and render parts individually. It takes some getting used to
-it, because obviously Vue works differently from Twig's form-method, but it is quite powerful.
-
-[Read the forms documentation](./Resources/docs/forms.md) for more information.
+This bundle is more a guide to 'how to combine Vue and Twig' than lots of code. 
+You *could* override the `VueDataStorage` and/or `VueExtension` services,
+but it would probably the easiest to simply copy the files to your own project and have no
+dependency on this bundle.

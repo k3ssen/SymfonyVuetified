@@ -1,20 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace K3ssen\SymfonyVuetified\Vue;
+namespace K3ssen\SymfonyVueBundle\Vue;
 
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class VueExtension extends AbstractExtension
 {
-    /**
-     * @var VueDataStorage
-     */
-    protected $vueDataStorage;
+    protected VueDataStorage $vueDataStorage;
 
     public function __construct(VueDataStorage $vueDataStorage)
     {
@@ -25,11 +20,10 @@ class VueExtension extends AbstractExtension
     {
         return [
             new TwigFunction('vue_data', [$this, 'addVueData']),
-            new TwigFunction('vue_prop', [$this, 'addVueDataProp']),
             new TwigFunction('get_vue_data', [$this, 'getVueData']),
             new TwigFunction('vue_store', [$this, 'addVueStore']),
             new TwigFunction('get_vue_store', [$this, 'getVueStore']),
-            new TwigFunction('vue_form', [$this, 'getVueForm']),
+            new TwigFunction('vue', [$this, 'addVueDataProp']),
         ];
     }
 
@@ -63,7 +57,7 @@ class VueExtension extends AbstractExtension
         return $key;
     }
 
-    public function addVueDataPropFilter($context, $value, ?string $key = null): string
+    public function addVueDataPropFilter(array $context, $value, ?string $key = null): string
     {
         // Default behaviour would be same as using {{ vue_prop(key, value) }}
         if ($key) {
@@ -99,15 +93,5 @@ class VueExtension extends AbstractExtension
     public function getVueStore(): string
     {
         return $this->vueDataStorage->getJson(VueDataStorage::TYPE_STORE);
-    }
-
-    public function getVueForm($form): VueForm
-    {
-        if ($form instanceof FormView) {
-            return new VueForm($form);
-        } else if ($form instanceof FormInterface) {
-            return VueForm::create($form);
-        }
-        throw new \InvalidArgumentException(sprintf('Provided form must be either a FormView or FormInterface; got %s instead', get_class($form)));
     }
 }

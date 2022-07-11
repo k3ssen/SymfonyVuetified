@@ -1,3 +1,0 @@
-{# The 'fetch' header is added by the FetchComponent #}
-{% set isFetchRequest = app.request.headers.get('fetch') %}
-{% extends isFetchRequest ? '@SymfonyVuetified/layout/base-fetched-page.html.twig' : '@SymfonyVuetified/layout/base-full-page.html.twig' %}

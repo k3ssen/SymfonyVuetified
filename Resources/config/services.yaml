@@ -1,13 +1,8 @@
 services:
-    _defaults:
-        autowire: true
+    K3ssen\SymfonyVueBundle\Vue\VueDataStorage:
         autoconfigure: true
 
-    K3ssen\SymfonyVuetified\Vue\VueDataStorage:
+    K3ssen\SymfonyVueBundle\Vue\VueExtension:
         autoconfigure: true
-
-    K3ssen\SymfonyVuetified\Vue\VueExtension:
-        $vueDataStorage: '@K3ssen\SymfonyVuetified\Vue\VueDataStorage'
-
-    K3ssen\SymfonyVuetified\Form\:
-        resource: '../../Form/*'
+        arguments:
+            $vueDataStorage: '@K3ssen\SymfonyVueBundle\Vue\VueDataStorage'

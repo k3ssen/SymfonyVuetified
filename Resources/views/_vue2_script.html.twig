@@ -1,0 +1,24 @@
+{# source: https://v2.vuejs.org/v2/guide/#Getting-Started #}
+{% if app.debug %}
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+{% else %}
+<!-- production version, optimized for size and speed -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+{% endif %}
+<script>
+    const vueData = {{ get_vue_data() | raw }};
+    const vueStoreData = {{ get_vue_store() | raw }};
+
+    window.vue = window.vue ?? {};
+
+    const vueObjectData = window.vue.data ?? {};
+    window.vue.data = () => Object.assign(
+        vueData,
+        typeof vueObjectData === 'function' ? vueObjectData(): vueObjectData
+    );
+
+    window.vue.el = window.vue.el ?? '#app';
+
+    Vue.prototype.$store = Vue.observable(vueStoreData);
+    new Vue(window.vue);
+</script>

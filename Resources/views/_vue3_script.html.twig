@@ -1,0 +1,18 @@
+{# source: https://vuejs.org/guide/quick-start.html#without-build-tools #}
+<script src="https://unpkg.com/vue@3"></script>
+<script>
+    const vueData = {{ get_vue_data() | raw }};
+    const vueStoreData = {{ get_vue_store() | raw }};
+
+    window.vue = window.vue ?? {};
+
+    const vueObjectData = window.vue.data ?? {};
+    window.vue.data = () => Object.assign(
+        vueData,
+        typeof vueObjectData === 'function' ? vueObjectData(): vueObjectData
+    );
+
+    const vueApp = Vue.createApp(window.vue);
+    vueApp.config.globalProperties.$store = Vue.reactive(vueStoreData);
+    vueApp.mount(window.vue.el ?? '#app');
+</script>
